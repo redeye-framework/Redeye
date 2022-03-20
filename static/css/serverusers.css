@@ -40,8 +40,8 @@
     color: #fff;
     border-radius: 5px;
     padding: 18px 10px;
+    margin-top: -10px;
     border: none;
-    margin-top: 20px;
     transition-duration: 0.2s;
 }
 
