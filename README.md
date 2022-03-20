@@ -7,7 +7,9 @@ Redeye is a management tool for creating a workflow while doing a pentest operat
 - [Overview](#Overview)
 - [Source Installation](#Source)
 - [Docker Installation](#Docker)
-- [The Devs](#TheDevs)
+- [The Developers](#The-Developers)
+- [Credits](#Credits)
+
 
 ## Overview
 
@@ -52,18 +54,28 @@ PreReport panel will contain all the screenshots from the current pentest.
 
 `Redeye will listen on: http://0.0.0.0:5000`
 
+## The Developers
+Daniel Arad - @dandan_arad && Elad Pticha - @elad_pt
+
 ## Credits
 * Sidebar
     * https://github.com/azouaoui-med/pro-sidebar-template 
     * https://bootsnipp.com/snippets/Q0dAX
+
 * flowchart
-    * https://www.jqueryscript.net/chart-graph/Drag-drop-Flow-Chart-Plugin-With-jQuery-jQuery-UI-flowchart-js.html\
+    * https://www.jqueryscript.net/chart-graph/Drag-drop-Flow-Chart-Plugin-With-jQuery-jQuery-UI-flowchart-js.html
 
 * download.js
     * http://danml.com/download.html
 
-* handlebars.js - Yehuda Katz
+* dropzone
+    * http://www.dropzonejs.com
+
+* Pictures and Icons
+    * https://www.iconfinder.com
+        * licensed by - https://creativecommons.org/licenses/by/4.0
+    * http://www.freepik.com
+    
+
 
 Redeye is under MIT License, if you own any Code/File in Redeye that is not under MIT License please contact us at: redeye.framework@gmail.com
-## TheDevs
-Daniel Arad - @dandan_arad && Elad Pticha - @elad_pt
