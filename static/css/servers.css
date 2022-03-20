@@ -207,6 +207,10 @@ hr {
     width: 640px;
 }
 
+.server-content .files a {
+    cursor: pointer;
+}
+
 .server-content table{
     margin: 5px;
     box-shadow: 2px 2px 5px black !important;

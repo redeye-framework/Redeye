@@ -1101,7 +1101,8 @@ def create_tables(db, tables, init):
     try:
         c = conn.cursor()
         c.executescript(tables)
-        c.executescript(init)
+        if db == "example.db":
+            c.executescript(init)
         print("Tables Created.")
     except Error as e:
         print(e)
@@ -1127,7 +1128,7 @@ def set_project_db(project):
 =======================================================
 """
 
-def init():
+def init(add_init=False):
     if not isdir(PROJECT_PATH):
         makedirs(PROJECT_PATH, exist_ok=True)
 
