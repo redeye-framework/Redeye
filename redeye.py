@@ -102,7 +102,12 @@ def server():
     ports = db.get_ports_by_server_id(session["db"], server[0])
     attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
     vendor = db.get_vendor_by_server_id(session["db"], server[0])[0][0]
-    return render_template('server.html', project=session["project"], username=session["username"], server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
+    users_with_type = []
+    for user in users:
+        type = helper.user_type_to_name(user[1])
+        tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
+        users_with_type.append(tuser)
+    return render_template('server.html', project=session["project"], username=session["username"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():
@@ -440,17 +445,18 @@ def edit_user():
         user_type = request.form.get('type')
         user_found_on = request.form.get('found')
         user_attain = request.form.get('attain')
+
+        """ User can be found on one server but be relevant to another.
         if db.get_server_id_by_name(session["db"], user_found_on) or db.get_server_id_by_ip(session["db"], user_found_on):
             if db.get_server_id_by_name(session["db"], user_found_on):
                 server_id = db.get_server_id_by_name(session["db"], user_found_on)[0][0]
             else:
                 server_id = db.get_server_id_by_ip(session["db"], user_found_on)[0][0]
-            user_found_on = "Null"
         else:
-            server_id = "Null"
-
+            server_id = ""
+        """
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=server_id, attain=user_attain)
+                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
         if 'userid' in url:
             url = url.split('userid=')
             url = url[0] + 'userid=' + user_id

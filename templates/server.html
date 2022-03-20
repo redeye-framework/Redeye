@@ -1,7 +1,6 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/context-menu.css') }}">
 {% include 'wrapper.html' %}
 <div class="server-page">
   <h1 class="head">{{ server[2] }} - <span title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" class="ip"
@@ -30,6 +29,7 @@
                   href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
               </td>
               <td>{{ user[3] }}</td>
+              <td>{{ user[1] }}</td>
               <td>{{ user[4] }}</td>
             </tr>
             {% endfor %}
@@ -123,7 +123,6 @@
 </div>
 </div>
 {% include 'wrapper_end.html' %}
-<script src="../static/js/context-menu.js"></script>
 <script src="../static/js/jquery.js"></script>
 <script>
   $(document).ready(function() {
