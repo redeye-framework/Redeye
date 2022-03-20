@@ -1,0 +1,12 @@
+## Add moudles for req
+python-docx
+flask
+flask_user
+flask-socketio
+docxtpl
+pyjwt==1.7.1
+pysqlcipher3
+email_validator
+eventlet
+Flask-JSGlue
+python-socketio[client]

@@ -8,7 +8,6 @@ files/data/logs.csv
 *.csv
 *.docx
 *.json
-*.txt
 *.jpg
 *.whl
 *.gz
