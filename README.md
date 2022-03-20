@@ -14,10 +14,9 @@ The installation process is short and easy.
 ### Source Installation
 `$ cd Redeye`<br>
 `$ chmod +x setup.sh && ./setup.sh`<br>
-
-### Run
-`$ python3 redeye.py`
+`$ python3 redeye.py`<br>
 
 ### Docker Installation
 
-TO be done ...
+`chmod +x buildDocker.sh`<br>
+`./buildDocker.sh`<br>
