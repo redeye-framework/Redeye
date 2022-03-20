@@ -1,0 +1,346 @@
+Metadata-Version: 2.1
+Name: docxcompose
+Version: 1.3.4
+Summary: Compose .docx documents
+Home-page: https://github.com/4teamwork/docxcompose
+Author: Thomas Buchberger
+Author-email: t.buchberger@4teamwork.ch
+License: MIT license
+Description: 
+        *docxcompose* is a Python library for concatenating/appending Microsoft
+        Word (.docx) files.
+        
+        
+        Example usage
+        -------------
+        
+        Append a document to another document:
+        
+        .. code::
+        
+            from docxcompose.composer import Composer
+            from docx import Document
+            master = Document("master.docx")
+            composer = Composer(master)
+            doc1 = Document("doc1.docx")
+            composer.append(doc1)
+            composer.save("combined.docx")
+        
+        
+        The docxcompose console script
+        ------------------------------
+        
+        
+        The ``docxcompose`` console script allows to compose docx files from the command
+        line, e.g.:
+        
+        .. code:: sh
+        
+            $ docxcompose files/master.docx files/content.docx -o files/composed.docx
+        
+        
+        Installation for development
+        ----------------------------
+        
+        To install docxcompose for development, clone the repository and using a python with setuptools (for example a fresh virtualenv), install it using pip:
+        
+        .. code:: sh
+        
+            $ pip install -e .[tests]
+        
+        Tests can then be run with ``pytest``.
+        
+        
+        A note about testing
+        --------------------
+        
+        The tests provide helpers for blackbox testing that can compare whole word
+        files. To do so the following files should be provided:
+        
+        - a file for the expected output that should be added to the folder
+          `docs/composed_fixture`
+        - multiple files that can be composed into the file above should be added
+          to the folder `docs`.
+        
+        The expected output can now be tested as follows:
+        
+        
+        .. code:: python
+        
+            def test_example():
+                fixture = FixtureDocument("expected.docx")
+                composed = ComposedDocument("master.docx", "slave1.docx", "slave2.docx")
+                assert fixture == composed
+        
+        
+        Should the assertion fail the output file will be stored in the folder
+        `docs/composed_debug` with the filename of the fixture file, `expected.docx`
+        in case of this example.
+        
+        Changelog
+        =========
+        
+        
+        1.3.4 (2021-12-20)
+        ------------------
+        
+        - Avoid IndexError when processing documents that have custom styled numbering definitions. [lonetwin]
+        
+        
+        1.3.3 (2021-08-12)
+        ------------------
+        
+        - Add support for Smart Art (fixes #23)
+        - Correctly handle mapped styles in restart_first_numbering. [njohner]
+        
+        
+        1.3.2 (2021-04-27)
+        ------------------
+        
+        - Make Doc Properties case-insensitive. [buchi]
+        
+        
+        1.3.1 (2021-01-13)
+        ------------------
+        
+        - Add support for complex fields with fieldname split into several runs. [njohner]
+        - Add support for date format switches. [njohner]
+        
+        
+        1.3.0 (2020-10-06)
+        ------------------
+        
+        - Support updating complex properties with no existing value. [deiferni]
+        
+        
+        1.2.0 (2020-07-13)
+        ------------------
+        
+        - Add method to nullify a docproperty. [deiferni]
+        
+        
+        1.1.2 (2020-06-11)
+        ------------------
+        
+        - Handle embedded images that also have an external reference.
+          [buchi]
+        - Fix renumbering of non-visual image and drawing properties.
+          [buchi]
+        
+        
+        1.1.1 (2020-05-04)
+        ------------------
+        
+        - Fix an issue with non-ascii binary_type docproperties. [deiferni]
+        
+        
+        1.1.0 (2020-04-07)
+        ------------------
+        
+        - Add support for updating docproperties in header and footer of documents. [deiferni]
+        
+        
+        1.0.2 (2019-09-09)
+        ------------------
+        
+        - Do not fail when complex field does not have a separate node. [njohner]
+        
+        
+        1.0.1 (2019-07-25)
+        ------------------
+        
+        - Correctly treat two complex fields in the same paragraph. [njohner]
+        - Correctly handle the case when a docproperty appears multiple time in a document. [njohner]
+        - Handle docproperties with extra space before or no quotes around the property name. [njohner]
+        
+        1.0.0 (2019-06-13)
+        ------------------
+        
+        - Change license from GPL to MIT.
+          [buchi]
+        
+        - Add support for adding, setting and deleting of doc properties.
+          [buchi]
+        
+        
+        1.0.0a17 (2019-04-25)
+        ---------------------
+        
+        - Add functionality to get and set content of plain text content controls
+          (structured document tags).
+          [buchi]
+        
+        
+        1.0.0a16 (2019-01-15)
+        ---------------------
+        
+        - Prevent artifacts of previously cached doc property values during update. [deiferni]
+        
+        
+        1.0.0a15 (2018-12-12)
+        ---------------------
+        
+        - Fix updating doc-properties with non-ascii names. [deiferni]
+        - Don't handle hyperlink references twice. [deiferni]
+        
+        
+        1.0.0a14 (2018-12-04)
+        ---------------------
+        
+        - Implement generic handling of referenced parts. Among other, this adds
+          support for embedded Excel charts.
+          [buchi]
+        
+        - Handle embedded SVGs.
+          [buchi]
+        
+        - Add styles from other parts, e.g. footnotes.
+          [buchi]
+        
+        
+        1.0.0a13 (2018-11-05)
+        ---------------------
+        
+        - Fix list-styles being set incorrectly when restarting numberings.
+          [deiferni]
+        
+        
+        1.0.0a12 (2018-10-30)
+        ---------------------
+        
+        - Fix setting section type for appended documents with only one section.
+          [deiferni]
+        
+        
+        1.0.0a11 (2018-07-30)
+        ---------------------
+        
+        - Fix handling of section type.
+          [buchi]
+        
+        - Fix an issue where the listing style of the first element was different.
+          [deiferni]
+        
+        - Fix issue when restarting intermittent numbering.
+          [deiferni]
+        
+        
+        1.0.0a10 (2018-07-18)
+        ---------------------
+        
+        - Add console script command to compose two or more word files.
+          [deiferni]
+        
+        
+        1.0.0a9 (2018-05-01)
+        --------------------
+        
+        - Fix error in mapping of num_ids introduced in 1.0.0.a7.
+          [buchi]
+        
+        - Do not fail when numbering zero is referenced.
+          [deiferni]
+        
+        
+        1.0.0a8 (2018-04-26)
+        --------------------
+        
+        - Only attempt to set the nsid when it is available.
+          [deiferni]
+        
+        
+        1.0.0a7 (2018-04-20)
+        --------------------
+        
+        - Fix handling of images in WordprocessingGroups (<wpg:wpg>).
+          [buchi]
+        
+        - Fix handling of shapes in shape groups (<v:group>).
+          [buchi]
+        
+        - Fix handling of numberings, avoid inserting multiple numbering properties.
+          [buchi]
+        
+        - Fix renumbering of bookmarks.
+          [buchi]
+        
+        - Renumber ids of drawing object properties (<wp:docPr>).
+          [buchi]
+        
+        
+        1.0.0a6 (2018-02-20)
+        --------------------
+        
+        - Do not restart numbering of bullets.
+          [buchi]
+        
+        
+        1.0.0a5 (2018-01-11)
+        --------------------
+        
+        - Renumber bookmarks to avoid duplicate ids.
+          [buchi]
+        
+        - Add support for shapes.
+          [buchi]
+        
+        
+        1.0.0a4 (2017-12-27)
+        --------------------
+        
+        - Fix handling of styles when composing documents with different languages.
+          [buchi]
+        
+        - Also add numberings referenced in styles.
+          [buchi]
+        
+        - Avoid having multiple <w:abstractNum> elements for the same style.
+          [buchi]
+        
+        - Restart first numbering of inserted documents
+          [buchi]
+        
+        - Add support for anchored images.
+          [buchi]
+        
+        - Handle referenced style ids that are not defined in styles.xml
+          [buchi]
+        
+        - Remove header and footer references in paragraph properties.
+          [buchi]
+        
+        
+        1.0.0a3 (2017-11-22)
+        --------------------
+        
+        - Make removal of property fields optional.
+          [buchi]
+        
+        
+        1.0.0a2 (2017-11-06)
+        --------------------
+        
+        - Fix handling of footnotes containing hyperlinks.
+          [buchi]
+        
+        - Add functionality to deal with custom document properties. Properties can be
+          updated and fields containing properties can be removed. When appending or
+          inserting documents their custom document properties get removed automatically.
+          [buchi]
+        
+        
+        1.0.0a1 (2017-09-13)
+        --------------------
+        
+        - Initial release
+          [buchi]
+        
+Keywords: Python DOCX Word OOXML
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: MIT License
+Provides-Extra: test
+Provides-Extra: tests

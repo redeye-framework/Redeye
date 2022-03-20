@@ -1,0 +1,10 @@
+lxml
+python-docx>=0.8.8
+setuptools
+six
+
+[test]
+pytest
+
+[tests]
+pytest
