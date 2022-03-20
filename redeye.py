@@ -25,6 +25,7 @@ import socketio as client_socket
 from threading import Thread, Lock
 from urllib.parse import unquote
 
+
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
@@ -1415,7 +1416,6 @@ def index(logged=False):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
-
 
 if __name__ == "__main__":
     # Run app.

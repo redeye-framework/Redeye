@@ -11,3 +11,4 @@ files/data/logs.csv
 *.jpg
 *.whl
 *.gz
+vpackages
