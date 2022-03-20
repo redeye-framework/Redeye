@@ -1,0 +1,14 @@
+*.pyc 
+DB/__pycache__
+*.db
+.vscode/settings.json
+*.xml
+files/Code Injection (1).pptx
+files/data/logs.csv
+*.csv
+*.docx
+*.json
+*.txt
+*.jpg
+*.whl
+*.gz

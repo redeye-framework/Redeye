@@ -1,0 +1,209 @@
+.flowchart-example-container {
+    width: 100%;
+    height: 400px;
+    background: initial;
+    border: 1px solid #3F6AD8;
+    border-width: 3px;
+    border-style: dashed;
+    margin-bottom: 10px;
+}
+
+.vectors-box {
+    width: 90%;
+    margin: 20px 3%;
+    padding: 0;
+    box-shadow: 4px 4px 10px black;
+}
+
+.stats-box {
+    display: inline-block;
+    background-color: #31353D;
+    height: 100px;
+    width: 90%;
+    margin: 5px 3%;
+    padding: 0;
+    box-shadow: 4px 4px 10px black;
+    text-align: center;
+}
+
+.stats-box > .section {
+    display: inline-block;
+    height: 80px;
+    margin: 10px;
+    width: 31%;
+    background-color: rgb(84, 89, 99);
+    text-align: left;
+    padding: 10px 15px;
+}
+
+.stats-box > .section > h6 {
+    margin-left: 25px;
+    color: #eef;
+}
+
+.onetoten {
+    width: 100%;
+    padding: 5px 8px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.onetoten > .dot {
+    display: inline-block;
+    /*background-color: #3971ff;*/
+    background-color: rgba(110, 110, 110, 1);
+    width: 1.7em;
+    height: 1.2em;
+    border-radius: 7px;
+    margin: 0 3px;
+    box-shadow: 0 0 2px black;
+}
+
+.vectors-box > .edit {
+    display: inline-block;
+    background-color: #31353D;
+    width: 100%;
+    height: 150px;
+    margin: 0;
+}
+
+.vectors-box > .edit > .operators{
+    width: 60%;
+    height: 100%;
+    float: left;
+    padding: 20px;
+    border-left: 1px solid #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.vectors-box > .edit > .edit-operator{
+    width: 40%;
+    height: 100%;
+    float: left;
+    padding: 20px;
+    position: relative;
+}
+
+.tabs {
+    overflow: hidden;
+    background-color: #31353D;
+    color: white;
+    padding: 0 !important;
+    width: 100%;
+    margin: 0;
+}
+
+/* Style the buttons inside the tab */
+
+.tabs button {
+    color: #ccd;
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.tabs .current {
+    filter: brightness(120%);
+}
+
+/* Change background color of buttons on hover */
+
+.tablinks:hover {
+    filter: brightness(120%);
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.flowchart-example-container {
+    background-color: rgb(84, 89, 99);
+    border: none;
+    height: 450px;
+    margin: 0px;
+}
+
+.input {
+    width: 43%;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 0.5%;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    outline: none;
+}
+
+.operator_properties {
+    width: 100%;
+}
+
+.title-input {
+    width: 88%;
+    margin-bottom: 5px;
+
+}
+
+.draggable_operator {
+    position: static !important;
+    float: left;
+    margin: 0px 20px;
+}
+
+.trash-object {
+    float: right;
+    font-size: 18px;
+}
+
+.floating-btn{
+    background-color: #3F6AD8;
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.delete {
+    background-color: rgb(212, 71, 71);
+    position: absolute;
+    top: -70px;
+    right: 15px;
+}
+
+.delete i {
+    color: #eef !important;
+}
+
+.save{
+    position: absolute;
+    top: -70px;
+    left: 15px;
+}
+.redo{
+    position: absolute;
+    top: -70px;
+    left: 80px;
+}
+
+.floating-btn:hover{
+    filter: brightness(110%);
+}
+
+.flowchart-operator {
+    width: auto !important;
+    min-width: 140px !important;
+}

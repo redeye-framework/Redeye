@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notebooks.css') }}"> {% include 'wrapper.html' %}
+<div class="page">
+    <h2 style="font-weight: bolder;font-size: 36px;" class="inline">Notebooks</h2>
+    </br>
+    </br>
+    </br>
+    <div class="notebooks">
+
+        <table class="table table-dark">
+            <tbody>
+                <tr>
+                    <form enctype="multipart/form-data" id="add-notebook-form" method="POST" action="">
+                        <td class="name">
+                            <input placeholder="notebook Name" id="notebookName-1" name="notebook-name" class="inline" type="text">
+                        </td>
+                        <td>
+                            <div class="notebook-content">
+                                <input placeholder="notebook Data" name="notebook-con" class="inline" type="text">
+                                <div class="buttons inline">
+                                    <label id="saveNotebook" for="save-notebook">
+                                        <input id="save-notebook" name="notebook-save" onchange="change_icon();"
+                                            type="button" /><i id="notebook-save-icon" class="fas fa-save"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="actions">
+                            <a href="#" onclick="javascript:document.getElementById('add-notebook-form').submit()">
+                                <i class="fas fa-plus" style="margin-left: 8px; font-size: 17px;"></i>
+                            </a>
+                        </td>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include 'wrapper_end.html' %} {% include 'footer.html' %}

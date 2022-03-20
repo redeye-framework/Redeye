@@ -1,0 +1,132 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tasks.css') }}"> {% include 'wrapper.html' %}
+<div class="card-hover-shadow-2x card">
+    <div class="card-header-tab card-header">
+        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Task Lists</div>
+    </div>
+    <div class="scroll-area-sm">
+        <perfect-scrollbar class="ps-show-limits">
+            <div style="position: static;" class="ps ps--active-y">
+                <div class="ps-content">
+                    <ul class=" list-group list-group-flush">
+                        {% for i in range(len) %}
+                        <li class="list-group-item">
+                            <form action="{{ url_for('update_task') }}" method="POST">
+                                <div class="todo-indicator bg-warning"></div>
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper">
+
+                                        <div id="user-{{ all_tasks[i][0] }}" onclick="javascript:showNote('{{ all_tasks[i][1] }}','{{ all_tasks[i][4] }}','{{ all_tasks[i][0] }}','{{ all_tasks[i][5] }}','{{ all_tasks[i][3] }}')" style="cursor: pointer;" class="widget-content-left">
+                                            {% if 1 == all_tasks[i][2] %}
+                                            <div class="widget-heading" style="font-weight: bold;">{{ all_tasks[i][1] }}
+                                                <div class="badge badge-success ml-2">Done</div>
+                                                <div class="widget-content wordbreak" style="font-weight: normal;">{{ all_tasks[i][4] }}</div>
+                                            </div>
+                                            {% endif %} {% if 0 == all_tasks[i][2] %}
+                                            <div class="widget-heading" style="font-weight: bold;">{{ all_tasks[i][1] }}
+                                                <div class="badge badge-danger ml-2">In Proggress</div>
+                                                <div class="widget-content wordbreak" style="font-weight: normal;">{{ all_tasks[i][4] }}</div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="widget-subheading"><i>By @{{ all_tasks[i][3] }}</i></div>
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <input type="hidden" name="task_id" value="{{ all_tasks[i][0] }}"> {% if 1 == all_tasks[i][2] %}
+                                            <button name="task_done" class="border-0 btn-transition btn btn-outline-success"> 
+                                                    <i class="fas fa-check-square"></i>
+                                                </button>
+                                            <button name="trash_task" class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> {% endif %} {% if 0 == all_tasks[i][2] %}
+                                            <button name="task_done" class="border-0 btn-transition btn btn-outline-success"> 
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            <button name="trash_task" class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> {% endif %}
+                            </form>
+                            </div>
+                            </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+    <div style="top: +10px;" class="d-block text-right card-footer">
+        <form action="{{ url_for('add_task') }}" method="POST">
+            <input dir="auto" name="task_name" type="text" class="main-todo-input" id="todo-label" placeholder="Task Name">
+            <textarea dir="auto" name="task_data" type="text" class="data-todo-input" cols="65" rows="5" id="todo-text" placeholder="Task content"></textarea>
+            <select name="task_executer" class="exec-todo-input inline">
+                <option value="" selected disabled hidden>Executer</option>
+                    {% for i in range(len_members) %}
+                        <option>{{ team_members[i][0] }}</option>
+                    {% endfor %}
+            </select>
+            <input type="hidden" value="0" name="private">
+            <button style="top: +10px;" class="btn btn-primary inline">Add Task</button>
+        </form>
+    </div>
+</div>
+<div class="card-hover-shadow-2x mb-3 card">
+    <div class="card-header-tab card-header">
+        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;My tasks</div>
+    </div>
+    <div class="scroll-area-sm">
+        <perfect-scrollbar class="ps-show-limits">
+            <div style="position: static;" class="ps ps--active-y">
+                <div class="ps-content">
+                    <ul class=" list-group list-group-flush">
+                        {% for i in range(my_tasks_len) %}
+                        <li class="list-group-item">
+                            <form action="{{ url_for('update_task') }}" method="POST">
+                                <div class="todo-indicator bg-warning"></div>
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper">
+
+                                        <div id="user-{{ my_tasks[i][0] }}" onclick="javascript:showNote('{{ my_tasks[i][1] }}','{{ my_tasks[i][4] }}','{{ my_tasks[i][0] }}','{{ my_tasks[i][5] }}','{{ my_tasks[i][3] }}')" style="cursor: pointer;" class="widget-content-left">
+                                            {% if 1 == my_tasks[i][2] %}
+                                            <div class="widget-heading" style="font-weight: bold;">{{ my_tasks[i][1] }}
+                                                <div class="badge badge-success ml-2">Done</div>
+                                                <div class="widget-content wordbreak" style="font-weight: normal;">{{ my_tasks[i][4] }}</div>
+                                            </div>
+                                            {% endif %} {% if 0 == my_tasks[i][2] %}
+                                            <div class="widget-heading" style="font-weight: bold;">{{ my_tasks[i][1] }}
+                                                <div class="badge badge-danger ml-2">In Proggress</div>
+                                                <div class="widget-content wordbreak" style="font-weight: normal;">{{ my_tasks[i][4] }}</div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <input type="hidden" name="task_id" value="{{ my_tasks[i][0] }}"> {% if 1 == my_tasks[i][2] %}
+                                            <button name="task_done" class="border-0 btn-transition btn btn-outline-success"> 
+                                                    <i class="fas fa-check-square"></i>
+                                                </button>
+                                            <button name="trash_task" class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> {% endif %} {% if 0 == my_tasks[i][2] %}
+                                            <button name="task_done" class="border-0 btn-transition btn btn-outline-success"> 
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            <button name="trash_task" class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> {% endif %}
+                            </form>
+                            </div>
+                            </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+    <div style="top: +10px;" class="d-block text-right card-footer">
+        <form action="{{ url_for('add_task') }}" method="POST">
+            <input dir="auto" name="task_name" type="text" class="main-todo-input" id="todo-label" placeholder="Task Name">
+            <textarea dir="auto" name="task_data" type="text" class="data-todo-input" cols="65" rows="5" id="todo-text" placeholder="Task content"></textarea>
+            <input type="hidden" value="{{ username }}" name="task_executer">
+            <input type="hidden" value="1" name="private">
+            <button style="top: +10px;" class="btn btn-primary inline">Add Private Task</button>
+        </form>
+    </div>
+</div>
+
+{% include 'notes.html' %} {% include 'wrapper_end.html' %}
+<!---<script src="{{ url_for('static', filename='js/todo.js') }}"></script> --->
+{% include 'footer.html' %}

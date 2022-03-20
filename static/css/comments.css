@@ -1,0 +1,156 @@
+
+* {
+    box-sizing: border-box;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    min-height: 100%;
+}
+
+img {
+    border: 0;
+}
+
+a:focus,
+a:active,
+button:focus {
+    outline: 0;
+}
+
+/* Defaults */
+a {
+    color: rgb(81, 84, 85);
+    text-decoration: none;
+}
+
+button {
+    background-color: rgb(64, 68, 70);
+    border-radius: 5px;
+    border: none;
+    color: rgb(255, 255, 255);
+    padding: 5px 15px;
+}
+
+/* Compose */
+.compose > div {
+    margin-top: 10px;
+    text-align: right;
+    display: none;
+}
+
+.compose textarea {
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(192, 225, 237);
+    display: block;
+    width: 100%;
+    padding: 4px;
+    resize: none;
+    height: 1.8em;
+}
+
+.compose textarea:focus {
+    outline: none;
+}
+
+/* Active State */
+.compose.expand textarea {
+    height: 5em;
+}
+
+.compose.expand > div {
+    display: block;
+}
+
+/* Tweets */
+.tweet {
+    overflow: hidden;
+}
+
+.tweet > img {
+    display: block;
+    float: left;
+    width: 60px;
+    height: 60px;
+    background-color: rgb(238, 238, 238);
+    border-radius: 4px;
+}
+
+.tweet .body {
+    margin-left: 60px;
+    padding-left: 10px;
+}
+
+.tweet .title {
+    font-weight: 700;
+    color: rgb(51, 51, 51);
+}
+
+.tweet .message {
+    margin-top: 10px;
+}
+
+/* Structure */
+body {
+    background: rgba(138, 145, 150, 1) url('../images/bg.png') repeat-x;
+}
+
+main {
+    width: 600px;
+    margin: 0 auto;
+}
+
+header {
+    margin-top: 20px;
+    background-color: rgb(239, 242, 247);
+    border: 1px solid rgb(192, 225, 237);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.tweets {
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(192, 225, 237);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Thread and Replies */
+.thread {
+    border-bottom: 1px solid rgb(225, 232, 237);
+}
+
+.thread .tweet {
+    margin: 10px;
+}
+
+.replies {
+    padding: 10px;
+    background-color: rgb(229, 242, 247);
+    display: none;
+}
+
+.replies .compose {
+    border-bottom: 1px solid rgb(196, 216, 230);
+    padding-bottom: 10px;
+}
+
+.thread.expand .replies {
+    display: block;
+}
+
+/* Custom CSS */
+.expand {
+    display: initial;
+}

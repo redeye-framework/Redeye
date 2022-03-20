@@ -1,0 +1,257 @@
+
+.section { 
+    position: relative;
+    padding-top: 70px;
+}
+
+.section-name {
+    position: absolute;
+    left: 45%;
+    margin-top: -60px;
+    color: rgb(146, 146, 163);
+    transform: translateX(-30%)
+}
+
+.section-name-input {
+    position: absolute;
+    left: 45%;
+    margin-top: -60px;
+    transform: translateX(-30%);
+    display: none;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #343a40;
+    color: white;
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    transition-duration: 0.2s;
+    font-size: 1.1rem;
+}
+
+.new-section {
+    position: absolute;
+    left: 45%;
+    margin-top: -80px;
+    font-size: 24px;
+    padding: 5px 20px;
+    transition-duration: 0.3s;
+}
+
+.new-section:hover{
+    filter: brightness(130%)
+}
+
+.server-box {
+    display: inline-block;
+    border: 0.8px solid #ccc;
+    border-top: 4px solid rgb(66, 224, 66);
+    padding: 0 !important;
+    border-radius: 4px;
+    margin: 20px 30px;
+    width: 300px;
+    height: 160px;
+    box-shadow: 3px 3px 8px black;
+    transition-duration: 0.3s;
+    position: relative;
+    background-color: #31353D;
+    color: #bbc;
+}
+
+.server-box:hover {
+    box-shadow: 5px 5px 15px black;
+    filter: brightness(110%);
+}
+
+.server-box-no-access {
+    display: inline-block;
+    border: 0.8px solid #ccc;
+    border-top: 4px solid rgb(221, 45, 22);
+    padding: 0 !important;
+    border-radius: 4px;
+    width: 300px;
+    height: 160px;
+}
+
+.server-box .new {
+    color: #666;
+    font-size: 30px;
+    position: absolute;
+    margin-top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.server-box .name {
+    padding: 10px 30px;
+    border-bottom: 0.8px solid #ccc;
+    font-weight: bold;
+    text-align: center;
+}
+
+.server-box .ip {
+    text-align: center;
+    padding: 15px;
+}
+
+.server-box .content {
+    display: inline-block;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.server-box .content .user {
+    border-right: 0.8px solid #ccc;
+    border-left: 0.8px solid #ccc;
+}
+
+.server-box .content > div {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.server-box .content .ports {
+    border-right: 0;
+}
+
+hr {
+    background-color: rgb(146, 146, 163);
+    margin-right: 30px;
+    position: relative
+}
+
+/*-------------- Server page ----------------*/
+.server-page {
+    padding: 30px 50px;
+}
+
+.server-page .head {
+    display: inline;
+}
+
+.server-page .edit a {
+    text-decoration: none;
+}
+
+.server-page .edit a i:hover {
+    filter: brightness(85%);
+}
+
+.server-page .ip {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.server-page input {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #343a40;
+    color: white;
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    
+}
+
+.server-page > form > select {
+    display: inline-block;
+    padding: 5px;
+    margin: 0 10px;
+    border-radius: 8px;
+    background-color: #343a40;
+    color: white;
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    
+}
+
+.server-page textarea {
+    border-radius: 8px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd
+}
+
+.server-page textarea:focus {
+    background-color: rgb(67, 72, 82);
+    color: #ccd
+}
+
+.server-page .accessible {
+    padding: 10px;
+}
+
+.server-page .edit {
+    float: right;
+    margin: 15px;
+}
+
+.server-page .server-content {
+    padding: 20px 0;
+}
+
+.server-content .row div{
+    display: inline-block;
+    margin: 30px;
+    padding: 0;
+    border-radius: 10px;
+}
+
+.server-content .ports {
+    width: 450px;
+}
+
+.server-content .files {
+    width: 640px;
+}
+
+.server-content table{
+    margin: 5px;
+    box-shadow: 2px 2px 5px black !important;
+    border-radius: 10px;
+}
+
+.server-content table input {
+    border-radius: 8px;
+    background-color: rgb(67, 72, 82);
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    color: #ccd
+}
+
+.server-content table a {
+    cursor: auto;
+}
+
+.server-content table a:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.server-content .cols th{
+    border-top: none;
+}
+
+.inline {
+    display: inline-block;
+}
+
+#state{
+    outline: none;
+}
+.select-ports {
+    border-radius: 3px;
+    padding: 6px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 80%;
+    margin-top: 15px;
+    float: left;
+}
+
+.fa-plus {
+    cursor: pointer;
+}

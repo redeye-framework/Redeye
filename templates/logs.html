@@ -1,0 +1,109 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/logs.css') }}">
+{% include 'wrapper.html' %}
+  <form action="{{ url_for('export_logs') }}" method="POST" class="inline">  
+    <input type="hidden" value="{{ objects }}" name="objects">
+    <input type="hidden" value="{{ log }}" name="logs">
+    <button id="csv-export-btn" name="type" value="csv" class="btn btn-primary inline">export to CSV</button>
+  </form>
+  <form action="{{ url_for('logs') }}" method="POST">
+    <div class="container" id="search-btn">
+        <input name="key_word" type="text" placeholder="Search...">
+        <div class="search"></div>
+    </div>
+  </form>
+<div class="container-fluid">
+  <div class="timeline" style="display: solid">
+    {% for i in range(len) %}
+    {% if i == 0 %}
+      <div class="timeline-month">
+        {{ year[i] }}
+        <span style="color:white">{{ len }} Entries</span>
+      </div>
+    {% elif year[i] != year[i-1] %}
+      <div class="timeline-month">
+        {{ year[i] }}
+        <span style="color:white">{{ len }} Entries</span>
+      </div>
+    {% endif %}
+    <div class="timeline-section">
+      {% if i == 0 %}
+        <div class="timeline-date">
+          {{ day[i] }}
+        </div>
+      {% elif day[i] != day[i-1] %}
+        <div class="timeline-date">
+          {{ day[i] }}
+        </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="timeline-box">
+            <div class="box-title">
+              <i style="color: #3F6AD8" class="fa fa-asterisk" aria-hidden="true"></i> {{ log[i][7] }}
+            </div>
+            {% if "User" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>User name : {{ objects[i][0][3] }}</strong></div>
+                <div class="box-item"><strong>Password : {{ objects[i][0][4] }}</strong></div>
+                {% if objects[i][0][2] == 1 or objects[i][0][2] == 2 %}
+                  <div class="box-item"><strong>Type : Server\Endpoint</strong></div>
+                {% elif objects[i][0][2] == 3 %}
+                  <div class="box-item"><strong>Type : Application</strong></div>
+                {% elif objects[i][0][2] == 4 %}
+                  <div class="box-item"><strong>Type : Netdevice</strong></div>
+                {% elif objects[i][0][2] == 5 %}
+                  <div class="box-item"><strong>Type : Other</strong></div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if "Task" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>Task name : {{ objects[i][0][2] }}</strong></div>
+                <div class="box-item"><strong>Data : {{ objects[i][0][5] }}</strong></div>
+                <div class="box-item"><strong>Executer : {{ objects[i][0][4] }}</strong></div>
+              </div>
+            {% endif %}
+            {% if "Server" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>Server ip : {{ objects[i][0][2] }}</strong></div>
+                <div class="box-item"><strong>Name : {{ objects[i][0][3] }}</strong></div>
+                <div class="box-item"><strong>Vendor : {{ objects[i][0][4] }}</strong></div>
+              </div>
+            {% endif %}
+            {% if "Netdevice" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>Net Device ip : {{ objects[i][0][2] }}</strong></div>
+                <div class="box-item"><strong>Type : {{ objects[i][0][3] }}</strong></div>
+                <div class="box-item"><strong>Description : {{ objects[i][0][4] }}</strong></div>
+              </div>
+            {% endif %}
+            {% if "Vulln" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>Vulnerability name : {{ objects[i][0][2] }}</strong></div>
+                <div class="box-item"><strong>Data : {{ objects[i][0][3] }}</strong></div>
+                <div class="box-item"><strong>Fix : {{ objects[i][0][4] }}</strong></div>
+              </div>
+            {% endif %}
+            {% if "File" in log[i][7] %}
+              <div class="box-content">
+                <div class="box-item"><strong>File name : {{ objects[i][0][2] }}</strong></div>
+                <div class="box-item"><strong>Path : {{ objects[i][0][3] }}</strong></div>
+                <div class="box-item"><strong>Description : {{ objects[i][0][4] }}</strong></div>
+              </div>
+            {% endif %}
+            <div class="box-footer">- {{ log[i][11] }} @{{ log[i][9] }}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% include 'wrapper_end.html' %}
+    <script src="{{ url_for('static', filename='js/jquery.timelineMe.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/logs.js') }}"></script>
+{% include 'footer.html' %}

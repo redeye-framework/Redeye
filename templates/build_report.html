@@ -1,0 +1,17 @@
+{% include 'header.html' %}
+{% include 'wrapper.html' %}
+
+Ideas for configurations:
+<ul>
+    <li>Format (word or pdf)</li>
+    <li>Basic information (prefilled with edit option).</li>
+    <li>Font, coloring and stuff.</li>
+    <li>Order of findings in report. (by dragging)</li>
+    <li>Build report.</li>
+    <form action="{{ url_for('generate_report') }}" method="POST">
+        <button class="btn btn-primary inline">export report</button>
+    </form>
+</ul>
+
+{% include 'wrapper_end.html' %}
+{% include 'footer.html' %}

@@ -1,0 +1,120 @@
+/* ============================================================================================ */
+/* ==================================== DEFAULT THEME ========================================= */
+/* ============================================================================================ */
+
+.context-menu-default {
+  position: absolute;
+  width: 200px;
+  padding: 0;
+  margin: 0;
+  background: #18191C;
+  z-index: 100;
+  border-radius: 3px;
+  -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+          box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transform: translate(0, 15px) scale(0.95);
+  transform: translate(0, 15px) scale(0.95);
+  -webkit-transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
+  transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
+  pointer-events: none;
+}
+
+.context-menu-default-item {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.context-menu-default-btn {
+  background: none;
+  line-height: normal;
+  overflow: visible;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: block;
+  width: 100%;
+  color: #A1A3A6;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 8px 16px;
+}
+
+.context-menu-default-btn::-moz-focus-inner,
+.context-menu-default-btn::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.context-menu-default-icon {
+  font-size: 16px;
+}
+
+.context-menu-default-text {
+  font-size: 14px;
+  margin-left: 15px;
+}
+
+.context-menu-default-item:hover > .context-menu-default-btn {
+  outline: none;
+  background-color: #FAFAFA;
+}
+
+.context-menu-default-item.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.context-menu-default-item.disabled .context-menu-default-btn {
+  cursor: default;
+}
+
+.context-menu-default-separator {
+  display: block;
+  margin: 7px 5px;
+  height: 1px;
+  border-bottom: 1px solid #fff;
+  background-color: #aaa;
+}
+
+.context-menu-default-item.subcontext-menu-default::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-left-color: #808080;
+}
+
+.context-menu-default-item.subcontext-menu-default:hover::after {
+  border-left-color: #fff;
+}
+
+.context-menu-default .context-menu-default {
+  top: 4px;
+  left: 99%;
+}
+
+.show-context-menu-default,
+.context-menu-default-item:hover > .context-menu-default {
+  opacity: 1;
+  -webkit-transform: translate(0, 0) scale(1);
+  transform: translate(0, 0) scale(1);
+  pointer-events: auto;
+}
+
+.context-menu-default-item:hover > .context-menu-default {
+  -webkit-transition-delay: 100ms;
+  transition-delay: 300ms;
+}

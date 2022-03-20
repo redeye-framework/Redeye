@@ -1,0 +1,109 @@
+
+
+.input {
+    width: 200px;
+    border-radius: 3px;
+    padding: 5px;
+    margin-left: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    display: none;
+}
+
+.users {
+    margin-left: 50px;
+}
+
+.user-box {
+    display: inline-block;
+    margin: 35px 40px;
+    padding: 10px;
+    background-color: #31353D;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px black;
+}
+
+.user-box .icon {
+    width: 80px;
+    height: 80px;
+    background-size: auto 80px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    margin: 20px 15px;
+    float: left;
+}
+
+.user-box .icon > .add-user-btn {
+    background-color: rgb(36, 88, 241);
+    color: #fff;
+    border-radius: 5px;
+    padding: 18px 10px;
+    border: none;
+    margin-top: 20px;
+    transition-duration: 0.2s;
+}
+
+.user-box .icon > .add-user-btn:hover {
+    filter: brightness(110%);
+}
+
+.user-box .prop {
+    float: left;
+    text-align: left;
+    padding: 10px;
+    position: relative;
+}
+
+.user-box .prop > div {
+    margin: 5px;
+}
+
+.user-box .prop > .name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.user-box .prop > .password {
+    margin-bottom: 10px;
+}
+
+.user-box .prop > .input-password {
+    margin-bottom: 10px;
+}
+
+.user-box .prop > .team > select{
+    width: 100px;
+    margin-right: 15px;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    transition-duration: 0.3s;
+}
+
+.user-box .prop > .prem {
+    display: inline;
+}
+
+.user-box .prop > .prem > .custom-checkbox > label {
+    margin-top: 5px;
+}
+
+.user-box .prop > .team,
+.user-box .prop > .prem > .custom-checkbox {
+    display: inline;
+}
+
+.user-box .prop > .delete {
+    position: absolute;
+    top: 9px;
+    right: 18px;
+    font-size: 18px;
+    color: rgb(201, 84, 84);
+    filter: brightness(90%)
+}

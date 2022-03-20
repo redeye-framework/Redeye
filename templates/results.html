@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}"> {% include 'wrapper.html' %}
+
+<h1 class="page-title-result"> {{ data_len }} Search results for - {{ keyword }}</h1>
+<div class="box-result">
+    {% for name in data %} {% for info in data[name] %}
+    <div class="box-part-result text-center" style="cursor: pointer">
+        <div class="title-result">
+            {% if name=="servers" %}
+            <h3>Server - {{ info[0][2] }}</h3>
+            <h5>IP: {{ info[0][1] }}</h5>
+            {% elif name=="tasks" %}
+            <h3>Task - {{ info[0][1] }}</h3>
+            <h5>Content: {{ info[0][4] }}</h5>
+            {% elif name=="users" %}
+            <h3>User - {{ info[0][2] }}</h3>
+            <h5>Permission: {{ info[0][4] }}</h5>
+            {% elif name=="Achievements" %}
+            <h3>Achievement - {{ info[0][1] }}</h3>
+            {% elif name=="comments" %}
+            <h3>Comment - {{ info[0][1] }}</h3>
+            {% elif name=="files" %}
+            <h3>File - {{ info[0][1] }}</h3>
+            {% elif name=="netdevices" %}
+            <h3>Device - {{ info[0][2] }}</h3>
+            {% elif name=="vulns" %}
+            <h3>Vullnerability - {{ info[0][1] }}</h3>
+            {% elif name=="report" %}
+            <h3>Report - {{ info[0][2] }}</h3>
+            {% endif %}
+        </div>
+        <div class="text-result">
+            {% if name=="servers" %}
+            <span class="free-text">Attain - {{ info[0][5] }}</span> {% elif name=="tasks" %}<span class="free-text">Executer - {{ info[0][3] }}</span> {% elif name=="users" %}<span class="free-text">Password - {{ info[0][3] }}</span> {% elif name=="Achievements"
+            %}
+            <span class="free-text">{{ info[0][5] }}</span> {% elif name=="comments" %}<span class="free-text">By @{{ info[0][2] }}</span> {% elif name=="files" %}<span class="free-text">Path - {{ info[0][2] }}</span> {% elif name=="netdevices" %}
+            <span class="free-text">{{ info[0][5] }}</span> {% elif name=="vulns" %}<span id="{{ info[0][5] }}" class="free-text"> - {{ info[0][2] }}</span> {% elif name=="report" %}<span class="free-text">Data - {{ info[0][1] }}</span> {%endif %}
+        </div>
+    </div>
+    {% endfor %} {% endfor %}
+</div>
+
+{% include 'wrapper_end.html' %}
+<script>
+    searchbox = document.getElementById('search-box');
+    searchbox.value = "{{ keyword }}";
+    searchbox.focus();
+</script>
+<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+{% include 'footer.html' %}

@@ -1,0 +1,37 @@
+<div class="user-details">
+    <div class="user-info">
+        <h2 class="username">Username</h2>
+        <h5 class="password">Password</h5>
+        <p>type: <span class="type"></span><br>
+            Permisions: <span class="perm"></span></p>
+        <p class="found"></p>
+        <p class="attain"></p>
+        <a href="javascript:hideUser();" class="exit"><i class="fas fa-times"></i></a>
+        <a href="javascript:editUser();" class="edit"><i class="fas fa-edit"></i></a>
+    </div>
+    <div class="user-edit">
+        <form action="{{ url_for('edit_user') }}" id="user-edit-form" method="POST">
+            <input type="hidden" id="input-refferer" name="refferer">
+            <input type="hidden" id="input-id" name="id">
+            <input type="text" id="input-username" name="username" placeholder="Username"><br>
+            <input type="text" id="input-password" name="password" placeholder="Password"><br>
+            <select id="input-type" name="type">
+                <option value="1">Domain User</option>
+                <option value="2">Localhost</option>
+                <option value="3">Application</option>
+                <option value="4">Net-device</option>
+                <option value="5">Other</option>
+            </select><br>
+            <input type="text" id="input-perm" name="permissions" placeholder="Permissions"><br>
+            <input type="text" id="input-found" name="found" placeholder="Found-on"><br>
+            <textarea id="input-attain" name="attain" placeholder="attain"></textarea><br>
+            <a href="javascript:hideUser();" class="exit"><i class="fas fa-times"></i></a>
+            <a href="javascript:removeUser()" id="delete-button" onclick="" class="delete"><i
+                    class="fas fa-trash"></i></a>
+            <a href="javascript:$('#user-edit-form').submit();" class="save"><i class="fas fa-save"></i></a>
+        </form>
+    </div>
+</div>
+<script>
+    var userid = "{{request.values.get('userid')}}";
+</script>

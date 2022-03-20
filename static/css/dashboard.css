@@ -1,0 +1,135 @@
+
+.missions {
+    margin-top: 30px;
+    height: 250px;
+    overflow-x: auto;
+}
+
+.missions > .mission {
+    float: left;
+    display: inline-block;
+    margin: 35px 40px;
+    height: 125px;
+    box-shadow: 1px 1px 4px black;
+    border-radius: 10px;
+}
+
+.missions > .mission > .main {
+    position: relative;
+    display: inline-block;
+    padding: 25px 50px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #31353D;
+    text-align: center;
+    border-radius: 10px;
+    transition-duration: 0.5s;
+}
+
+.missions > .mission > .main > .noti {
+    color: white;
+    display: inline-block;
+    background-color: #29a3e9;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 2px 9px 3px;
+    border-radius: 15px;
+    position: absolute;
+    text-decoration: none;
+    top: 0px;
+    right: 20px;
+    transform: translateY(-40%);
+}
+.missions > .mission > .main > .noti:hover {
+    filter: brightness(110%);
+}
+
+.missions > .mission > .main > .done {
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    background-color: #28a745;
+    position: absolute;
+    top: 15px;
+    left: 17px;
+}
+
+.missions > .mission > .main > .not-done {
+    background-color: #c44939 !important;
+}
+
+.missions > .mission > .main > .flag {
+    position: absolute;
+    bottom: 2px;
+    left: 8px;
+    padding: 13px 10px;
+    text-decoration: none;
+    font-size: 16px;
+    filter: brightness(80%);
+    transition-duration: 0.2s;
+    color: #c44939;
+}
+
+.missions > .mission > .main > .flag:hover {
+    filter: brightness(90%);
+}
+
+.missions > .mission > .main > .desc-arrow > .open-desc, .close-desc {
+    color: #ccd;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 2px;
+    right: 8px;
+    transform: rotate(-90deg);
+}
+
+.missions > .mission > .main > .desc-arrow > .open-desc:hover, .close-desc:hover {
+    filter: brightness(120%);
+}
+
+.missions > .mission > .main > .time {
+    border-bottom: 1px solid #ccd;
+    padding: 0px 30px 5px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.missions > .mission > .main > .name {
+    padding: 5px;
+}
+
+.missions > .mission > .more {
+    display: inline-block;
+    background-color: #3b4049;
+    width: 0px;
+    overflow: hidden;
+    /*padding: 10px 15px;*/
+    /*display: none;*/
+    height: 100%;
+    margin: 0;
+    position: relative;
+    float: right;
+    text-align: right;
+    direction: rtl;
+    border-radius: 0 10px 10px 0;
+    transition-duration: 0.5s;
+}
+
+.missions > .mission > .more > .desc {
+
+}
+
+.missions > .mission > .more > .exec {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+}
+
+.missions > .mission > .more > .check-done {
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+}

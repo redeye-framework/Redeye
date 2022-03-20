@@ -1,0 +1,27 @@
+.data-feedback-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 100%;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+}
+
+.select-feedback-page {
+    border-radius: 3px;
+    padding: 6px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 200px;
+    height: 50px;
+    margin-top: 15px;
+}
+
+input[type="submit"] {
+    float: right;
+} 

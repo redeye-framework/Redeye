@@ -1,0 +1,123 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pre_report.css') }}"> {% include 'wrapper.html' %}
+<div class="sub">
+    <div class="file-upload">
+        <div class="file-upload-content">
+            <form enctype="multipart/form-data" id="report_form" action="{{ url_for('add_report') }}" method="POST">
+                <div class="head">
+                    <input dir="auto" name="section_name" type="text" class="section-name-input" id="section-name-input" placeholder="Section Name">
+                    <a onclick="get_image_id();this.parentElement.parentElement.remove()" class="section-options" id="delete-button"><i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i></a>
+                    <a onclick="download_image();" class="section-options" id="download-button"><i class="fas fa-download" style="color: #007bff;"></i></a>
+                </div>
+                </br>
+                <div class="image_fit">
+                    <div class="image-block" id="image-block">
+                        <input id="section-image-link" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                        <div class="drag-text" id="image-upload-icon">
+                            <h3><i class="fas fa-upload upload-icon"></i></h3>
+                        </div>
+                        <img id="section-image" onclick="javascript:$('#section-image-link').click()" class="file-upload-image image-wrap" src="#" alt="your image" style="display: none;">
+                    </div>
+                    <div class="image-upload-wrap">
+                        <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                        <div class="drag-text">
+                            <h3><i class="fas fa-upload upload-icon"></i></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-title-wrap">
+                    <textarea id="section-text-input" dir="auto" name="data" style="max-height: 300px;font-size: 18px; width: 80%;" class="data-report-input" placeholder="Place here comment about this image"></textarea><br>
+                    <input type="hidden" id="pic_data" name="image_data">
+                    <input type="hidden" id="image_name" name="image_name" value="">
+                    <input type="hidden" id="image_id" name="image_id">
+                    <button style="bottom: -10px;" type="button" id="section-submit-btn" onclick="get_image_name();get_image_data();document.getElementById('report_form').submit();" class="btn btn-primary inline">Insert to Report - <span class="image-title">Uploaded Image</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="prev-subs">
+    <div class="prev-sub" onclick="removeSection();">
+        <div class="new-prev-sub">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+    {% for i in range(len) %}
+    <div class="prev-sub" onclick="change_section_view(this);" title="{{ data[i][1] }}">
+        <img class="section-img" src="{{ images[i] }}" alt="">
+        <h5 dir="auto" class="section-header">{{ data[i][2] }}</h5>
+        <input type="hidden" value="{{ data[i][0] }}" id="{{ i }}" class="section-id">
+        <p dir="auto" class="section-text" style="display: none;">{{ data[i][1] }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function get_image_data() {
+        var image = document.getElementsByClassName('file-upload-image')[0].src;
+        document.getElementById('pic_data').value = image;
+        return 1;
+    }
+
+    function get_image_name() {
+        try {
+            var image_name = document.getElementsByClassName('image-title')[0].innerText;
+            document.getElementById('image_name').value = image_name;
+        } catch {
+            return 0;
+        }
+        return 1;
+    }
+
+    function is_input() {
+        var input = document.getElementsByClassName('image-upload-wrap')[0].style.display;
+        if (input != 'none') {
+            document.getElementsByClassName('image-upload-wrap')[0].style.display = 'none';
+        }
+    }
+
+    function get_image_id() {
+        document.getElementById('delete-button').href = "{{ url_for('delete_from_report') }}?image_id=" + this.id
+
+    }
+
+    function download_image() {
+        download(this.src, this.head, 'image/gif');
+    }
+
+    function change_section_view(prevSub) {
+        is_input();
+        head = prevSub.getElementsByClassName("section-header")[0].innerText;
+        text = prevSub.getElementsByClassName("section-text")[0].innerText;
+        src = prevSub.getElementsByClassName("section-img")[0].src;
+        id = prevSub.getElementsByClassName("section-id")[0].value;
+        document.getElementById("section-name-input").value = head;
+        document.getElementById("section-text-input").value = text;
+        document.getElementById("section-image").src = src;
+        document.getElementById("image_id").value = id;
+        document.getElementById("section-submit-btn").innerHTML = "Update Section - <span class='image-title'>" + head + "</span>";
+        document.getElementById("report_form").action = "{{ url_for('update_report') }}";
+        document.getElementById('section-image').style.display = 'inline';
+        $('#delete-button').show();
+        $('#download-button').show();
+    }
+
+    function removeSection() {
+        document.getElementById("section-name-input").value = "";
+        document.getElementById("section-text-input").value = "";
+        document.getElementById("section-image").style.display = 'none';
+        document.getElementById("section-image").src = "";
+        document.getElementsByClassName('image-upload-wrap')[0].style.display = 'block';
+        document.getElementById("section-submit-btn").innerHTML = "Insert to Report - <span class='image-title'>Uploaded Image</span>";
+        document.getElementById("report_form").action = "{{ url_for('add_report') }}"
+        $('#section-name-input').css("margin-right", "0");
+        $('#delete-button').hide();
+        $('#download-button').hide();
+    }
+</script>
+
+{% include 'wrapper_end.html' %}
+<script src="{{ url_for('static', filename='js/pre_report.js') }}"></script>
+<script src="{{ url_for('static', filename='js/download.js') }}"></script>
+{% include 'footer.html' %}

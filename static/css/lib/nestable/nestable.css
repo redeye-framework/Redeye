@@ -1,0 +1,24 @@
+.main-achiv-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 80%;
+    font-size: 22px;
+    box-shadow: 4px 4px 10px black;
+}
+.achievements-list {
+    width: 85%;
+    margin-left: -40px;
+
+}
+
+.icon-set{
+    position: relative;
+    font-size: 20px;
+    float: right;
+    color: rgb(212, 71, 71);
+    bottom: -17px;
+
+}

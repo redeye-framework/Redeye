@@ -1,0 +1,337 @@
+i {
+    font-style: italic
+}
+
+
+.page-content > .card {
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+    border-width: 0;
+    background-color: #31353D !important;
+    transition: all .2s;
+    width: 45%;
+    height: 90vh;
+    margin-right: 30px !important;
+    padding: 0px !important;
+    float: left;
+    box-shadow: 4px 4px 10px black;
+}
+
+.card-header:first-child {
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    border-bottom-width: 1px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0.625rem;
+    height: 3.5rem;
+    background-color: transparent;
+}
+
+.widget-subheading {
+    color: #858a8e;
+    font-size: 10px;
+}
+
+.card-header.card-header-tab .card-header-title {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.card-header .header-icon {
+    font-size: 1.65rem;
+    margin-right: 0.625rem;
+}
+
+.card-header.card-header-tab .card-header-title {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.btn-actions-pane-right {
+    margin-left: auto;
+    white-space: nowrap
+}
+
+.wordbreak {
+    word-break: break-all;
+    word-wrap: wrap break-word;
+    white-space: pre-line;
+    white-space: pre-wrap;
+  }
+
+.scroll-area-sm {
+    height: 400px;
+    flex-grow: 1;
+    background-color: transparent;
+    overflow-x: hidden;
+
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.list-group {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.todo-indicator {
+    position: absolute;
+    width: 4px;
+    height: 60%;
+    border-radius: 0.3rem;
+    left: 0.625rem;
+    top: 20%;
+    opacity: .6;
+    transition: opacity .2s;
+}
+
+.bg-warning {
+    background-color: #f7b924 !important
+}
+
+.widget-content {
+    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.widget-content .widget-content-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    align-items: center;
+}
+
+.widget-content .widget-content-right.widget-content-actions {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.widget-content .widget-content-right {
+    margin-left: auto;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer
+}
+
+.btn {
+    position: relative;
+    margin-top: 4px;
+    transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s
+}
+
+.btn-outline-success {
+    color: #3ac47d;
+    border-color: #3ac47d
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #3ac47d;
+    border-color: #3ac47d
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #3ac47d;
+    border-color: #3ac47d
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #3f6ad8;
+    border-color: #3f6ad8
+}
+
+.btn {
+    position: relative;
+    transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    outline: none !important;
+}
+
+.main-todo-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 100%;
+}
+
+.data-todo-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 100%;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+
+}
+.exec-todo-input {
+    border-radius: 3px;
+    padding: 6px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 80%;
+    margin-top: 15px;
+    float: left;
+}
+
+.card-footer {
+    background-color: transparent;
+    padding: 30px;
+}
+
+.taskbox-info{
+    background-color: #343a40;
+    color: #bbc;
+    overflow: hidden;
+    width: 600px;
+    padding: 30px;
+    display: none;
+    position: absolute;
+    top: 200px;
+    left: 500px;
+    box-shadow: 1px 1px 20px black;
+    border-radius: 5px;
+    z-index: 100;
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.taskbox-info h2,
+.taskbox-info h5,
+.taskbox-info p {
+    max-width: 90%;
+
+}
+
+.taskbox-info .exit{
+    font-size: 2em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.taskbox-info .edit{
+    font-size: 1.5em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    margin: 15px;
+}
+
+.taskbox-info i:hover{
+    filter: brightness(85%);
+}
+
+.taskbox-info .password{
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.taskbox-edit{
+    background-color: #343a40;
+    color: #ccc;
+    overflow: hidden;
+    min-height: 200px;
+    width: 600px;
+    padding: 30px;
+    display: solid;
+    position: absolute;
+    top: 200px;
+    left: 500px;
+    box-shadow: 1px 1px 20px black;
+    border-radius: 5px;
+    z-index: 100;
+    display: none;
+}
+
+.taskbox-edit .exit{
+    font-size: 2em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.taskbox-edit .save{
+    font-size: 1.8em;
+    color: rgb(90, 124, 236);
+    padding: 5px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    margin: 15px;
+}
+
+.taskbox-edit .delete{
+    font-size: 1.6em;
+    color: rgb(201, 84, 84);
+    padding: 5px;
+    position: absolute;
+    bottom: 45px;
+    right: 7px;
+    margin: 15px;
+}
+
+.taskbox-edit i:hover{
+    filter: brightness(85%);
+}
+
+.taskbox-edit input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}
+
+.taskbox-edit select {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}
+
+.taskbox-edit textarea {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}

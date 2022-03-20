@@ -1,0 +1,244 @@
+
+.files {
+  width: 80%;
+  margin-left: 7%;
+  display: inline-block;
+}
+
+.files .container{
+  position: absolute;
+  top: 50px;
+  right: 100px;
+  width: 300px;
+  height: 60px;
+}
+
+.files h1{
+  font-weight: bolder;
+  font-size: 40px;
+  text-align: center;
+  margin-left: -100px;
+  margin-bottom: 50px;
+}
+
+.files .container .search {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  background: #3f6ad8;
+  border-radius: 50%;
+  transition: all 1s;
+  z-index: 4;
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.4);
+}
+.files .container .search:hover {
+  cursor: pointer;
+}
+.files .container .search::before {
+  content: "";
+  position: absolute;
+  margin: auto;
+  top: 22px;
+  right: 0;
+  bottom: 0;
+  left: 22px;
+  width: 12px;
+  height: 2px;
+  background: white;
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+.files .container .search::after {
+  content: "";
+  position: absolute;
+  margin: auto;
+  top: -5px;
+  right: 0;
+  bottom: 0;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: all 0.5s;
+}
+.files .container input {
+  font-family: "Inconsolata", monospace;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  outline: none;
+  border: none;
+  background: #3f6ad8;
+  color: white;
+  text-shadow: 0 0 10px #3f6ad8;
+  padding: 0 80px 0 20px;
+  border-radius: 30px;
+  transition: all 1s;
+  opacity: 0;
+  z-index: 5;
+  font-weight: bolder;
+  letter-spacing: 0.1em;
+}
+.files .container input:hover {
+  cursor: pointer;
+}
+.files .container input:focus {
+  width: 300px;
+  opacity: 1;
+  cursor: text;
+}
+.files .container input:focus ~ .search {
+  right: -250px;
+  background: #151515;
+  z-index: 6;
+}
+.files .container input:focus ~ .search::before {
+  top: 0;
+  left: 0;
+  width: 25px;
+}
+.files .container input:focus ~ .search::after {
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 2px;
+  border: none;
+  background: white;
+  border-radius: 0%;
+  transform: rotate(-45deg);
+}
+.files .container input::placeholder {
+  color: white;
+  opacity: 0.5;
+  font-weight: bolder;
+}
+
+.files .file{
+  width: 180px;
+  height: 200px;
+  float: left;
+  margin: 1%;
+  overflow:auto;
+  box-shadow: 4px 4px 10px black;
+}
+
+.card {
+  margin: 30px 10px;
+  background-color: #31353D;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px black;
+}
+
+.folder-icons {
+  display: inline-block;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-image: url(/static/pics/folder.png);
+  background-size: cover;
+  height: 90px;
+  width: 120px;
+  vertical-align: bottom;
+}
+
+.file-icons {
+  display: inline-block;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  margin-left: 25px;
+  height: 120px;
+  width: 120px;
+  vertical-align: bottom;
+}
+
+.btn {
+  border-radius: 10px;
+  background-color: #31353D;
+}
+
+.custom-menu {
+  display: none;
+  z-index: 1000;
+  position: absolute;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid rgba(224, 224, 224, 0.685) ;
+  background: #31353D;
+  color: #fff;
+  border-radius: 5px;
+  list-style: none;
+  padding: 0px;
+}
+
+.custom-menu li {
+  padding: 12px 16px;
+  cursor: pointer;
+  background: #31353D;
+  transition-duration: 0.2s;
+}
+
+.custom-menu li:hover {
+  filter: brightness(120%);
+}
+
+#new-folder {
+  padding: 30px 20px 0;
+}
+
+#new-folder:hover {
+  background-color: #31353D;
+}
+
+.folder-name-input {
+  display: flex;
+  width: 100%;
+  flex: 0 1 20px;
+}
+
+.folder-name-input > input {
+  width: 100%;
+  flex-grow: 1;
+  transition-duration: 0.2s;
+}
+
+.folder-name-input > button {
+  float: right;
+  margin-left: 5px;
+  background: #3184ff;
+  color: white;
+  border-radius: 5px;
+  border: 0.5px solid #3962ca;
+  outline: none;
+  transition-duration: 0.2s;
+  filter: brightness(120%);
+}
+
+.folder-name-input > button:hover {
+  filter: brightness(140%);
+}
+
+.main-file-input {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: rgb(67, 72, 82);
+  border-color: transparent;
+  color: #ccd;
+  width: 100%;
+  height: 15%;
+}
+
+input[type="submit"] {
+  display: none;
+}

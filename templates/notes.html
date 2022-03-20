@@ -1,0 +1,25 @@
+<div class="taskbox-info" style="display: none;">
+    <h2 class="taskname">Taskname</h2>
+    <h5 class="data">Data</h5>
+    <p class="attain"></p>
+    <span class="exec"></span>
+    <input type="hidden" class="members">
+    <a href="javascript:hideNote();" class="exit"><i class="fas fa-times"></i></a>
+    <a href="javascript:editNote();" class="edit"><i class="fas fa-edit"></i></a>
+</div>
+<div class="taskbox-edit">
+    <form action="{{ url_for('edit_note') }}" id="note-edit-form" method="POST">
+        <input type="hidden" id="input-id" name="id">
+        <input type="text" id="input-taskname" name="taskname">
+        <input type="text" id="input-data" name=data>
+        <textarea style="min-height: 60px;max-height: 200px;overflow:scroll;" id="input-attain" name="attain" placeholder="My notes for this Task"></textarea><br>
+        <select name="exec" class="exec-todo-input inline">
+            <option value="" selected disabled hidden>Executer</option>
+                {% for i in range(len_members) %}
+                    <option>{{ team_members[i][0] }}</option>
+                {% endfor %}
+        </select>
+        <a href="javascript:hideNote();" class="exit"><i class="fas fa-times"></i></a>
+        <a href="javascript:$('#note-edit-form').submit();" class="save"><i class="fas fa-save"></i></a>
+    </form>
+</div>

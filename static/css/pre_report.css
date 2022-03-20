@@ -1,0 +1,256 @@
+
+.head {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.head .section-options {
+  position: absolute;
+  display: none;
+  margin: 15px;
+  float: right;
+  font-size: 26px;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+
+.head .section-options:hover {
+  filter: brightness(125%);
+}
+
+.head #delete-button {
+  top: 0px; 
+  right: 0px;
+}
+
+.head #download-button {
+  top: 0px;
+  right: 45px;
+}
+
+.sub {
+  width: 70%;
+  margin: 0 auto;
+  float: left;
+}
+
+.file-upload {
+  position: fixed;
+  width: 60%;
+}
+
+.prev-subs {
+  display: inline-block;
+  width: 20%;
+  margin-right: 50px;
+  float: right;
+  padding: 50px 0 0 20px !important;
+}
+
+.prev-subs > .prev-sub {
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+
+.prev-subs > .prev-sub > img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: -2px 2px 7px black;
+  transition-duration: 0.2s;
+}
+
+.prev-subs > .prev-sub > img:hover {
+  box-shadow: -4px 4px 13px black;
+}
+
+.prev-subs > .prev-sub > h5 {
+  padding: 7px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.prev-subs > .prev-sub > .new-prev-sub {
+  width: 100%;
+  height: 140px;
+  display: inline-block;
+  background-color: #31353D;
+  border: 2px solid #535966;
+  color: #535966;
+  font-size: 24px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  box-shadow: -2px 2px 7px black;
+  transition-duration: 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.prev-subs > .prev-sub > .new-prev-sub:hover {
+  box-shadow: -4px 4px 13px black;
+  color: #cacaca !important;
+  border: 2px solid #9b9ea7;
+}
+
+.prev-subs > .prev-sub > .new-prev-sub > i {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%) !important;
+}
+
+#section-submit-btn {
+  margin-top: 5px;
+}
+
+#section-image {
+  display: none;
+}
+
+.upload-icon {
+  margin-top: 150px;
+}
+
+.file-upload-content {
+  text-align: center;
+}
+
+.file-upload-input {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.image-upload-wrap {
+  margin: 20px 0;
+  width: 70%;
+  height: 500px;
+  left: 15%;
+  background-color: #31353D;
+  border: 2px solid #535966;
+  position: relative;
+  border-radius: 10px;
+  color: #9b9ea7;
+  transition-duration: 0.4s;
+}
+
+.image-upload-wrap:hover {
+  color: #cacaca;
+  border: 2px solid #9b9ea7;
+}
+
+.drag-text {
+  font-weight: 100;
+  padding: 60px 0;
+  position: absolute;
+  top: 0;
+  left: 50%;  
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+#section-name-input {
+  width: 300px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: rgb(67, 72, 82);
+  border-color: transparent;
+  color: white !important;
+}
+
+::placeholder {
+  color: #9b9ea7;
+}
+
+.image-title-wrap {
+  padding: 0 15px 15px 15px;
+  color: #222;
+}
+
+.file-upload-image {
+  max-height: 90%;
+  max-width: 90%;
+  border: 2px solid #535966;
+  position: relative;
+  border-radius: 10px;
+  color: #9b9ea7;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.file-upload-image:hover {
+  color: white;
+  border: 2px solid white;
+  filter: brightness(80%);
+}
+
+.image-block {
+  position: relative;
+  margin: 20px;
+}
+
+.image-block > .file-upload-input {
+  display: none;
+}
+
+.image-block > #image-upload-icon {
+  z-index: 999;
+  opacity: 0;
+  transition-duration: 0.4s;
+} 
+
+.remove-image {
+  width: 200px;
+  margin: 0;
+  color: #fff;
+  background: #cd4535;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  border-bottom: 4px solid #b02818;
+  transition: all .2s ease;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.remove-image:hover {
+  background: #c13b2a;
+  color: #ffffff;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+
+.remove-image:active {
+  border: 0;
+  transition: all .2s ease;
+}
+
+.image_fit .file-upload-image {
+  height: 500px;
+  width: auto;
+  max-width: 900px;
+  background-size: cover;
+  background-position: center;
+}
+
+.data-report-input {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: rgb(67, 72, 82);
+  border-color: transparent;
+  color: #ccd !important;
+  margin-top: 10px;
+  resize: vertical;
+  min-height: 100px;
+  max-height: 300px;
+
+}

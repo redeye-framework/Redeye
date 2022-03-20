@@ -1,0 +1,210 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/context-menu.css') }}">
+{% include 'wrapper.html' %}
+<div class="server-page">
+  <h1 class="head">{{ server[2] }} - <span title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" class="ip"
+      style="background-color: {% if server[4] %}#04a11e {% else %}#933{% endif %};">{{ server[1] }}</span>
+  </h1>
+  <div class="edit head">
+    <a href="{{ url_for('edit_server') }}?ip={{ server[1] }}"><i class="fas fa-edit fa-2x"></i></a>
+    <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
+  </div>
+  <div class="container-fluid server-content">
+    <div class="row">
+      <div class="col col-sm-4 users">
+        <table class="table table-dark">
+          <thead>
+            <tr class="cols">
+              <th scope="col">Username</th>
+              <th scope="col">Password</th>
+              <th scope="col">Permisions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><a class="hover-user-details" style="padding: 5px 10px;" id="user-{{ user[0] }}"
+                  href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
+              </td>
+              <td>{{ user[3] }}</td>
+              <td>{{ user[4] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col col-sm-6 vulns">
+        <table class="table table-dark">
+          <thead>
+            <tr class="cols">
+              <th scope="col">Vulnerability</th>
+              <th scope="col">Description</th>
+              <th scope="col">Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vuln in vulns %}
+            <tr>
+              <td>{{ vuln[1] }}</td>
+              <td>{{ vuln[2] }}</td>
+              <td>{{ vuln[3] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-sm-6 free-text">
+        <h1>Attain</h1>
+        <p style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
+      </div>
+      
+      <div style="overflow:scroll !important;max-height: 400px !important;" class="col col-sm-auto">
+        <select value="None" style="top: -20px;left: 5px;height: 40px;width: 150px;position:absolute; " onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
+          <option value="All" selected disabled hidden>All</option>
+          <option>All</option>
+          <option>Open</option>
+          <option>Filtered</option>
+          <option>Closed</option>
+        </select>
+      </br>
+      </br>
+        <table id="ports_table" class="table table-dark ports">
+          <thead>
+            <tr class="cols">
+              <th scope="col">Port</th>
+              <th scope="col">Service</th>
+              <th scope="col">State</th>
+              <th scope="col">Vulnerable</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for port in ports %}
+            <tr>
+              <td>{{ port[1] }}</td>
+              <td>{{ port[2] }}</td>
+              <td>{{ port[3] }}</td>
+              <td>{{ port[4] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-sm-6">
+        <table style="overflow: scroll;max-height: 300px;" class="table table-dark files">
+          <thead>
+            <tr class="cols">
+              <th scope="col">Filename</th>
+              <th scope="col">Path</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for file in files %}
+            <tr>
+              <td><a id="{{ file[2] }}" name="{{ file[1] }}" href="{{ url_for('files',file_name=file[2]) }}"
+                  download="{{ file[1] }}">{{ file[1] }}</a></td>
+              <td>{{ file[2] }}</td>
+              <td>{{ file[3] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% include 'user.html' %}
+</div>
+</div>
+{% include 'wrapper_end.html' %}
+<script src="../static/js/context-menu.js"></script>
+<script src="../static/js/jquery.js"></script>
+<script>
+  $(document).ready(function() {
+    var dict = {};
+  var elms = document.querySelectorAll('[id*="files"]');
+  console.log(elms);
+  for (var i = 0; i < elms.length; i++) {
+    var el = elms[i];
+    dict[el.innerHTML] = el.href;
+    el.addEventListener('contextmenu', openContextMenu, false);
+
+  }
+
+  const menu = new ContextMenu(
+    {
+      'theme': 'default',
+      'items': [
+        { 'icon': 'file', 'name': 'View File', action: () => window.location = dict["1.txt"] },
+        //$(document.querySelectorAll('[id*="files"]'))
+        { 'icon': 'download', 'name': 'Download File', action: () => download(el.href, el.name) },
+      ]
+    }
+  );
+
+  function openContextMenu(evt) {
+    evt.preventDefault();
+    const time = menu.isOpen() ? 100 : 0;
+
+    menu.hide();
+    setTimeout(() => { menu.show(evt.pageX, evt.pageY) }, time);
+    document.addEventListener('click', hideContextMenu, false);
+  }
+
+  function hideContextMenu(evt) {
+    menu.hide();
+    document.removeEventListener('click', hideContextMenu);
+  }
+  
+    function start_context() {
+      console.log("here")
+      var el = window.event.srcElement;
+      location.href = el.href;
+      
+    }
+    //$(document.querySelectorAll('[id*="files"]')).click(start_context);
+    //$(document.querySelectorAll('[id*="files"]')).click(start_context);
+
+
+
+  function download(url, filename) {
+    fetch(url).then(function (t) {
+      return t.blob().then((b) => {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+      }
+      );
+    });
+  }
+});
+</script>
+<script>
+  function sort_ports(){
+    var state = document.getElementById('state').value;
+    var table = document.getElementById('ports_table');
+    
+    for(var i=1;i <= table.rows.length; ++i){
+      if(table.rows[i].style.display == "none"){
+            table.rows[i].style.display = "";
+            
+      }
+      var port_state = table.rows[i].cells[2].innerHTML;
+      if(state.toLowerCase() != port_state.toLowerCase() && state != "All"){
+            table.rows[i].style.display = 'none';
+        }
+      else if(state == "All"){
+        for(var i=1;i <= table.rows.length; ++i){
+            table.rows[i].style.display = "";
+        }
+      }
+    }
+  }
+</script>
+{% include 'footer.html' %}

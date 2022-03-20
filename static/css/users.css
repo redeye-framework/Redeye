@@ -1,0 +1,192 @@
+.container-users {
+    width: 80%; 
+    margin-left: 7%; 
+    display: inline-block;
+}
+
+.container-users .table {
+    box-shadow: 4px 4px 10px black !important;
+    border-radius: 10px;
+}
+
+.container-users table thead tr th{
+    border-color: transparent;
+}
+
+.container-users table tbody tr td a{
+    cursor: auto;
+}
+
+.container-users table tbody tr td a:hover{
+    color: #007bff;
+    text-decoration: none;
+}
+
+.user-details {
+    position: absolute;
+    display: none;
+    opacity: 0.94;
+}
+
+.user-info{
+    background-color: #31353D;
+    color: #bbc;
+    width: 600px;
+    padding: 30px;
+    display: solid;
+    box-shadow: 1px 1px 20px black;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.user-info .exit{
+    font-size: 2em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.user-info .edit{
+    font-size: 1.5em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    margin: 15px;
+}
+
+.user-info i:hover{
+    filter: brightness(85%);
+}
+
+.user-info .password{
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.user-edit{
+    background-color: #31353D;
+    color: #ccc;
+    width: 600px;
+    padding: 30px;
+    display: solid;
+    box-shadow: 1px 1px 20px black;
+    border-radius: 5px;
+    z-index: 100;
+    display: none;
+}
+
+.user-edit .exit{
+    font-size: 2em;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.user-edit .save{
+    font-size: 1.8em;
+    color: rgb(90, 124, 236);
+    padding: 5px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    margin: 15px;
+}
+
+.user-edit .delete{
+    font-size: 1.6em;
+    color: rgb(201, 84, 84);
+    padding: 5px;
+    position: absolute;
+    bottom: 45px;
+    right: 7px;
+    margin: 15px;
+}
+
+.user-edit i:hover{
+    filter: brightness(85%);
+}
+
+.user-edit input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}
+
+.user-edit select {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}
+
+.user-edit textarea {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 70%;
+    margin: 5px;
+}
+
+.modern-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    margin-left: -4px;
+}
+
+.inline {
+    display: inline;
+}
+
+table {
+    margin-top:20px;
+    background-color: #31353D !important;
+}
+.table-dark td, .table-dark th, .table-dark thead th {
+    border-color: #31353D;
+}
+
+.exec-users-input {
+    border-radius: 3px;
+    padding: 6px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 80%;
+    float: left;
+    margin-left: -9px;
+}
+
+.popup {
+    display: inline-block;
+    opacity: 1;
+    padding: 20px;
+    text-align: center;
+    background:rgb(113, 179, 255);
+    filter: brightness(150%);
+    color: white;
+    position: absolute;
+    bottom: 50px;
+    right: 150px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    transition-duration: 1s;
+}

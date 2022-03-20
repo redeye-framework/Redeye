@@ -1,0 +1,54 @@
+.page {
+    display: inline-block;
+    width: 800px;
+    margin-left: 10%;
+    color: #ccd;
+    font-size: 1.1em;
+}
+
+.page .input {
+    display: inline-block;
+    box-shadow: 1px 1px 3px black;
+    background-color: #31353D;
+    margin: 15px 15px 40px;
+    padding: 20px;
+    border-radius: 7px;
+    width: 100%;
+}
+
+.page .input form {
+    display: inline;
+}
+
+.page .input form .text {
+    width: 85%;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+}
+
+.page .input form .button {
+    border-radius: 3px;
+    color: white;
+    border: transparent;
+    padding: 8px;
+    margin-left: 10px;
+    background-color: rgb(45, 119, 189);
+}
+
+.page .tweets .tweet {
+    display: inline-block;
+    background-color: #31353D;
+    box-shadow: 1px 1px 3px black;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 7px;
+    width: 100%
+}
+
+.page .tweets .tweet .uploader {
+    float: right;
+    color: #88a;
+}
