@@ -1,7 +1,6 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/context-menu.css') }}">
 {% include 'wrapper.html' %}
 <div class="server-page">
   <h1 class="head">{{ server[2] }} - <span title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" class="ip"
@@ -123,7 +122,6 @@
 </div>
 </div>
 {% include 'wrapper_end.html' %}
-<script src="../static/js/context-menu.js"></script>
 <script src="../static/js/jquery.js"></script>
 <script>
   $(document).ready(function() {
