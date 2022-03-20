@@ -1,54 +1,59 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}"> {% include 'wrapper.html' %}
-{% for section in data %}
-<div class="container-fluid section">
-    <h4 class="section-name">{{ data[section]['name'] }}</h4>
-    <input class="section-name-input" type="text" value="{{ section }}">
-    <div class="row">
-        {% for server in data[section]['info'] %}
-        <a href="{{ url_for('server') }}?ip={{ data[section]['info'][server]['srvDetails'][1] }}">
-            <div class="server-box {% if not data[section]['info'][server]['srvDetails'][4] %}server-box-no-access{% endif %}">
-                <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
-                <div class="content">
-                    <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
-                        <script>
-                            var ports = "{{ data[section]['info'][server]['ports'][0][2] if data[section]['info'][server]['ports'][0] }}";
+<link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}"> 
+{% include 'wrapper.html' %}
+<div class="section-hide-all-btn"><i class="fas fa-angle-down"></i></div>
+<div class="sections">
+    {% for section in data %}
+    <div class="container-fluid section">
+        <h4 class="section-name">{{ data[section]['name'] }}</h4>
+        <input class="section-name-input" type="text" value="{{ section }}">
+        <!--div class="section-delete-btn"><i class="fas fa-angle-down"></i></div-->
+        <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
+        <div class="row">
+            {% for server in data[section]['info'] %}
+            <a href="{{ url_for('server') }}?ip={{ data[section]['info'][server]['srvDetails'][1] }}">
+                <div class="server-box {% if not data[section]['info'][server]['srvDetails'][4] %}server-box-no-access{% endif %}">
+                    <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
+                    <div class="content">
+                        <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
+                            <script>
+                                var ports = "{{ data[section]['info'][server]['ports'][0][2] if data[section]['info'][server]['ports'][0] }}";
 
-                            if (ports.length > 0) {
-                                document.write(ports);
-                            } else {
-                                document.write("None");
-                            }
-                        </script>
+                                if (ports.length > 0) {
+                                    document.write(ports);
+                                } else {
+                                    document.write("None");
+                                }
+                            </script>
+                        </div>
+                        <div class="user"><i class="fas fa-user"></i> {{ data[section]['info'][server]['users'][0][2] if data[section]['info'][server]['users'][0] }}</div>
+                        <div class="vulnerability"><i class="fas fa-bullseye"></i> {% if (data[section]['info'][server]['srvDetails'][4] and data[section]['info'][server]['ports'][0]) %}Yes{% else %}No{% endif %}</div>
                     </div>
-                    <div class="user"><i class="fas fa-user"></i> {{ data[section]['info'][server]['users'][0][2] if data[section]['info'][server]['users'][0] }}</div>
-                    <div class="vulnerability"><i class="fas fa-bullseye"></i> {% if (data[section]['info'][server]['srvDetails'][4] and data[section]['info'][server]['ports'][0]) %}Yes{% else %}No{% endif %}</div>
+                    <div class="ip"><i class="fas fa-globe-americas"></i> {{ data[section]['info'][server]['srvDetails'][1] }}</div>
                 </div>
-                <div class="ip"><i class="fas fa-globe-americas"></i> {{ data[section]['info'][server]['srvDetails'][1] }}</div>
-            </div>
-        </a>
-        {% endfor %}
-        <a href="{{ url_for('edit_server') }}?section={{ data[section]['name'] }}">
-            <div class="server-box" style="border-top: 4px solid #ccc;">
-                <div class="new">
-                    <i class="fas fa-plus"></i>
+            </a>
+            {% endfor %}
+            <a href="{{ url_for('edit_server') }}?section={{ data[section]['name'] }}">
+                <div class="server-box" style="border-top: 4px solid #ccc;">
+                    <div class="new">
+                        <i class="fas fa-plus"></i>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
-</div>
-<br><br>
-<hr><br> 
-{% endfor %}
-<div class="section">
-    <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
-        <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
+    <hr><br> 
+    {% endfor %}
+    <div class="section">
+        <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
+            <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
+        </form>
+    </div>
+    <form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
+        <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
+        <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
     </form>
 </div>
-<form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
-    <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
-    <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
-</form>
 {% include 'wrapper_end.html' %}
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>
 {% include 'footer.html' %}
