@@ -25,6 +25,7 @@ import socketio as client_socket
 from threading import Thread, Lock
 from urllib.parse import unquote
 from shutil import copy as copyFile
+import hashlib
 
 
 app = Flask(__name__, template_folder="templates")
@@ -1219,7 +1220,7 @@ def add_user():
 
     username = request.form.get("username")
     password = request.form.get("password")
-    user_id = db.add_new_user(username, password)
+    user_id = db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest())
 
     return redirect(request.referrer)
 
@@ -1239,7 +1240,7 @@ def update_password():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.args.to_dict()
-    db.update_user_details("password", dict["password"], dict["user_id"])
+    db.update_user_details("password", hashlib.sha256(dict["password"].encode()).hexdigest(), dict["user_id"])
 
     return redirect(request.referrer)
 

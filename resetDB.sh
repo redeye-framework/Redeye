@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#! /bin/bash
 rm RedDB/managementDB.db
 rm RedDB/Projects/*
 rm -rf files/*

@@ -11,3 +11,4 @@ RedeyeVirtualEnv/*
 *.whl
 *.gz
 vpackages
+resetDB.sh

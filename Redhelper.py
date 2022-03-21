@@ -11,6 +11,7 @@ import base64
 from mimetypes import guess_extension
 from collections import defaultdict
 import shutil
+import hashlib
 
 
 # Consts
@@ -184,7 +185,8 @@ def check_login(creds):
     approve = db.get_redeye_users()
     try:
         for a in approve:
-            if a[1] == creds["username"] and a[2] == creds["password"]:
+            print(a[2], hashlib.sha256(creds["password"].encode()).hexdigest())
+            if a[1] == creds["username"] and a[2] == hashlib.sha256(creds["password"].encode()).hexdigest():
                 return(a[0])
     except Exception:
         pass
