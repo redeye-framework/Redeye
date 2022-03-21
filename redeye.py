@@ -71,6 +71,7 @@ def init(app):
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
         makedirs(d9, exist_ok=True)
+        makedirs("files", exist_ok=True)
 
 """
 =======================================================
@@ -1222,27 +1223,36 @@ def add_user():
 
     return redirect(request.referrer)
 
-@socketio.on('update_user_name')
-def update_user_name(json):
+@app.route('/update_user_name',methods=['POST'])
+def update_user_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    username = json["username"]
-    user_id = json["user_id"]
-    db.update_user_details("username", username, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_user_name")
+    dict = request.args.to_dict()
+    db.update_user_details("username", dict["username"], dict["user_id"])
 
-@socketio.on('update_password')
-def update_password(json):
+    return redirect(request.referrer)
+
+@app.route('/update_password',methods=['POST'])
+def update_password():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    password = json["password"]
-    user_id = json["user_id"]
-    db.update_user_details("password", password, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_password")
+    dict = request.args.to_dict()
+    db.update_user_details("password", dict["password"], dict["user_id"])
+
+    return redirect(request.referrer)
+
+
+@app.route('/delete_managment_user',methods=['POST'])
+def delete_managment_user():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.delete_user_by_id(dict["user_id"])
+
+    return redirect(request.referrer)
 
 
 """

@@ -939,6 +939,11 @@ def update_user_details(obj, data, user_id):
     query = 'UPDATE redeye_users SET "{}"="{}" WHERE id="{}"'.format(obj,data,user_id)
     return get_db_with_actions(MANAGE_DB, query)
 
+@check_input
+def delete_user_by_id(user_id):
+    query = 'DELETE FROM redeye_users WHERE id="{}"'.format(user_id)
+    return get_db_with_actions(MANAGE_DB, query)
+
 
 """
 =======================================================

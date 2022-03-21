@@ -12,7 +12,7 @@ function editName(curr) {
         $input.hide()
         $(curr).show()
 
-        socket.emit("update_user_name", { user_id: userId, username: name })
+        $.post(Flask.url_for('update_user_name', { user_id: userId, username: name }));
     })
 }
 
@@ -36,13 +36,18 @@ function editPassword(curr) {
         $input.hide()
         $(curr).show()
         $(curr).siblings("br").hide()
-        socket.emit("update_password", { user_id: userId, password: password })
+        $.post(Flask.url_for('update_password', { user_id: userId, password: password }));
         $(curr).html("*********************")
         alert("Password was changed.")
     });
 }
 
-// TODO: Add socket.on for password changed (to change the value of the password to the updated hash).
-socket.on('update_password', function(details) {
-    // details["user_id"]
-});
+function deleteUser(parent, curr) {
+    var userId = $(curr).siblings(".user-id").val();
+    var username = $(curr).siblings(".input-name").val();
+    if (!confirm('This will Permanently delete the user. Do you wish to continue?')) {
+        return
+    }
+    $(parent).hide();
+    $.post(Flask.url_for('delete_managment_user', { user_id: userId }));
+}

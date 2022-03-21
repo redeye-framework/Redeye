@@ -11,7 +11,7 @@
             <input type="text" class="name input input-name">
             <div class="password" onclick="editPassword(this)">{{ user[2] }}</div>
             <input type="text" class="password input input-password"><br style="display: none;">
-            <div class="delete"><a href="#"><i class="fa fa-trash"></i></a></div>
+            <div class="delete" onclick="deleteUser(this.parentElement.parentElement,this)"><a href="#"><i class="fa fa-trash"></i></a></div>
         </div>
     </div>
     {% endfor %}
@@ -26,4 +26,6 @@
     </div>
 </div>
 
+{% include 'wrapper_end.html' %}
+<script src="{{ url_for('static', filename='js/serverusers.js') }}"></script>
 {% include 'footer.html' %}
