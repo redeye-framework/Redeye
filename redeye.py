@@ -24,6 +24,7 @@ from flask_socketio import SocketIO, emit
 import socketio as client_socket
 from threading import Thread, Lock
 from urllib.parse import unquote
+from shutil import copy as copyFile
 
 
 app = Flask(__name__, template_folder="templates")
@@ -48,6 +49,8 @@ projects = []
 # CONSTS
 IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less permissive) set this to False.
 PROFILE_PICS = r"static/pics/profiles"
+DEFAULT_JSONS = r"static/jsons"
+DEFAULT_DB = r"ExampleDB"
 PRIVATE_MESSAGE = 1
 GROUP_MESSAGE = 2
 GLOBAL_MESSAGE = 3
@@ -932,13 +935,17 @@ def attack():
                 os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
     
     dic_data = {}
+    if session["project"] == DEFAULT_DB:
+        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(session["project"]))
+
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
     if "New" in attacks:
         attacks.remove("New")
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
-            dic_data[attack] = data.read()    
+            dic_data[attack] = data.read()
+        
 
     return render_template('attack.html', project=session["project"], username=session["username"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 

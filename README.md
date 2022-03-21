@@ -43,14 +43,22 @@ PreReport panel will contain all the screenshots from the current pentest.
 ## Installation
 
 ### Source
-`$ cd Redeye`<br>
-`$ chmod +x setup.sh && ./setup.sh`<br>
-`$ python3 redeye.py`<br>
+```
+cd Redeye
+sudo apt install python3.8-venv
+python3 -m venv RedeyeVirtualEnv
+source RedeyeVirtualEnv/bin/activate
+pip3 install -r requirements.txt
+python3 RedDB/db.py
+python3 redeye.py
+```
 
 ### Docker
 
-`chmod +x buildDocker.sh`<br>
-`./buildDocker.sh`<br>
+```
+chmod +x buildDocker.sh
+./buildDocker.sh
+```
 
 `Redeye will listen on: http://0.0.0.0:5000`
 

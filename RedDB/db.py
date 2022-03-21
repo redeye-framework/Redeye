@@ -1101,7 +1101,7 @@ def create_tables(db, tables, init):
     try:
         c = conn.cursor()
         c.executescript(tables)
-        if db == "example.db":
+        if db == PROJECT_PATH + "example.db":
             c.executescript(init)
         print("Tables Created.")
     except Error as e:
