@@ -7,12 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Redeye - {{ project }}</title>
     {{ JSGlue.include() }}
-    <link rel="icon" href="{{ url_for('static', filename='pics/redeye.png') }}" type="image/x-icon"> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
-    <script>
-        alert("{{ message }}")
-    </script>
-    {% endfor %} {% endif %} {% endwith %}
-    <link rel="icon" href="{{ url_for('static', filename='pics/redeye.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='pics/redeye.ico') }}" type="image/x-icon" /> 
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.flowchart.css') }}">
