@@ -59,7 +59,9 @@ $("table").mouseover(function() {
     }
     else {
         $(this).focusout(function() {
-            $(this).find(".tr-add").hide()
+            if (!$(this).is(':hover')) {
+                $(this).find(".tr-add").hide()
+            }
         })
     }
     //$(this).find(".tr-add").find('td')
