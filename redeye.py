@@ -396,6 +396,7 @@ def create_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!")
     if request.method == 'POST':
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
@@ -404,12 +405,13 @@ def create_user():
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
         
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!")
         if not user_name:
             return redirect(request.referrer)
         if not user_pass:
             user_pass = "Unknown"
         if not user_perm:
-            user_perm = "READ | WRITE"
+            user_perm = "READ|WRITE"
         if not user_type or int(user_type) == 6:
             manual_type = request.form.get('select_type')
             if manual_type:
@@ -428,7 +430,8 @@ def create_user():
             else:
                 server_id = "NULL"
 
-        db.insert_new_user(session["db"], user_type,server_id, found, user_name, user_pass,
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!")
+        db.insert_new_user(session["db"], user_type, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
         return redirect(request.referrer)
 
@@ -630,7 +633,7 @@ def create_vuln():
             fix = '-'
         db.insert_new_vuln(session["db"], name, desc, fix, server_id,
                            session["username"])
-        return redirect(url_for('edit_server') + '?ip=' + server_ip)
+        return redirect(request.referrer)
 
 @app.route('/delete_vuln')
 def delete_vuln():
