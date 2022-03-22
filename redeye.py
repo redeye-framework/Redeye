@@ -26,7 +26,8 @@ from threading import Thread, Lock
 from urllib.parse import unquote
 from shutil import copy as copyFile
 import hashlib
-
+from fire import Fire
+from glob import glob
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -60,7 +61,6 @@ APP = "red"
 def init(app):
     global projects
     projects = db.get_projects()
-    print(projects)
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
@@ -668,7 +668,7 @@ def create_comment():
 
     if request.method == 'POST':
         data = request.form.get('data')
-        db.create_comment(session["db"], data, session["username"])
+        db.create_comment(session["db"], data, session["username"], datetime.now().strftime("%H:%M:%S - %d/%m/%Y "))
         return redirect(url_for('index'))
 
 """
@@ -1125,10 +1125,9 @@ def search():
                         matches.append(data[i])
                     break
 
-        print(matches)
         for match in matches:
             info[match[4]].append(db.get_data_by_table(session["db"], match[4],match[1]))
-            print(info)
+
     return render_template('results.html', project=session["project"], username=session["username"],keyword=keyword,data_len=len(matches),data=info)
 
 """
@@ -1277,9 +1276,8 @@ def updateNoteName(json):
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    print(json)
     db.update_notebookName(session["db"],json["noteId"], json["data"])
-    print(session)
+
 
 
 """
@@ -1298,7 +1296,7 @@ def add_scan(file):
                 for ip_addr, data in nmap_dic.items():
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
-                    print(ip_addr)
+
                     if not db.check_if_server_exsist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
@@ -1322,7 +1320,6 @@ def add_scan(file):
                                     port_num, state, service, "", "server_id", server_id)
 
     except Exception as e:
-        print("ERROR: Exception adding nmap scan: ", e)
         return 0
     return 1
 
@@ -1409,8 +1406,6 @@ def emit_to_all_users(details, function_name):
     for uid in db.get_redeye_users():
         uid = uid[0]
         if str(uid) in clients.keys():
-            print("uid: " + str(uid))
-            print("room: " + clients[str(uid)])
             emit(function_name,details ,room=clients[str(uid)])
 
 @socketio.on('socket_connection')
@@ -1430,20 +1425,62 @@ def add_header(response):
 @app.route('/')
 def index(logged=False):
     if not is_logged(logged):
-        print("dsa")
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     comments = db.get_all_comments(session["db"])
-    #print("logged: " + logged)
+
     return render_template('index.html', project=session["project"], username=session["username"], display_name=session["username"], comments=comments)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+
+def startRedeye(reset=False,debug=False,port=5000):
+    if reset:
+        projectsFiles = glob("RedDB/Projects/*")
+        allFiles = glob("files/**", recursive=True)
+
+        # Remove management DB
+        if path.exists("RedDB/managementDB.db"):
+            os.remove("RedDB/managementDB.db")
+
+        # Remove all project files
+        for project in projectsFiles:
+                os.remove(project)
+
+        # Remove all files
+        for file in allFiles:
+            if path.isfile(file):
+                os.remove(file)
+
+        # List all Dirs under files
+        allFolders = glob("files/**", recursive=True)
+        # Delete Subdirs to Root dirs
+        allFolders.reverse()
+
+        # Remove all dirs
+        for folder in allFolders:
+            os.rmdir(folder)
+
+        # Init DB
+        db.init()
+
+    init(app)
+    if debug:
+        socketio.run(app, debug=True, host='0.0.0.0', port=port)
+    else:
+        socketio.run(app, debug=False, host='0.0.0.0', port=port)
+
+
 if __name__ == "__main__":
     # Run app.
     # only app run goes here
     helper.setGlobals()
-    init(app)
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    Fire(startRedeye)

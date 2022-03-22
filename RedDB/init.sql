@@ -23,7 +23,7 @@ INSERT INTO users(type, server_id, username, password, permissions) VALUES(1, 1,
 INSERT INTO users(type, server_id, username, password, permissions) VALUES(1, 1, "mailUser", "Bb123123", "READ");
 
 -- comments:
-INSERT INTO comments(data, executor) VALUES("Welcome to Redeye!", "@Devs");
+INSERT INTO comments(data, executor, date) VALUES("Welcome to Redeye!", "@Devs", "77:77:77 - 01/01/1970 ");
 
 -- exploits:
 INSERT INTO exploits(name, data) VALUES("Nmap EB Scan", "nmap -n -Pn -p445 --script <ip>")

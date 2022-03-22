@@ -20,7 +20,6 @@ PROJECT_END = "May 20 2020" # Need to change this to be in the database
 SERVICES_FILE = "Tools/services"
 
 def setGlobals():
-    print("Setting globals")
     global MAIN_FILES
     global FILES_FOLDER
     global PASS_FOLDER
@@ -41,7 +40,6 @@ def setGlobals():
     REPORT_IMAGES = "files/{}/report_images"
 
 def setFilesFolder(folderName):
-    print(folderName)
     return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), PASS_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), ADMIN_FILES.format(folderName), REPORT_IMAGES.format(folderName)
      
 
@@ -132,10 +130,10 @@ def share_files(walk_dir):
         dic_files = defaultdict(list)
         dic_folders = defaultdict(list)
         for subdir in subdirs:
-            #print('\t- subdirectory ' + subdir)
+
             dic_folders[subdir].append(os.path.join(root, subdir))
         for filename in files:
-            #file_path = os.path.join(root, filename)
+
             dic_files[filename].append(os.path.join(root, filename))
         dic[root].append([dic_folders,dic_files])
         break
@@ -155,7 +153,7 @@ def get_all_files(walk_dir):
     for root, subdirs, files in os.walk(walk_dir):
         for filename in files:
             lst_files[filename].append(os.path.join(root, filename))
-    print(lst_files)
+
     return lst_files
 
 def convert_path_to_name(full_name_list):
@@ -185,7 +183,6 @@ def check_login(creds):
     approve = db.get_redeye_users()
     try:
         for a in approve:
-            print(a[2], hashlib.sha256(creds["password"].encode()).hexdigest())
             if a[1] == creds["username"] and a[2] == hashlib.sha256(creds["password"].encode()).hexdigest():
                 return(a[0])
     except Exception:
@@ -233,7 +230,7 @@ def serve_file_by_os():
         return 2
 
 def set_task(task):
-    print(task)
+
     if 'task_executer' not in task:
         task['task_executer'] = "All"
     if task['task_name'] == '':
@@ -299,7 +296,7 @@ def get_logs(userdb, logs, keyword=None):
         key_word_objs,days,month_years,sorted_logs =[],[],[],[]
         for i,obj in enumerate(all_objects):
             item = obj[0]
-            print(item[2:])
+
             if keyword.lower() in str(item[2:]).lower():
                 key_word_objs.append(obj)
                 log = db.get_log_by_id(userdb, obj[0][0])[0]
@@ -353,7 +350,6 @@ def get_project_name(projects, dbname):
 def get_service_name_by_port(port):
     f = open(SERVICES_FILE, "r")
     lines = f.read().split("\n")
-    print(" " + port + "/")
     port = "\t" + port + "/"
     for line in lines:
         if port in line:
