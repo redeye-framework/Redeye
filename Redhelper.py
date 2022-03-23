@@ -12,6 +12,7 @@ from mimetypes import guess_extension
 from collections import defaultdict
 import shutil
 import hashlib
+import zipfile
 
 
 # Consts
@@ -356,3 +357,12 @@ def get_service_name_by_port(port):
             word = line.split("\t")[0]
             return word
     return "unknown"
+
+
+def zipdir(filesPath, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(filesPath):
+        for file in files:
+            ziph.write(path.join(root, file), 
+                       path.relpath(path.join(root, file), 
+                                       path.join(filesPath, '..')))

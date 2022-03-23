@@ -10,5 +10,7 @@ RedeyeVirtualEnv/*
 *.jpg
 *.whl
 *.gz
+*.zip
+zip/*
 vpackages
 resetDB.sh

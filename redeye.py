@@ -25,9 +25,12 @@ import socketio as client_socket
 from threading import Thread, Lock
 from urllib.parse import unquote
 from shutil import copy as copyFile
+from shutil import copytree as copyDir
+from shutil import rmtree as rmDir
 import hashlib
 from fire import Fire
 from glob import glob
+import zipfile
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -53,6 +56,8 @@ IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less 
 PROFILE_PICS = r"static/pics/profiles"
 DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
+ZIP_FOLDER = r"zip"
+FILES_FOLDER = r"files/"
 PRIVATE_MESSAGE = 1
 GROUP_MESSAGE = 2
 GLOBAL_MESSAGE = 3
@@ -72,7 +77,7 @@ def init(app):
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
         makedirs(d9, exist_ok=True)
-        makedirs("files", exist_ok=True)
+        makedirs(FILES_FOLDER, exist_ok=True)
 
 """
 =======================================================
@@ -1203,8 +1208,8 @@ def delete_exploit():
 =======================================================
 """
 
-@app.route("/serverusers",methods=['GET'])
-def serverusers():
+@app.route("/management",methods=['GET'])
+def management():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
@@ -1213,7 +1218,8 @@ def serverusers():
     for i,user in enumerate(users):
         users[i] = users[i][:2] + ("*********************",) + users[i][3:] + ("RedTeam",)
         
-    return render_template("serverusers.html", project=session["project"], username=session["username"], users=users)
+    return render_template("management.html", project=session["project"], username=session["username"], users=users)
+
 
 @app.route('/add_user',methods=['POST'])
 def add_user():
@@ -1225,6 +1231,7 @@ def add_user():
     user_id = db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest())
 
     return redirect(request.referrer)
+
 
 @app.route('/update_user_name',methods=['POST'])
 def update_user_name():
@@ -1253,10 +1260,91 @@ def delete_managment_user():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.args.to_dict()
-    db.delete_user_by_id(dict["user_id"])
+
+    if int(dict["user_id"]) != session["uid"]:
+        db.delete_user_by_id(dict["user_id"])
+        return ('', 204)
+    else:
+        # Todo return flash msg
+        return
+
+
+@app.route('/uploadManagmentUserPicture',methods=['POST'])
+def uploadManagmentUserPicture():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Example: 
+    # {'profilePicture-2': <FileStorage: 'adwaita-day.png' ('image/png')>}
+    # {'profilePicture-IdOfTheUser' : FileObject}
+    newProfilePicture = request.files.to_dict()
+    for key, value in newProfilePicture.items():
+        userId = key.split("-")[1]
+        newPicture = value
+
+        _, fileName = helper.save_file(newPicture, PROFILE_PICS)
+        db.change_user_profile_pic(userId,fileName)
 
     return redirect(request.referrer)
 
+    
+@app.route('/exportAll',methods=['GET'])
+def exportAll():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Create zip folder to export
+    makedirs(ZIP_FOLDER, exist_ok=True)
+
+    # Create new zip file contains:
+    # 1) The DB of the env
+    # 2) All files from that env
+    with zipfile.ZipFile(f'zip/RedEye-{session["project"]}.zip', 'w', zipfile.ZIP_DEFLATED) as exported:
+        helper.zipdir(f'files/{session["project"]}/',exported)
+        exported.write(f'{session["db"]}')
+    
+    # Send user the zip file
+    return send_from_directory(ZIP_FOLDER, f'RedEye-{session["project"]}.zip')
+
+
+@app.route('/importAll',methods=['GET'])
+def importAll():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Make sure zip folder is present
+    makedirs(ZIP_FOLDER, exist_ok=True)
+    
+    # Test with temp zip file - Waiting for UI
+    testing = path.join(ZIP_FOLDER,"RedEye-test.zip")
+    projectName = testing.split('-')[1].split('.')[0]
+
+    # Extract all files to the zip folder
+    with zipfile.ZipFile(testing, 'r') as imported:
+        imported.extractall(ZIP_FOLDER)
+    
+    # Get the db file name
+    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))
+
+    # Only if the user uploaded any files
+    if dbFile:
+        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile[0])
+        # Copy the DB file to the Projects DB folder
+        copyFile(dbFilePath, "RedDB/Projects")
+
+    # Copy files dir to Redeye files dir
+    copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
+
+    # Create new Project in managment DB
+    db.insert_new_project(projectName,dbFile)
+
+    # Refresh projects global
+    refresh_projects()
+
+    # Delete zip folder - It will be created again with new Import/Export
+    rmDir(ZIP_FOLDER)
+
+    return ('', 204)
 
 """
 =======================================================

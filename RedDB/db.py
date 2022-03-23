@@ -1025,6 +1025,15 @@ def get_redeye_user_by_id(id):
     return db_get(MANAGE_DB, query)[0]
 
 @check_input
+def change_user_profile_pic(userId,profilePicName):
+    query = '''UPDATE redeye_users
+              SET profile_pic = "{}" 
+              WHERE id = "{}" '''.format(profilePicName, userId)
+
+    result = get_db_with_actions(MANAGE_DB, query)
+    return(result)
+
+@check_input
 def get_redeye_users_names():
     query = r'SELECT username FROM redeye_users'
     return db_get(MANAGE_DB, query)
