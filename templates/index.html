@@ -1,6 +1,5 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tweets.css') }}">
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tweets.css') }}"> {% include 'wrapper.html' %}
 <div class="page">
     <div class="input">
         <form action="{{ url_for('create_comment') }}" method="POST">
@@ -11,22 +10,21 @@
     <div class="tweets">
         {% for comment in comments %}
         <div class="tweet">
-            <div class="content"><p>{{ comment[1] }}</p></div>
+            <div class="content">
+                <p>{{ comment[1] }}</p>
+            </div>
             <div class="resources"></div>
             <div class="uploader">
-                {% if comment[2] != display_name %}
-                    {{ comment[2] }}
-                {% else %}
-                    <form action="{{ url_for('delete_comment') }}" method="POST" id="delete-comment-form-{{ comment[0] }}">
-                        <input type="hidden" name="id" value="{{ comment[0] }}">
-                        <a href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
+                {% if comment[2] != display_name %} {{ comment[2] }} {% else %}
+                <form action="{{ url_for('delete_comment') }}" method="POST" id="delete-comment-form-{{ comment[0] }}">
+                    <input type="hidden" name="id" value="{{ comment[0] }}">
+                    <a href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
                                             style="margin-left: 15px; color: rgb(201, 84, 84);"></i></a>
-                    </form>
-                {% endif %}
+                </form>
+                {% endif %} {{ comment[3] }}
             </div>
         </div>
-        {% endfor %}        
+        {% endfor %}
     </div>
 </div>
-{% include 'wrapper_end.html' %}
-{% include 'footer.html' %}
+{% include 'wrapper_end.html' %} {% include 'footer.html' %}

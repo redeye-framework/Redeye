@@ -220,10 +220,6 @@ hr {
     border-radius: 10px;
 }
 
-.server-content .ports {
-    width: 450px;
-}
-
 .server-content .files {
     width: 640px;
 }
@@ -255,9 +251,15 @@ hr {
     text-decoration: none;
 }
 
+.server-content table .tr-add {
+    display: none;;
+    transition-duration: 0.3s;
+}
+
 .server-content .cols th{
     border-top: none;
 }
+
 
 .inline {
     display: inline-block;

@@ -24,7 +24,6 @@ def serialize_input(*user_input):
     for data in user_input:
         blacklist = REGEX.findall(str(data))
         if blacklist:
-            print("found not allowed chars, will not execute the query ==> ", blacklist)
             return False
     return True
 
@@ -613,7 +612,6 @@ def change_section_id(db, id, newName):
               WHERE id = "{}" '''.format(newName,id)
 
     result = get_db_with_actions(db, query)
-    print(result)
     return(result)
 
 """
@@ -803,9 +801,9 @@ def get_all_comments(db):
     return db_get(db, query)
 
 @check_input
-def create_comment(db, data, executor):
-    query = 'INSERT INTO comments(data, executor) VALUES("{}", "{}");'.format(
-        data, executor)
+def create_comment(db, data, executor, date):
+    query = 'INSERT INTO comments(data, executor, date) VALUES("{}", "{}", "{}");'.format(
+        data, executor, date)
     return(get_db_with_actions(db, query))
 
 @check_input
@@ -937,6 +935,11 @@ def add_new_user(username, password):
 @check_input
 def update_user_details(obj, data, user_id):
     query = 'UPDATE redeye_users SET "{}"="{}" WHERE id="{}"'.format(obj,data,user_id)
+    return get_db_with_actions(MANAGE_DB, query)
+
+@check_input
+def delete_user_by_id(user_id):
+    query = 'DELETE FROM redeye_users WHERE id="{}"'.format(user_id)
     return get_db_with_actions(MANAGE_DB, query)
 
 
@@ -1101,7 +1104,7 @@ def create_tables(db, tables, init):
     try:
         c = conn.cursor()
         c.executescript(tables)
-        if db == "example.db":
+        if db == PROJECT_PATH + "example.db":
             c.executescript(init)
         print("Tables Created.")
     except Error as e:

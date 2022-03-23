@@ -24,7 +24,10 @@ from flask_socketio import SocketIO, emit
 import socketio as client_socket
 from threading import Thread, Lock
 from urllib.parse import unquote
-
+from shutil import copy as copyFile
+import hashlib
+from fire import Fire
+from glob import glob
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -48,6 +51,8 @@ projects = []
 # CONSTS
 IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less permissive) set this to False.
 PROFILE_PICS = r"static/pics/profiles"
+DEFAULT_JSONS = r"static/jsons"
+DEFAULT_DB = r"ExampleDB"
 PRIVATE_MESSAGE = 1
 GROUP_MESSAGE = 2
 GLOBAL_MESSAGE = 3
@@ -56,7 +61,6 @@ APP = "red"
 def init(app):
     global projects
     projects = db.get_projects()
-    print(projects)
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
@@ -68,6 +72,7 @@ def init(app):
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
         makedirs(d9, exist_ok=True)
+        makedirs("files", exist_ok=True)
 
 """
 =======================================================
@@ -393,6 +398,7 @@ def create_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!")
     if request.method == 'POST':
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
@@ -401,12 +407,13 @@ def create_user():
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
         
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!")
         if not user_name:
             return redirect(request.referrer)
         if not user_pass:
             user_pass = "Unknown"
         if not user_perm:
-            user_perm = "READ | WRITE"
+            user_perm = "READ|WRITE"
         if not user_type or int(user_type) == 6:
             manual_type = request.form.get('select_type')
             if manual_type:
@@ -425,7 +432,8 @@ def create_user():
             else:
                 server_id = "NULL"
 
-        db.insert_new_user(session["db"], user_type,server_id, found, user_name, user_pass,
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!")
+        db.insert_new_user(session["db"], user_type, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
         return redirect(request.referrer)
 
@@ -627,7 +635,7 @@ def create_vuln():
             fix = '-'
         db.insert_new_vuln(session["db"], name, desc, fix, server_id,
                            session["username"])
-        return redirect(url_for('edit_server') + '?ip=' + server_ip)
+        return redirect(request.referrer)
 
 @app.route('/delete_vuln')
 def delete_vuln():
@@ -663,7 +671,7 @@ def create_comment():
 
     if request.method == 'POST':
         data = request.form.get('data')
-        db.create_comment(session["db"], data, session["username"])
+        db.create_comment(session["db"], data, session["username"], datetime.now().strftime("%H:%M:%S - %d/%m/%Y "))
         return redirect(url_for('index'))
 
 """
@@ -932,13 +940,17 @@ def attack():
                 os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
     
     dic_data = {}
+    if session["project"] == DEFAULT_DB:
+        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(session["project"]))
+
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
     if "New" in attacks:
         attacks.remove("New")
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
-            dic_data[attack] = data.read()    
+            dic_data[attack] = data.read()
+        
 
     return render_template('attack.html', project=session["project"], username=session["username"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
@@ -1116,10 +1128,9 @@ def search():
                         matches.append(data[i])
                     break
 
-        print(matches)
         for match in matches:
             info[match[4]].append(db.get_data_by_table(session["db"], match[4],match[1]))
-            print(info)
+
     return render_template('results.html', project=session["project"], username=session["username"],keyword=keyword,data_len=len(matches),data=info)
 
 """
@@ -1211,31 +1222,40 @@ def add_user():
 
     username = request.form.get("username")
     password = request.form.get("password")
-    user_id = db.add_new_user(username, password)
+    user_id = db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest())
 
     return redirect(request.referrer)
 
-@socketio.on('update_user_name')
-def update_user_name(json):
+@app.route('/update_user_name',methods=['POST'])
+def update_user_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    username = json["username"]
-    user_id = json["user_id"]
-    db.update_user_details("username", username, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_user_name")
+    dict = request.args.to_dict()
+    db.update_user_details("username", dict["username"], dict["user_id"])
 
-@socketio.on('update_password')
-def update_password(json):
+    return redirect(request.referrer)
+
+@app.route('/update_password',methods=['POST'])
+def update_password():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    password = json["password"]
-    user_id = json["user_id"]
-    db.update_user_details("password", password, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_password")
+    dict = request.args.to_dict()
+    db.update_user_details("password", hashlib.sha256(dict["password"].encode()).hexdigest(), dict["user_id"])
+
+    return redirect(request.referrer)
+
+
+@app.route('/delete_managment_user',methods=['POST'])
+def delete_managment_user():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.delete_user_by_id(dict["user_id"])
+
+    return redirect(request.referrer)
 
 
 """
@@ -1259,9 +1279,8 @@ def updateNoteName(json):
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    print(json)
     db.update_notebookName(session["db"],json["noteId"], json["data"])
-    print(session)
+
 
 
 """
@@ -1280,7 +1299,7 @@ def add_scan(file):
                 for ip_addr, data in nmap_dic.items():
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
-                    print(ip_addr)
+
                     if not db.check_if_server_exsist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
@@ -1304,7 +1323,6 @@ def add_scan(file):
                                     port_num, state, service, "", "server_id", server_id)
 
     except Exception as e:
-        print("ERROR: Exception adding nmap scan: ", e)
         return 0
     return 1
 
@@ -1391,8 +1409,6 @@ def emit_to_all_users(details, function_name):
     for uid in db.get_redeye_users():
         uid = uid[0]
         if str(uid) in clients.keys():
-            print("uid: " + str(uid))
-            print("room: " + clients[str(uid)])
             emit(function_name,details ,room=clients[str(uid)])
 
 @socketio.on('socket_connection')
@@ -1412,20 +1428,62 @@ def add_header(response):
 @app.route('/')
 def index(logged=False):
     if not is_logged(logged):
-        print("dsa")
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     comments = db.get_all_comments(session["db"])
-    #print("logged: " + logged)
+
     return render_template('index.html', project=session["project"], username=session["username"], display_name=session["username"], comments=comments)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+
+def startRedeye(reset=False,debug=False,port=5000):
+    if reset:
+        projectsFiles = glob("RedDB/Projects/*")
+        allFiles = glob("files/**", recursive=True)
+
+        # Remove management DB
+        if path.exists("RedDB/managementDB.db"):
+            os.remove("RedDB/managementDB.db")
+
+        # Remove all project files
+        for project in projectsFiles:
+                os.remove(project)
+
+        # Remove all files
+        for file in allFiles:
+            if path.isfile(file):
+                os.remove(file)
+
+        # List all Dirs under files
+        allFolders = glob("files/**", recursive=True)
+        # Delete Subdirs to Root dirs
+        allFolders.reverse()
+
+        # Remove all dirs
+        for folder in allFolders:
+            os.rmdir(folder)
+
+        # Init DB
+        db.init()
+
+    init(app)
+    if debug:
+        socketio.run(app, debug=True, host='0.0.0.0', port=port)
+    else:
+        socketio.run(app, debug=False, host='0.0.0.0', port=port)
+
+
 if __name__ == "__main__":
     # Run app.
     # only app run goes here
     helper.setGlobals()
-    init(app)
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    Fire(startRedeye)

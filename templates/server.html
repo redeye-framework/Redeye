@@ -13,48 +13,78 @@
   <div class="container-fluid server-content">
     <div class="row">
       <div class="col col-sm-4 users">
-        <table class="table table-dark">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Username</th>
-              <th scope="col">Password</th>
-              <th scope="col">Type</th>
-              <th scope="col">Permisions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for user in users %}
-            <tr>
-              <td><a class="hover-user-details" style="padding: 5px 10px;" id="user-{{ user[0] }}"
-                  href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
-              </td>
-              <td>{{ user[3] }}</td>
-              <td>{{ user[1] }}</td>
-              <td>{{ user[4] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
+          <table class="table table-dark">
+            <thead>
+              <tr class="cols">
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">Type</th>
+                <th scope="col">Permisions</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td><a class="hover-user-details" style="padding: 5px 10px;" id="user-{{ user[0] }}"
+                    href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
+                </td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[4] }}</td>
+                <td><a href="{{ url_for('delete_user') }}?id={{ user[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                  style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+              </tr>
+              {% endfor %}
+              <tr class="tr-add">
+                <input type="hidden" name="server_ip" value="{{ server[1] }}">
+                <input type="hidden" name="server_id" value="{{ server[0] }}">
+                <input type="hidden" name="type" value="1">
+                <td><input type="text" size="5" name="username"></td>
+                <td><input type="text" size="5" name="password"></td>
+                <td><input type="text" size="5" name="permissions"></td>
+                <td><input type="text" size="5" name="sad"></td>
+                <td><a href="javascript:$('#user-form').submit();"><i class="fas fa-plus"
+                            style="margin: 5px 15px; font-size: 18px;"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
       </div>
       <div class="col col-sm-6 vulns">
-        <table class="table table-dark">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Vulnerability</th>
-              <th scope="col">Description</th>
-              <th scope="col">Fix</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for vuln in vulns %}
-            <tr>
-              <td>{{ vuln[1] }}</td>
-              <td>{{ vuln[2] }}</td>
-              <td>{{ vuln[3] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <form action="{{ url_for('create_vuln') }}" method="POST" id="vuln-form">
+          <table class="table table-dark">
+            <thead>
+              <tr class="cols">
+                <th scope="col">Vulnerability</th>
+                <th scope="col">Description</th>
+                <th scope="col">Fix</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for vuln in vulns %}
+              <tr>
+                <td>{{ vuln[1] }}</td>
+                <td>{{ vuln[2] }}</td>
+                <td>{{ vuln[3] }}</td>
+                <td><a href="{{ url_for('delete_vuln') }}?id={{ vuln[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                  style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+              </tr>
+              {% endfor %}
+              <tr class="tr-add">
+                <input type="hidden" name="server_ip" value="{{ server[1] }}">
+                <input type="hidden" name="server_id" value="{{ server[0] }}">
+                <td><input type="text" name="name"></td>
+                <td><input type="text" name="description"></td>
+                <td><input type="text" name="fix"></td>
+                <td><a href="javascript:$('#vuln-form').submit();"><i class="fas fa-plus"
+                            style="margin-left: 15px;"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
       </div>
     </div>
     <div class="row">
@@ -63,16 +93,15 @@
         <p style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
       </div>
       
-      <div style="overflow:scroll !important;max-height: 400px !important;" class="col col-sm-auto">
-        <select value="None" style="top: -20px;left: 5px;height: 40px;width: 150px;position:absolute; " onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
+      <div style="" class="col col-sm-auto">
+        <select value="None" style="height: 40px;width: 150px; margin: 8px;" onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
           <option value="All" selected disabled hidden>All</option>
           <option>All</option>
           <option>Open</option>
           <option>Filtered</option>
           <option>Closed</option>
         </select>
-      </br>
-      </br>
+        <form action="{{ url_for('create_server_port') }}" method="POST" id="port-form">
         <table id="ports_table" class="table table-dark ports">
           <thead>
             <tr class="cols">
@@ -80,6 +109,7 @@
               <th scope="col">Service</th>
               <th scope="col">State</th>
               <th scope="col">Vulnerable</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -89,10 +119,22 @@
               <td>{{ port[2] }}</td>
               <td>{{ port[3] }}</td>
               <td>{{ port[4] }}</td>
+              <td><a href="{{ url_for('delete_port') }}?id={{ port[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
             </tr>
             {% endfor %}
+            <tr class="tr-add">
+              <input name="server_id" type="hidden" value="{{ server[0] }}">
+              <td><input id="input_port1" name="port" type="text" size="3"></td>
+              <td><input id="input_port2" name="service" type="text" size="3"></td>
+              <td><input id="input_port3" name="state" type="text" size="3"></td>
+              <td><input id="input_port4" name="vuln" type="text" size="5"></td>
+              <td><a href="javascript:$('#port-form').submit();"><i class="fas fa-plus"
+                      style="margin-left: 15px"></i></a></td>
+            </tr>
           </tbody>
         </table>
+        </form>
       </div>
     </div>
     <div class="row">
@@ -124,6 +166,7 @@
 </div>
 {% include 'wrapper_end.html' %}
 <script src="../static/js/jquery.js"></script>
+<script src="../static/js/servers.js"></script>
 <script>
   $(document).ready(function() {
     var dict = {};

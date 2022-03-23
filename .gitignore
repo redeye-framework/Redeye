@@ -3,12 +3,12 @@ DB/__pycache__
 *.db
 .vscode/settings.json
 *.xml
-files/Code Injection (1).pptx
-files/data/logs.csv
+files/*
+RedeyeVirtualEnv/*
 *.csv
 *.docx
-*.json
 *.jpg
 *.whl
 *.gz
 vpackages
+resetDB.sh
