@@ -15,7 +15,7 @@
             </div>
             <div class="resources"></div>
             <div class="uploader">
-                {% if comment[2] != display_name %} {{ comment[2] }} {% else %}
+                {% if comment[2] != display_name %} <span style="float: left;">{{ comment[2] }}</span> {% else %}
                 <form action="{{ url_for('delete_comment') }}" method="POST" id="delete-comment-form-{{ comment[0] }}">
                     <input type="hidden" name="id" value="{{ comment[0] }}">
                     <a class="delete-tweet" href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
