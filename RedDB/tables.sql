@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS comments (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       data text NOT NULL,
                                       executor NOT NULL,
+                                      date text NOT NULL,
                                       relevent INTEGER NOT NULL DEFAULT 1
 );
 

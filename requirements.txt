@@ -9,3 +9,4 @@ email_validator
 eventlet
 Flask-JSGlue
 python-socketio[client]
+fire

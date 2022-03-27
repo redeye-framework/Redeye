@@ -2,7 +2,6 @@
 def main(port):
     f = open("services", "r")
     lines = f.read().split("\n")
-    print(" " + port + "/")
     port = "\t" + port + "/"
     for line in lines:
         if port in line:
@@ -10,4 +9,3 @@ def main(port):
             return word
     return "unknown"
 
-print(main(input("port: ")))

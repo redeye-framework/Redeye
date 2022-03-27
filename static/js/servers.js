@@ -39,6 +39,40 @@ $(".section-name").click(function() {
     })
 })
 
+$(".section-hide-btn").click(function (){
+    var i = $(this).find("i")
+    if (i.hasClass("fa-angle-down")) {
+        i.removeClass("fa-angle-down")
+        i.addClass("fa-angle-up")
+        $(this).parent().find(".row").hide()
+        $(this).parent().find("br").hide()
+    } else {
+        i.removeClass("fa-angle-up")
+        i.addClass("fa-angle-down")
+        $(this).parent().find(".row").show()
+        $(this).parent().find("br").show()
+    }
+})
+
+$(".section-hide-all-btn").click(function (){
+    var i = $(this).find("i")
+    if (i.hasClass("fa-angle-down")) {
+        i.removeClass("fa-angle-down")
+        i.addClass("fa-angle-up")
+        
+        $(".sections").find(".fa-angle-down").each(function () {
+            $(this).click()
+        })
+    } else {
+        i.removeClass("fa-angle-up")
+        i.addClass("fa-angle-down")
+
+        $(".sections").find(".fa-angle-up").each(function () {
+            $(this).click()
+        })
+    }
+})
+
 $("table").mouseover(function() {
     $(this).find(".tr-add").show()
     //$(this).find(".tr-add").animate({padding: '0px'}, {duration: 200});

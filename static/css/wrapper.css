@@ -509,10 +509,9 @@ input:checked+.slider:before {
 .logout {
     bottom: 10px;
     left: 25px;
-    border-radius: 5px;
+    border-radius: 10px;
     position: fixed !important;
 }
-
 
 
 /*--------------------------page-content-----------------------------*/
@@ -535,6 +534,7 @@ input:checked+.slider:before {
 .fa-trash:hover {
     filter: brightness(120%);
 }
+
 
 /*------scroll bar---------------------*/
 
@@ -658,7 +658,7 @@ input:checked+.slider:before {
     border-right: none;
 }
 
-.rights{
+.rights {
     position: fixed;
     bottom: 8px;
     right: 16px;
@@ -667,17 +667,19 @@ input:checked+.slider:before {
     font-family: 'Times New Roman', Times, serif;
 }
 
+
 /****** Import button *******/
 
 .import-btn {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
-.import-btn + label {
+
+.import-btn+label {
     display: inline-block;
     user-select: none;
     position: fixed;
@@ -686,16 +688,18 @@ input:checked+.slider:before {
     padding: 15px 20px;
     border-radius: 50%;
     transition: transform .5s ease-in-out;
-
 }
 
-.import-btn:focus + label,
-.import-btn + label:hover {
+.import-btn:focus+label,
+.import-btn+label:hover {
     background-color: #3f6ad8;
     filter: brightness(115%);
 }
-.import-btn + label {
-	cursor: pointer; /* "hand" cursor */
+
+.import-btn+label {
+    cursor: pointer;
+    /* "hand" cursor */
 }
+
 
 /*****************************/

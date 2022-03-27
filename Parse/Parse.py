@@ -132,16 +132,3 @@ def check_nmap_file(file_path):
         return True
     else:
         return False
-
-
-def init():
-    #get_ip_hostname_vendor(r"C:\Users\Elad\total.xml")
-    #d = get_nmap_data(r"C:\Users\Elad\total.xml")
-    lst_ports = []
-    d = get_nmap_data(r"C:\Users\Elad\total.xml")
-    for ip,data in d.items():
-        print(ip,data[0]["vendor"],data[0]["hostname"],data[1]["ports"])
-
-    
-if __name__ == "__main__":
-    init()

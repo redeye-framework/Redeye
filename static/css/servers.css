@@ -8,8 +8,29 @@
     position: absolute;
     left: 45%;
     margin-top: -60px;
-    color: rgb(146, 146, 163);
+    color: rgb(204, 204, 207);
     transform: translateX(-30%)
+}
+
+.section-hide-btn {
+    font-size: 1.8em;
+    float: right;
+    padding: 30px;
+    margin-top: -90px;
+    cursor: pointer;
+}
+
+.section-hide-all-btn {
+    font-size: 1.8em;
+    float: left;
+    padding: 30px;
+    position: relative;
+    color: rgb(213, 213, 218);
+    top: 0px;
+    left: 0px;
+    margin: -25px 0 0 -15px;
+    cursor: pointer;
+    z-index: 1000;
 }
 
 .section-name-input {

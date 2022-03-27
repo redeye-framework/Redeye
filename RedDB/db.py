@@ -24,7 +24,6 @@ def serialize_input(*user_input):
     for data in user_input:
         blacklist = REGEX.findall(str(data))
         if blacklist:
-            print("found not allowed chars, will not execute the query ==> ", blacklist)
             return False
     return True
 
@@ -613,7 +612,6 @@ def change_section_id(db, id, newName):
               WHERE id = "{}" '''.format(newName,id)
 
     result = get_db_with_actions(db, query)
-    print(result)
     return(result)
 
 """
@@ -803,9 +801,9 @@ def get_all_comments(db):
     return db_get(db, query)
 
 @check_input
-def create_comment(db, data, executor):
-    query = 'INSERT INTO comments(data, executor) VALUES("{}", "{}");'.format(
-        data, executor)
+def create_comment(db, data, executor, date):
+    query = 'INSERT INTO comments(data, executor, date) VALUES("{}", "{}", "{}");'.format(
+        data, executor, date)
     return(get_db_with_actions(db, query))
 
 @check_input
@@ -1025,6 +1023,15 @@ def get_redeye_users():
 def get_redeye_user_by_id(id):
     query = r'SELECT id,username,profile_pic FROM redeye_users WHERE id="{}"'.format(id)
     return db_get(MANAGE_DB, query)[0]
+
+@check_input
+def change_user_profile_pic(userId,profilePicName):
+    query = '''UPDATE redeye_users
+              SET profile_pic = "{}" 
+              WHERE id = "{}" '''.format(profilePicName, userId)
+
+    result = get_db_with_actions(MANAGE_DB, query)
+    return(result)
 
 @check_input
 def get_redeye_users_names():

@@ -1,3 +1,0 @@
-Part of sidecar "chiller-theme" - https://github.com/azouaoui-med/pro-sidebar-template
-                                  https://bootsnipp.com/snippets/Q0dAX
-Tasks - MIT license from Web Designer Wall - https://webdesignerwall.com/wdw-snippet/bootstrap-4-todo-task-list-with-badges

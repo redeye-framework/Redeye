@@ -55,16 +55,16 @@ python3 redeye.py
 
 ### Docker
 
+Build with Dockerfile
 ```
 chmod +x buildDocker.sh
 ./buildDocker.sh
-
-OR
-
-docker pull redeyeframework/redeye:latest
 ```
 
-
+Pull from Dockerhub
+```
+docker pull redeyeframework/redeye:latest
+```
 
 `Redeye will listen on: http://0.0.0.0:5000`
 
