@@ -18,7 +18,7 @@
                 {% if comment[2] != display_name %} {{ comment[2] }} {% else %}
                 <form action="{{ url_for('delete_comment') }}" method="POST" id="delete-comment-form-{{ comment[0] }}">
                     <input type="hidden" name="id" value="{{ comment[0] }}">
-                    <a href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
+                    <a class="delete-tweet" href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
                                             style="margin-left: 15px; color: rgb(201, 84, 84);"></i></a>
                 </form>
                 {% endif %} {{ comment[3] }}
