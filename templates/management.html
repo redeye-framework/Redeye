@@ -6,9 +6,8 @@
     <div class="user-box">
         <form enctype="multipart/form-data" action="{{ url_for('uploadManagmentUserPicture') }}" method="POST">
             <div class="icon" style="background-image: url(/static/pics/profiles/{{ user[3] }});">
-                <input type="file" onchange="form.submit()" name="profilePicture-{{ user[0] }}" style="opacity:0;height: 100%;">
+                <input class="image-btn" type="file" onchange="form.submit()" name="profilePicture-{{ user[0] }}">
             </div>
-        </form>
         <div class="prop">
             <input type="hidden" class="user-id" value="{{ user[0] }}">
             <div class="name" onclick="editName(this)">{{ user[1] }}</div>
@@ -17,6 +16,7 @@
             <input type="text" class="password input input-password"><br style="display: none;">
             <div class="delete" onclick="deleteUser(this.parentElement.parentElement,this)"><a href="#"><i class="fa fa-trash"></i></a></div>
         </div>
+        </form>
     </div>
 
     {% endfor %}
