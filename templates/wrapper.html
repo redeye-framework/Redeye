@@ -52,33 +52,11 @@
                                 <span>Servers</span>
                             </a>
                         </li>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fas fa-users"></i>
+                        <li>
+                            <a href="{{ url_for('all_users') }}">
+                                <i class="fa fa-users"></i>
                                 <span>Users</span>
                             </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="{{ url_for('all_users') }}">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('domain_users') }}">Domain</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('localhost_users') }}">Localhost</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('application_users') }}">Applications</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('netdevice_users') }}">Netdevices</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('other_users') }}">Other</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
                         <li class="sidebar-dropdown" style="display: none;">
                             <!-- Will be added in later versions. -->
