@@ -200,7 +200,7 @@ hr {
 }
 
 .server-content .files {
-    width: 640px;
+    min-width: 640px;
 }
 
 .server-content .files a {
@@ -231,7 +231,7 @@ hr {
 }
 
 .server-content table .tr-add {
-    display: none;;
+    display: none;
     transition-duration: 0.3s;
 }
 
@@ -260,4 +260,8 @@ hr {
 
 .fa-plus {
     cursor: pointer;
+}
+
+#file_upload {
+    width: 230px;
 }

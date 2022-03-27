@@ -1,24 +1,20 @@
 // Get the input field
-var port1 = document.getElementById("input_port1");
-var port2 = document.getElementById("input_port2");
-var port3 = document.getElementById("input_port3");
-var port4 = document.getElementById("input_port4");
-port1.addEventListener("keyup", function(event) {
+document.getElementById("input_port1").addEventListener("keyup", function(event) {
 if (event.keyCode === 13) {
     $('#port-form').submit();
 }
 });
-port2.addEventListener("keyup", function(event) {
+document.getElementById("input_port2").addEventListener("keyup", function(event) {
 if (event.keyCode === 13) {
     $('#port-form').submit();
 }
 });
-port3.addEventListener("keyup", function(event) {
+document.getElementById("input_port3").addEventListener("keyup", function(event) {
 if (event.keyCode === 13) {
     $('#port-form').submit();
 }
 });
-port4.addEventListener("keyup", function(event) {
+document.getElementById("input_port4").addEventListener("keyup", function(event) {
 if (event.keyCode === 13) {
     $('#port-form').submit();
 }

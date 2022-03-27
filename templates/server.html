@@ -145,6 +145,7 @@
               <th scope="col">Filename</th>
               <th scope="col">Path</th>
               <th scope="col">Description</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -154,8 +155,17 @@
                   download="{{ file[1] }}">{{ file[1] }}</a></td>
               <td>{{ file[2] }}</td>
               <td>{{ file[3] }}</td>
+              <td><a href="{{ url_for('delete_file') }}?id={{ file[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
             </tr>
             {% endfor %}
+            <tr class="tr-add">
+              <td>
+                  <form enctype="multipart/form-data" action="{{ url_for('upload_file') }}" method="POST">
+                      <input type="file" id="file_upload" onchange="form.submit()" name="upload_file" multiple>
+                  </form>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
