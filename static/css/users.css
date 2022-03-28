@@ -190,3 +190,15 @@ table {
     font-size: 16px;
     transition-duration: 1s;
 }
+
+.select-type {
+    border-radius: 3px;
+    padding: 6px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    margin: 10px;
+    width: 120px;
+    height: 38px;
+    float: right;
+}

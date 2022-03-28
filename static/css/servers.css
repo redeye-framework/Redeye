@@ -221,7 +221,7 @@ hr {
 }
 
 .server-content .files {
-    width: 640px;
+    min-width: 640px;
 }
 
 .server-content .files a {
@@ -252,7 +252,7 @@ hr {
 }
 
 .server-content table .tr-add {
-    display: none;;
+    display: none;
     transition-duration: 0.3s;
 }
 
@@ -268,17 +268,22 @@ hr {
 #state{
     outline: none;
 }
+
 .select-ports {
     border-radius: 3px;
     padding: 6px;
     background-color: rgb(67, 72, 82);
     border-color: transparent;
     color: #ccd;
-    width: 80%;
+    width: 150px;
     margin-top: 15px;
     float: left;
 }
 
 .fa-plus {
     cursor: pointer;
+}
+
+#file_upload {
+    width: 230px;
 }

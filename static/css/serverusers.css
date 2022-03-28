@@ -45,6 +45,13 @@
     transition-duration: 0.2s;
 }
 
+.user-box .icon .image-btn {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    float: left;
+}
+
 .user-box .icon > .add-user-btn:hover {
     filter: brightness(110%);
 }
@@ -54,6 +61,7 @@
     text-align: left;
     padding: 10px;
     position: relative;
+    height: 100px;
 }
 
 .user-box .prop > div {
@@ -101,7 +109,7 @@
 
 .user-box .prop > .delete {
     position: absolute;
-    top: 9px;
+    bottom: -5px;
     right: 18px;
     font-size: 18px;
     color: rgb(201, 84, 84);
