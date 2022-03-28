@@ -111,7 +111,7 @@ def get_all_data(path):
 #    pass
 
 
-def parse_users_passwords(exec,file_name,path):
+def parse_users_passwords(dbName,exec,file_name,path,userType):
     with open(path,'r') as users_passwords:
         data = users_passwords.readlines()
     for line in data:
@@ -119,8 +119,8 @@ def parse_users_passwords(exec,file_name,path):
             user,password = line.split(":")
         except:
             continue
-            
-        db.insert_new_other_user(5,file_name,user,password,"-",exec)
+        
+        db.insert_new_other_user(dbName,userType,file_name,user,password,"-",exec)
 
 def check_nmap_file(file_path):
     """

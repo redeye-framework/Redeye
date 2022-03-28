@@ -1,81 +1,70 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}"> {% include 'wrapper.html' %}
 <div class="container-users">
-  <h2 style="font-weight: bolder;font-size: 36px;" class="inline">
-    {% if type==1 %}Domain
-    {% elif type==2 %}Localhost
-    {% elif type==3 %}Application
-    {% elif type==4 %}Netdevice
-    {% elif type==5 %}Other
-    {% elif type==6 %}All
-    {% endif %}
-    Users</h2>
-    <form action="{{ url_for('export_users') }}" method="POST" class="inline">  
-      <button style="float:right; margin-top: 10px;" name="type" value="csv" class="btn btn-primary inline">export to CSV</button>
+    <h2 style="font-weight: bolder;font-size: 36px;" class="inline">
+        {% if type==1 %}Domain {% elif type==2 %}Localhost {% elif type==3 %}Application {% elif type==4 %}Netdevice {% elif type==5 %}Other {% elif type==6 %}All {% endif %} Users
+    </h2>
+    <form action="{{ url_for('export_users') }}" method="POST" class="inline">
+        <button style="float:right; margin-top: 10px;" name="type" value="csv" class="btn btn-primary inline">export to CSV</button>
     </form>
-  </br>
-  </br>       
-  <table class="table table-dark table-striped">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Password</th>
-        <th>Permissions</th>
-        <th>Found on</th>
-        {% if type==6 %}<th>User Type</th>
-        {% endif %}
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for name in data %}
-      {% for info in data[name] %}
-      <tr style="overflow:scroll">
-        <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a></td>
-        <td onclick="copyToClipboard(this.innerHTML)" style="cursor:pointer;">{{ info[0] }}</td>
-        <td>{{ info[1] }}</td>
-        <td>{{ info[2] }}</td>
-        {% if type==6 %}<td>{{ info[3] }}</td>
-        {% endif %}
-        <td><a href="{{ url_for('delete_user') }}?id={{ info[5] }}"
-          onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+    </br>
+    </br>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Permissions</th>
+                <th>Found on</th>
+                {% if type==6 %}
+                <th>User Type</th>
+                {% endif %}
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for name in data %} {% for info in data[name] %}
+            <tr style="overflow:scroll">
+                <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a></td>
+                <td onclick="copyToClipboard(this.innerHTML)" style="cursor:pointer;">{{ info[0] }}</td>
+                <td>{{ info[1] }}</td>
+                <td>{{ info[2] }}</td>
+                {% if type==6 %}
+                <td>{{ info[3] }}</td>
+                {% endif %}
+                <td><a href="{{ url_for('delete_user') }}?id={{ info[5] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
               style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
-      </tr>
-      {% endfor %}
-    {% endfor %}
-    <tr style="overflow:scroll">
-      <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
-        <input type="hidden" name="type" value="{{ type }}">
-        <td><input class="modern-input" type="text" name="username" placeholder="Username"></td>
-        <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
-        <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
-        <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
-        {% if type==6 %}
-        <td><select name="select_type" class="exec-users-input inline"><option>Domain</option>
+            </tr>
+            {% endfor %} {% endfor %}
+            <tr style="overflow:scroll">
+                <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
+                    <input type="hidden" name="type" value="{{ type }}">
+                    <td><input class="modern-input" type="text" name="username" placeholder="Username"></td>
+                    <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
+                    <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
+                    <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
+                    {% if type==6 %}
+                    <td><select name="select_type" class="exec-users-input inline"><option>Domain</option>
         <option>Localhost</option>
         <option>Application</option>
         <option>NetDevice</option>
         <option>Other</option></select></td>
-        {% endif %}
-        <td><a href="javascript:$('#user-form').submit();"><i class="fas fa-plus"
+                    {% endif %}
+                    <td><a href="javascript:$('#user-form').submit();"><i class="fas fa-plus"
           style="margin-left: 15px;"></i></a></td>
-      </form>
-    </tr>
-    </tbody>
-  </table>
+                </form>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <form enctype="multipart/form-data" action="{{ url_for('add_users_from_file') }}" method="POST">
-  <input type="hidden" id="root" name="location"></input>
-  <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
-  <label class="btn btn-primary" for="file"><i class="fas fa-upload"></i></label>
+    <input type="hidden" id="root" name="location"></input>
+    <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
+    <label class="btn btn-primary" for="file"><i class="fas fa-upload"></i></label>
 </form>
 
 <script>
-  var path = document.getElementById("root");path.value = window.location.href
-
-  
+    var path = document.getElementById("root");
+    path.value = window.location.href
 </script>
-{% include 'user.html' %}
-{% include 'wrapper_end.html' %}
-{% include 'footer.html' %}
+{% include 'user.html' %} {% include 'wrapper_end.html' %} {% include 'footer.html' %}

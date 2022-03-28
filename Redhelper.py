@@ -103,15 +103,15 @@ def user_type_to_name(user_type):
         return "Unknown"
 
 def user_name_to_type(user_type_name):
-    if user_type_name == "Domain":
+    if user_type_name.lower() == "domain":
         return 1
-    elif user_type_name == "Localhost":
+    elif user_type_name.lower() == "localhost":
         return 2
-    elif user_type_name == "Application":
+    elif user_type_name.lower() == "application":
         return 3
-    elif user_type_name == "NetDevice":
+    elif user_type_name.lower() == "netdevice":
         return 4
-    elif user_type_name == "Other":
+    elif user_type_name.lower() == "other":
         return 5
     else:
         return "Unknown"
