@@ -35,9 +35,6 @@
         </thead>
         <tbody>
             {% for name in data %} {% for info in data[name] %}
-            <script>
-                console.log("{{data[name]}}" + " " + "{{info}}")
-            </script>
             <tr style="overflow:scroll">
                 <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a>
                 </td>
