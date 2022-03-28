@@ -35,6 +35,9 @@
         </thead>
         <tbody>
             {% for name in data %} {% for info in data[name] %}
+            <script>
+                console.log("{{data[name]}}" + " " + "{{info}}")
+            </script>
             <tr style="overflow:scroll">
                 <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a>
                 </td>
@@ -60,7 +63,7 @@
               <option>Domain</option>
               <option>Localhost</option>
               <option>Application</option>
-              <option>NetDevice</option>
+              <option>Net-Device</option>
               <option>Other</option>
             </select></td>
                     {% endif %}
@@ -73,14 +76,11 @@
 </div>
 <form enctype="multipart/form-data" action="{{ url_for('add_users_from_file') }}" method="POST">
     <input type="hidden" id="root" name="location"></input>
-    <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple />
+    <input type="file" name="upload_file" id="file" onchange="document.getElementById('root').value=document.getElementById('type').value;form.submit()" class="import-btn" multiple />
     <label class="btn btn-primary" for="file"><i class="fas fa-upload"></i></label>
 </form>
 
 <script>
-    var path = document.getElementById("root");
-    path.value = window.location.href
-
     function sortUsers() {
         var type = document.getElementById('type').value;
         var table = document.getElementById('users-table');
@@ -101,7 +101,6 @@
                 }
             }
         }
-    } >>>
-    >>> > 9 ab47bc4068ef12c952cd097dcaa3ba1015631f0
+    }
 </script>
 {% include 'user.html' %} {% include 'wrapper_end.html' %} {% include 'footer.html' %}

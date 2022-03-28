@@ -4,12 +4,16 @@ This project was built by pentesters for pentester.
 Redeye is a management tool for creating a workflow while doing a pentest operation. Redeye was made for running while in a differentiated environment and non differentiated likewise. Can be used for a specific operation or as a continuous database for data collected in previous operations.
 
 ## Table of Contents
+- [The Developers](#The-Developers)
 - [Overview](#Overview)
 - [Source Installation](#Source)
 - [Docker Installation](#Docker)
-- [The Developers](#The-Developers)
+- [Special Thanks](#Special-Thanks)
 - [Credits](#Credits)
 
+
+## The Developers
+Daniel Arad - @dandan_arad && Elad Pticha - @elad_pt
 
 ## Overview
 
@@ -68,8 +72,8 @@ docker pull redeyeframework/redeye:latest
 
 `Redeye will listen on: http://0.0.0.0:5000`
 
-## The Developers
-Daniel Arad - @dandan_arad && Elad Pticha - @elad_pt
+## Special-Thanks
+- Yoav Danino for mental support and beta testing 
 
 ## Credits
 * Sidebar

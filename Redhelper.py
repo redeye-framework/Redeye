@@ -96,7 +96,7 @@ def user_type_to_name(user_type):
     elif user_type == 3:
         return "Application"
     elif user_type == 4:
-        return "NetDevice"
+        return "Net-Device"
     elif user_type == 5:
         return "Other"
     else:
@@ -109,7 +109,7 @@ def user_name_to_type(user_type_name):
         return 2
     elif user_type_name.lower() == "application":
         return 3
-    elif user_type_name.lower() == "netdevice":
+    elif user_type_name.lower() == "net-device":
         return 4
     elif user_type_name.lower() == "other":
         return 5
@@ -214,15 +214,6 @@ def set_user_device_name(userdb, found_on,device_id):
         else:
             device_ip = "Unknown"
     return device_ip
-
-def set_user_other_user(found_on,user_found):
-    if user_found:
-        return user_found
-    else:
-        if found_on:
-            return found_on
-        else:
-            return "Unknown"
 
 def serve_file_by_os():
     if os.name == 'nt':

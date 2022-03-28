@@ -11,12 +11,17 @@ COPY . /redeye
 # install the dependencies and packages in the requirements file
 RUN pip install -r requirements.txt
 
+# install sqlite3
+RUN sudo apt install sqlite3
+
 # Expose the port
 EXPOSE 5000
+
+# Reset the DB
+RUN python RedDB/db.py
 
 # configure the container to run in an executed manner
 ENTRYPOINT [ "python" ]
 
-RUN python RedDB/db.py
-
+# Run redeye
 CMD ["redeye.py" ]

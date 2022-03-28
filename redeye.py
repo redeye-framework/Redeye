@@ -485,73 +485,6 @@ def delete_user():
         db.delete_user(session["db"], user_id, session["username"])
         return ('', 204)
 
-@app.route('/domain_users', methods=['GET'])
-def domain_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_domain_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=1)
-
-@app.route('/localhost_users', methods=['GET'])
-def localhost_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_localhost_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=2)
-
-@app.route('/application_users', methods=['GET'])
-def application_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_application_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=3)
-
-@app.route('/netdevice_users', methods=['GET'])
-def netdevice_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_netdevices_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        device_ip = helper.set_user_device_name(session["db"], user[7],user[9])
-
-        data[username].append([password, perm, device_ip, u_type, attain, uid])
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=4)
-
-@app.route('/other_users', methods=['GET'])
-def other_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_other_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid, info = user[
-            1], user[2], user[3], user[4], user[5], user[0], user[10]
-        
-        info = helper.set_user_other_user(user[7],info)
-        data[username].append([password, perm, info, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=5)
-
 @app.route('/all_users', methods=['GET'])
 def all_users():
     if not is_logged():
@@ -559,19 +492,24 @@ def all_users():
 
     data = collections.defaultdict(list)
     users = db.get_all_users(session["db"])
+
+    
     for user in users:
         u_type, username, password, perm, attain, uid = user[
             1], user[2], user[3], user[4], user[5], user[0]
+
         if user[8] is not None:
+            
             info = helper.set_user_server_name(session["db"], user[7],user[8])
+
         elif user[9] is not None:
             info = helper.set_user_device_name(session["db"], user[7],user[9])
-        elif user[10] is not None:
-            info = helper.set_user_other_user(user[7],info)
+
         elif user[7] is not None:
             info = user[7]
         else:
             info = "Unknown"
+
         u_type = helper.user_type_to_name(u_type)
         data[username].append([password, perm, info, u_type, attain, uid])
 
@@ -601,12 +539,19 @@ def add_users_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+    dic = {}
     if request.method == 'POST':
+        
+        for key,val in request.form.items():
+            dic[key] = val
+        
         files = request.files.getlist("upload_file")
+
         for file in files:
             full_path, file_name = helper.save_file(file, helper.PASS_FOLDER.format(session["project"]))
+            
             if file_name:
-                userType = helper.user_name_to_type(request.referrer.split("/")[-1].split("_")[0])
+                userType = helper.user_name_to_type(dic["location"])
                 parse.parse_users_passwords(session["db"],
                     session["username"], file_name, full_path,userType)
 
