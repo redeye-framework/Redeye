@@ -326,7 +326,8 @@ def tasks():
                 t[5] = t[5].replace('\r\n', " ")
         my_tasks_lst.append(t)
 
-    team_members = db.get_redeye_users_names()
+    projectId = db.get_projectId_by_projectName(session["project"])
+    team_members = db.get_redeye_users_names(projectId)
     return render_template('tasks.html', project=session["project"], username=session["username"], all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
@@ -1155,7 +1156,8 @@ def management():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    users = db.get_redeye_users()
+    projectId = db.get_projectId_by_projectName(session["project"])
+    users = db.get_redeye_users(projectId)
     
     for i,user in enumerate(users):
         users[i] = users[i][:2] + ("*********************",) + users[i][3:] + ("RedTeam",)
@@ -1170,7 +1172,8 @@ def add_user():
 
     username = request.form.get("username")
     password = request.form.get("password")
-    user_id = db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest())
+    projectId = db.get_projectId_by_projectName(session["project"])
+    db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest(), projectId)
 
     return redirect(request.referrer)
 
@@ -1365,25 +1368,36 @@ def add_scan(file):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    creds = request.form.to_dict()
-    check_id = helper.check_login(creds)
-    if creds and check_id:
-        session["username"] = creds["username"]
-        session["uid"] = check_id
-        session["project"] = creds["project"] # TODO: Validate project existance.
-        session["db"] = db.set_project_db(session["project"])
-        session["project"] = helper.get_project_name(projects, session["project"])
-        clients[session["uid"]] = socketio
-        token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
-        ) + timedelta(hours=2)}, app.secret_key)
-        resp = make_response(index(token.decode('UTF-8')))
-        resp.set_cookie('reduser', token.decode('UTF-8'))
-        return resp
 
-    else:
+    if request.method == 'GET':
         resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
         resp.set_cookie('reduser', "")
         return resp
+
+    else:
+        creds = request.form.to_dict()
+        if creds:
+            projectId = db.get_projectId_by_DBName(creds["project"])
+            check_id = helper.check_login(creds,projectId)
+
+            if check_id:
+                session["username"] = creds["username"]
+                session["uid"] = check_id
+                session["project"] = creds["project"] # TODO: Validate project existance.
+                session["db"] = db.set_project_db(session["project"])
+                session["project"] = helper.get_project_name(projects, session["project"])
+                clients[session["uid"]] = socketio
+                token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
+                ) + timedelta(hours=2)}, app.secret_key)
+                resp = make_response(index(token.decode('UTF-8')))
+                resp.set_cookie('reduser', token.decode('UTF-8'))
+                return resp
+        
+        # If the user is not authenticated
+        resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
+        resp.set_cookie('reduser', "")
+        return resp
+
 
 @app.route('/new_project', methods=['POST'])
 def new_project():
@@ -1404,7 +1418,9 @@ def new_project():
         elif data["name"] == project[2]:
             return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE, msg="Network name is taken.")
 
-    db.insert_new_project(data["name"], data["dbname"])
+    projectId = db.insert_new_project(data["name"], data["dbname"])
+
+    db.add_new_user(data["username"], hashlib.sha256(data["password"].encode()).hexdigest(), projectId)
     refresh_projects()
     resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
     resp.set_cookie('reduser', "")
@@ -1436,7 +1452,8 @@ def is_logged(logged=False):
 """
 
 def emit_to_all_users(details, function_name):
-    for uid in db.get_redeye_users():
+    projectId = db.get_projectId_by_projectName(session["project"])
+    for uid in db.get_redeye_users(projectId):
         uid = uid[0]
         if str(uid) in clients.keys():
             emit(function_name,details ,room=clients[str(uid)])

@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS redeye_users (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       username text NOT NULL,
                                       password text,
-                                      profile_pic text DEFAULT "user.png"
+                                      profile_pic text DEFAULT "user.png",
+                                      projectID INTEGER NOT NULL
                                   );
 CREATE TABLE IF NOT EXISTS projects (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,

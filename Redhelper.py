@@ -180,8 +180,8 @@ def save_file_in_dir(path, file_data, name):
         data.write(file_data)
     return
 
-def check_login(creds):
-    approve = db.get_redeye_users()
+def check_login(creds,project):
+    approve = db.get_redeye_users(project)
     try:
         for a in approve:
             if a[1] == creds["username"] and a[2] == hashlib.sha256(creds["password"].encode()).hexdigest():

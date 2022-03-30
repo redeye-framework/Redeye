@@ -905,31 +905,9 @@ def update_exploit(db, id, name, data):
 """
 
 @check_input
-def get_redeye_users_names():
-    query = r'SELECT username FROM redeye_users'
-    return db_get(MANAGE_DB, query)
-
-
-@check_input
-def get_redeye_user_by_id(id):
-    query = r'SELECT id,username,profile_pic FROM redeye_users WHERE id="{}"'.format(id)
-    return db_get(MANAGE_DB, query)[0]
-
-
-@check_input
-def get_user_id(username):
-    query = r'SELECT id FROM redeye_users WHERE username="{}"'.format(username)
-    return db_get(MANAGE_DB, query)[0][0]
-
-@check_input
-def get_user_by_id(id):
-    query = r'SELECT username FROM redeye_users WHERE id="{}"'.format(id)
-    return db_get(MANAGE_DB, query)[0][0]
-
-@check_input
-def add_new_user(username, password):
-    query = 'INSERT INTO redeye_users(username, password) VALUES("{}", "{}");'.format(
-        username, password)
+def add_new_user(username, password, projectId):
+    query = 'INSERT INTO redeye_users(username, password, projectId) VALUES("{}", "{}","{}");'.format(
+        username, password,projectId)
     return get_db_with_actions(MANAGE_DB, query)
 
 @check_input
@@ -1010,14 +988,9 @@ def change_relevent_to_zero(db, table_name, object_id):
 """
 
 @check_input
-def get_redeye_users():
-    conn = create_connection(MANAGE_DB)
-    sql = "SELECT * FROM redeye_users"
-    cur = conn.cursor()
-    cur.execute(sql)
-    result = cur.fetchall()
-    conn.close()
-    return(result)
+def get_redeye_users(projectId):
+    query = r'SELECT * FROM redeye_users WHERE projectId="{}"'.format(projectId)
+    return db_get(MANAGE_DB, query)
 
 @check_input
 def get_redeye_user_by_id(id):
@@ -1034,8 +1007,8 @@ def change_user_profile_pic(userId,profilePicName):
     return(result)
 
 @check_input
-def get_redeye_users_names():
-    query = r'SELECT username FROM redeye_users'
+def get_redeye_users_names(projectId):
+    query = r'SELECT username FROM redeye_users WHERE projectId = "{}"'.format(projectId)
     return db_get(MANAGE_DB, query)
 
 def get_projects():
@@ -1046,6 +1019,14 @@ def insert_new_project(name, filename):
     query = r'INSERT INTO projects(filename, name) VALUES("{}", "{}")'.format(filename, name)
     result = get_db_with_actions(MANAGE_DB, query)
     return(result)
+
+def get_projectId_by_projectName(projectName):
+    query = r'SELECT id FROM projects WHERE name="{}"'.format(projectName)
+    return db_get(MANAGE_DB, query)[0][0]
+
+def get_projectId_by_DBName(dbName):
+    query = r'SELECT id FROM projects WHERE filename="{}"'.format(dbName)
+    return db_get(MANAGE_DB, query)[0][0]
 
 """
 =======================================================
