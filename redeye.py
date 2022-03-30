@@ -4,6 +4,7 @@ eventlet.monkey_patch()
 from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory
 from flask_jsglue import JSGlue
 import jwt
+import sys
 import sqlite3
 from os import walk, path, listdir, sep, makedirs, remove
 import os
@@ -1492,7 +1493,27 @@ def page_not_found(e):
     return render_template('500.html'), 500
 
 
-def startRedeye(reset=False,debug=False,port=5000,safe=False):
+def showHelpMenu():
+    description = """usage: python3 redeye.py [--help] [OPTIONS]
+    
+    Redeye is a tool intended to help you manage your data during a pentest operation
+    in the most efficient and organized way.
+
+    optional arguments:
+    --reset     Resets the DB and deletes all files [Default: False].
+    --debug     Debugging mode [Default: False].
+    --port      Select listening port [Default: 5000].
+    --safe      Set state to "safe" - Allows to create new projects [Default: False].
+    --help      Display this help message.
+    """
+    print(description)
+    
+
+def startRedeye(reset=False,debug=False,port=5000,safe=False,help=False):
+    if help:
+        showHelpMenu()
+        sys.exit(0)
+
     if reset:
         projectsFiles = glob("RedDB/Projects/*")
         allFiles = glob("files/**", recursive=True)

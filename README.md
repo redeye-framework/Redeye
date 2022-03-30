@@ -1,7 +1,7 @@
 # Redeye
 
-This project was built by pentesters for pentester.
-Redeye is a management tool for creating a workflow while doing a pentest operation. Redeye was made for running while in a differentiated environment and non differentiated likewise. Can be used for a specific operation or as a continuous database for data collected in previous operations.
+This project was built by pentesters for pentesters.
+Redeye is a tool intended to help you manage your data during a pentest operation in the most efficient and organized way.
 
 ## Table of Contents
 - [The Developers](#The-Developers)
@@ -54,26 +54,33 @@ python3 -m venv RedeyeVirtualEnv
 source RedeyeVirtualEnv/bin/activate
 pip3 install -r requirements.txt
 python3 RedDB/db.py
-python3 redeye.py
+python3 redeye.py --safe
 ```
 
 ### Docker
 
 Build with Dockerfile
 ```
-chmod +x buildDocker.sh
-./buildDocker.sh
+cd Redeye
+docker build -t redeye:latest .
+docker run -p 5000:5000 redeye:latest
 ```
 
 Pull from Dockerhub
 ```
 docker pull redeyeframework/redeye:latest
+sudo docker run -p 5000:5000 redeyeframework/redeye:latest
 ```
 
-`Redeye will listen on: http://0.0.0.0:5000`
+### General
+Redeye will listen on: http://0.0.0.0:5000
+Default Credentials:
+- username: redeye
+- password: redeye
+
 
 ## Special-Thanks
-- Yoav Danino for mental support and beta testing 
+- Yoav Danino for mental support and beta testing.
 
 ## Credits
 * Sidebar
