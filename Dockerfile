@@ -12,16 +12,13 @@ COPY . /redeye
 RUN pip install -r requirements.txt
 
 # install sqlite3
-RUN sudo apt install sqlite3
+RUN apt-get update && apt-get install -y sqlite3
 
 # Expose the port
 EXPOSE 5000
-
-# Reset the DB
-RUN python RedDB/db.py
 
 # configure the container to run in an executed manner
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["redeye.py" ]
+CMD ["redeye.py", "--safe", "--reset"]

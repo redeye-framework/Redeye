@@ -1,7 +1,7 @@
 from re import M
 import eventlet
 eventlet.monkey_patch()
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, flash, jsonify, Markup
+from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory
 from flask_jsglue import JSGlue
 import jwt
 import sqlite3
@@ -1492,7 +1492,7 @@ def page_not_found(e):
     return render_template('500.html'), 500
 
 
-def startRedeye(reset=False,debug=False,port=5000):
+def startRedeye(reset=False,debug=False,port=5000,safe=False):
     if reset:
         projectsFiles = glob("RedDB/Projects/*")
         allFiles = glob("files/**", recursive=True)
@@ -1523,6 +1523,10 @@ def startRedeye(reset=False,debug=False,port=5000):
         db.init()
 
     init(app)
+
+    global IS_ENV_SAFE
+    IS_ENV_SAFE = safe
+
     if debug:
         socketio.run(app, debug=True, host='0.0.0.0', port=port)
     else:
