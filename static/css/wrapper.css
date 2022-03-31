@@ -99,8 +99,9 @@ input:focus {
 }
 
 .page-wrapper.toggled .page-content {
-    padding-left: 300px;
-    padding-top: 30px;
+    width: calc(100% - 260px);
+    margin-left: 260px;
+    padding: 30px;
     text-shadow: 1px 1px 1px black;
     transition-duration: 0.2s;
 }

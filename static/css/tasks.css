@@ -8,7 +8,7 @@ i {
     border-width: 0;
     background-color: #31353D !important;
     transition: all .2s;
-    width: 45%;
+    width: calc(50% - 30px);
     height: 90vh;
     margin-right: 30px !important;
     padding: 0px !important;
