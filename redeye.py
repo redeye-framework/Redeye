@@ -1523,13 +1523,15 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,help=False):
             os.remove("RedDB/managementDB.db")
 
         # Remove all project files
-        for project in projectsFiles:
-                os.remove(project)
+        if projectsFiles:
+            for project in projectsFiles:
+                    os.remove(project)
 
         # Remove all files
-        for file in allFiles:
-            if path.isfile(file):
-                os.remove(file)
+        if allFiles:
+            for file in allFiles:
+                if path.isfile(file):
+                    os.remove(file)
 
         # List all Dirs under files
         allFolders = glob("files/**", recursive=True)
@@ -1537,8 +1539,9 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,help=False):
         allFolders.reverse()
 
         # Remove all dirs
-        for folder in allFolders:
-            os.rmdir(folder)
+        if len(allFolders) > 1:
+            for folder in allFolders:
+                os.rmdir(folder)
 
         # Init DB
         db.init()
