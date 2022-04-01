@@ -74,7 +74,7 @@ sudo docker run -p 5000:5000 redeyeframework/redeye:latest
 
 ### General
 Redeye will listen on: http://0.0.0.0:5000
-Default Credentials:
+</br>Default Credentials:
 - username: redeye
 - password: redeye
 
