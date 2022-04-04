@@ -59,22 +59,22 @@ python3 redeye.py --safe
 
 ### Docker
 
-Build with Dockerfile
+Build with Dockerfile and create the container.
 ```
 cd Redeye
 docker build -t redeye:latest .
 docker run --name Redeye -p 5000:5000 redeye:latest
 ```
 
-Pull from Dockerhub
+Pull from Dockerhub and create the container.
 ```
 docker pull redeyeframework/redeye:latest
 sudo docker run --name Redeye -p 5000:5000 redeyeframework/redeye:latest
 ```
 
-Start the container
+Start/Stop the container
 ```
-sudo docker start Redeye
+sudo docker start/stop Redeye
 ```
 
 ### General
