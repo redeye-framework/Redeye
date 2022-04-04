@@ -17,8 +17,11 @@ RUN apt-get update && apt-get install -y sqlite3
 # Expose the port
 EXPOSE 5000
 
-# configure the container to run in an executed manner
+# Init the DB
+RUN python RedDB/db.py
+
+# Configure the container to run in an executed manner
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["redeye.py", "--safe", "--reset"]
+CMD ["redeye.py", "--safe"]

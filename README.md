@@ -63,18 +63,23 @@ Build with Dockerfile
 ```
 cd Redeye
 docker build -t redeye:latest .
-docker run -p 5000:5000 redeye:latest
+docker run --name Redeye -p 5000:5000 redeye:latest
 ```
 
 Pull from Dockerhub
 ```
 docker pull redeyeframework/redeye:latest
-sudo docker run -p 5000:5000 redeyeframework/redeye:latest
+sudo docker run --name Redeye -p 5000:5000 redeyeframework/redeye:latest
+```
+
+Start the container
+```
+sudo docker start Redeye
 ```
 
 ### General
-Redeye will listen on: http://0.0.0.0:5000
-</br>Default Credentials:
+Redeye will listen on: http://0.0.0.0:5000</br>
+Default Credentials:
 - username: redeye
 - password: redeye
 
