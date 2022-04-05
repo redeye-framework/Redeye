@@ -692,10 +692,12 @@ def upload_file():
         files = request.files.getlist("upload_file")
         try:
             current_dir = request.referrer.split('dir_name=')[1]
-            # url decoding the string.
-            current_dir = urllib.parse.unquote(current_dir)
+
+            # Url decoding the string and replace + with space.
+            current_dir = urllib.parse.unquote_plus(current_dir)
             if helper.secure_file_name(current_dir):
                 return render_template('404.html'), 404
+
         except Exception:
             current_dir = helper.FILES_FOLDER.format(session["project"])
 
@@ -711,6 +713,7 @@ def upload_file():
                 try:
                     db.insert_new_file(session["db"], full_path, file_name, "Added from {} file".format(
                         file_name), server_id, session["username"])
+                        
                 except Exception:
                     db.insert_new_standalone_file(session["db"], full_path, file_name, "Added from {} file".format(
                         file_name), session["username"])
@@ -799,8 +802,9 @@ def add_new_dir():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     current_dir = request.referrer.split('dir_name=')[1]
-    # url decoding the string.
-    full_path = urllib.parse.unquote(current_dir)
+
+    # Url decoding the string and replace + with space.
+    full_path = urllib.parse.unquote_plus(current_dir)
     dir_name = request.form.get('dir_name')
     if helper.secure_file_name(full_path) or helper.secure_file_name(dir_name):
         return render_template('404.html'), 404
