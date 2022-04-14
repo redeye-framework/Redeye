@@ -84,21 +84,26 @@ function sort_ports() {
     }
 }
 
+function submitUsersForm() {
+    document.getElementById("type").value = document.getElementById("UserTypeForm").value;
+    $('#user-form').submit();
+
+}
+
 $("table").mouseover(function() {
     $(this).find(".tr-add").show()
-    //$(this).find(".tr-add").animate({padding: '0px'}, {duration: 200});
-    //$(this).find(".tr-add").find('td')
-    //.wrapInner('<div style="display: block;" />')
-    //.parent()
-    //.find('td > div')
-    //.slideUp(700, function(){
-    //    $(this).parent().parent().remove();
-    //});
+        //$(this).find(".tr-add").animate({padding: '0px'}, {duration: 200});
+        //$(this).find(".tr-add").find('td')
+        //.wrapInner('<div style="display: block;" />')
+        //.parent()
+        //.find('td > div')
+        //.slideUp(700, function(){
+        //    $(this).parent().parent().remove();
+        //});
 }).mouseleave(function() {
-    if (!$(this).find(':focus').length > 0){
+    if (!$(this).find(':focus').length > 0) {
         $(this).find(".tr-add").hide()
-    }
-    else {
+    } else {
         $(this).focusout(function() {
             if (!$(this).is(':hover')) {
                 $(this).find(".tr-add").hide()
@@ -117,23 +122,23 @@ $("table").mouseover(function() {
 
 
 // Get the input field
-$(document).ready(function () {
-   document.getElementById("input_port1").addEventListener("keyup", function (event) {
+$(document).ready(function() {
+    document.getElementById("input_port1").addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             $('#port-form').submit();
         }
     });
-    document.getElementById("input_port2").addEventListener("keyup", function (event) {
+    document.getElementById("input_port2").addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             $('#port-form').submit();
         }
     });
-    document.getElementById("input_port3").addEventListener("keyup", function (event) {
+    document.getElementById("input_port3").addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             $('#port-form').submit();
         }
     });
-    document.getElementById("input_port4").addEventListener("keyup", function (event) {
+    document.getElementById("input_port4").addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             $('#port-form').submit();
         }

@@ -18,6 +18,9 @@ INSERT INTO ports(port, service, state, vuln, server_id) VALUES("tcp-80", "HTTP"
 INSERT INTO ports(port, service, state, server_id) VALUES("tcp-445", "SMB", "Closed", 1);
 INSERT INTO ports(port, service, state, vuln, server_id) VALUES("tcp-22", "SSH", "open", "Weak Credentials", 2);
 
+-- userType:
+INSERT INTO userTypes(typeName) VALUES("Domain");
+
 -- users:
 INSERT INTO users(type, server_id, username, password, permissions) VALUES(1, 1, "Admin", "Aa123123", "READ | WRITE");
 INSERT INTO users(type, server_id, username, password, permissions) VALUES(1, 1, "mailUser", "Bb123123", "READ");

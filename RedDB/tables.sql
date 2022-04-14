@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
                                       FOREIGN KEY(server_id) REFERENCES servers(id),
                                       FOREIGN KEY(device_id) REFERENCES netdevices(id)
                                   );
+CREATE TABLE IF NOT EXISTS userTypes (
+                                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                      typeName text NOT NULL
+                                  );                                  
 CREATE TABLE IF NOT EXISTS log (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       user_id INTEGER,

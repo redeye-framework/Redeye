@@ -115,7 +115,7 @@ def server():
     vendor = db.get_vendor_by_server_id(session["db"], server[0])[0][0]
     users_with_type = []
     for user in users:
-        type = helper.user_type_to_name(user[1])
+        type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
     return render_template('server.html', project=session["project"], username=session["username"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
@@ -409,7 +409,7 @@ def create_user():
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
         user_perm = request.form.get('permissions')
-        user_type = request.form.get('type')
+        user_type = request.form.get("userType")
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
         
@@ -417,14 +417,22 @@ def create_user():
             return redirect(request.referrer)
         if not user_pass:
             user_pass = "Unknown"
+
         if not user_perm:
             user_perm = "READ|WRITE"
-        if not user_type or int(user_type) == 6:
-            manual_type = request.form.get('select_type')
-            if manual_type:
-                user_type = helper.user_name_to_type(manual_type)
+
+        if user_type:
+            userTypeId = db.get_user_type(session["db"],user_type)
+            
+            if not userTypeId:
+                userTypeId = db.insert_new_user_type(session["db"],user_type)
             else:
-                user_type = 5
+                userTypeId = userTypeId[0][0]
+
+        else:
+            # Will not Add the user, for now
+            return redirect(request.referrer)
+
         found = "NULL"
         if not server_id:
             found = request.form.get('found')
@@ -437,7 +445,7 @@ def create_user():
             else:
                 server_id = "NULL"
 
-        db.insert_new_user(session["db"], user_type, server_id, found, user_name, user_pass,
+        db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
         return redirect(request.referrer)
 
@@ -512,10 +520,16 @@ def all_users():
         else:
             info = "Unknown"
 
-        u_type = helper.user_type_to_name(u_type)
+        u_type = db.get_user_type_id(session["db"],u_type)[0][0]
+
         data[username].append([password, perm, info, u_type, attain, uid])
 
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=6)
+    allUserTypes = db.get_all_users_types(session["db"])
+
+    for index,typeName in enumerate(allUserTypes):
+        allUserTypes[index] = typeName[0]
+
+    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=6, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
 def export_users():
@@ -531,7 +545,7 @@ def export_users():
         writer.writeheader()
         for user in users:
             user_name, password, perm, user_type, attain = user[2], user[3], user[4], user[1], user[5]
-            user_type = helper.user_type_to_name(user_type)
+            user_type = db.get_user_type_id(session["db"],user_type)[0][0]
             writer.writerow({'Username': user_name, 'Password': password,
                              'Permission': perm, 'Type': user_type, 'Attain': attain})
     return send_from_directory(helper.FILES_FOLDER.format(session["project"]), "users.csv", as_attachment=True)

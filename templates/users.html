@@ -11,11 +11,9 @@
     <select value="None" onchange="sortUsers()" class="select-type" id="type" name="sort_ports">
     <option value="All" selected disabled hidden>All</option>
     <option>All</option>
-    <option>Domain</option>
-    <option>Localhost</option>
-    <option>Application</option>
-    <option>Net-Device</option>
-    <option>Other</option>
+    {% for userType in allUserTypes %}
+        <option>{{ userType }}</option>
+    {% endfor %}
   </select>
     </br>
     </br>
@@ -51,20 +49,25 @@
             <tr style="overflow:scroll">
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
                     <input type="hidden" name="type" value="{{ type }}">
+                    <input type="hidden" id="userTypeForm" name="userType">
                     <td><input class="modern-input" type="text" name="username" placeholder="Username"></td>
                     <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
                     <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
                     <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
                     {% if type==6 %}
-                    <td><select name="select_type" class="exec-users-input inline">
-              <option>Domain</option>
-              <option>Localhost</option>
-              <option>Application</option>
-              <option>Net-Device</option>
-              <option>Other</option>
+                    <td name="type_selector" id="type_selector">
+                        {% if allUserTypes|length == 0 %}
+                        <input class="modern-input" type="text" name="userType" id="userType" placeholder="User Type"> {% else %}
+                        <select id="userType" name="userType" class="exec-users-input inline" id="select_type" onchange="addNewUserType(this)">
+                            {% for userType in allUserTypes %}
+                                <option>{{ userType }}</option>
+                            {% endfor %}
+                            <option>Other</option>
+                        {% endif %}
+              
             </select></td>
                     {% endif %}
-                    <td><a href="javascript:$('#user-form').submit();"><i class="fas fa-plus" style="margin-left: 15px;"></i></a>
+                    <td><a onclick="submitUserForm()" href="#"><i class="fas fa-plus" style="margin-left: 15px;"></i></a>
                     </td>
                 </form>
             </tr>
@@ -98,6 +101,29 @@
                 }
             }
         }
+    }
+
+    function addNewUserType(obj) {
+        if (obj.value == "Other") {
+            // Create new Text-Box element
+            var el = document.createElement("input");
+            el.setAttribute("class", "modern-input");
+            el.setAttribute("type", "text");
+            el.setAttribute("name", "userType");
+            el.setAttribute("id", "userType");
+            el.setAttribute("placeholder", "User Type");
+
+            // Remove the selector
+            obj.remove();
+
+            // Places an text box so the user will be able to create new userType roles
+            document.getElementById("type_selector").appendChild(el);
+        }
+    }
+
+    function submitUserForm() {
+        document.getElementById('userTypeForm').value = document.getElementById('userType').value;
+        $('#user-form').submit();
     }
 </script>
 {% include 'user.html' %} {% include 'wrapper_end.html' %} {% include 'footer.html' %}
