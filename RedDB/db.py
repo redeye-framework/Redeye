@@ -249,25 +249,24 @@ def get_server_id_by_user_id(db, user_id):
 @check_input
 def insert_new_user_type(db, typeName):
     """
-    Add new task to data base.
+    Add new UserType.
     """
     query = ''' INSERT INTO userTypes(typeName)
               VALUES("{}") '''.format(typeName)
     result = get_db_with_actions(db, query)
     return(result)
 
-
 @check_input
 def get_all_users_types(db):
     query = r'SELECT typeName FROM userTypes'
     return db_get(db, query)
 
-
+@check_input
 def get_user_type(db, typeName):
     query = r'SELECT id FROM userTypes WHERE typeName="{}"'.format(typeName)
     return db_get(db, query)
 
-
+@check_input
 def get_user_type_id(db, typeId):
     query = r'SELECT typeName FROM userTypes WHERE id="{}"'.format(typeId)
     return db_get(db, query)
