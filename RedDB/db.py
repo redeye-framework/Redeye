@@ -952,6 +952,11 @@ def delete_user_by_id(user_id):
     query = 'DELETE FROM redeye_users WHERE id="{}"'.format(user_id)
     return get_db_with_actions(MANAGE_DB, query)
 
+@check_input
+def get_profilePicture_by_id(picId):
+    query = r'SELECT profile_pic FROM redeye_users WHERE id="{}"'.format(picId)
+    return db_get(MANAGE_DB, query)
+
 
 """
 =======================================================

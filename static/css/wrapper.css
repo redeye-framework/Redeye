@@ -163,7 +163,7 @@ input:focus {
 /*--------------------sidebar-brand----------------------*/
 
 .sidebar-wrapper .sidebar-brand {
-    padding: 10px 20px;
+    padding: 10px 10px;
     display: flex;
     align-items: center;
 }
@@ -182,7 +182,6 @@ input:focus {
     font-size: 15px;
     font-weight: normal;
     flex-grow: 1;
-    margin-left: -50px;
 }
 
 .sidebar-wrapper .sidebar-brand>a:hover {
@@ -700,6 +699,17 @@ input:checked+.slider:before {
 .import-btn+label {
     cursor: pointer;
     /* "hand" cursor */
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background-size: auto 40px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    margin: 20px 15px;
+    float: left;
 }
 
 
