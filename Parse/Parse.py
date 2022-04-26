@@ -2,6 +2,7 @@ import re
 from RedDB import db
 import xml.etree.ElementTree as ET
 from collections import defaultdict
+from werkzeug.utils import secure_filename
 
 """
 Gets path to nmap.xml and returns data
@@ -111,16 +112,33 @@ def get_all_data(path):
 #    pass
 
 
-def parse_users_passwords(dbName,exec,file_name,path,userType):
+def parse_users_passwords(dbName,exec,file_name,path):
     with open(path,'r') as users_passwords:
         data = users_passwords.readlines()
+
+    importedTypeName = "Imported from " + secure_filename(file_name)
+
+    # Add new user Type
+    typeNameExsist = 0
+    for typeName in db.get_all_users_types(dbName):
+        if typeName[0] == importedTypeName:
+            typeNameExsist = 1
+            break
+
+    # Add new type only if its not already exsists
+    if not typeNameExsist:
+        userTypeId = db.insert_new_user_type(dbName, importedTypeName)
+    
+    else:
+        userTypeId = db.get_user_type(dbName, importedTypeName)[0][0]
+
     for line in data:
         try:
             user,password = line.split(":")
         except:
             continue
-        
-        db.insert_new_other_user(dbName,userType,file_name,user,password,"-",exec)
+
+        db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
 
 def check_nmap_file(file_path):
     """

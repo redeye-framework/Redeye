@@ -67,6 +67,8 @@ APP = "red"
 def init(app):
     global projects
     projects = db.get_projects()
+    projects.reverse()
+
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
@@ -567,9 +569,8 @@ def add_users_from_file():
             full_path, file_name = helper.save_file(file, helper.PASS_FOLDER.format(session["project"]))
             
             if file_name:
-                userType = helper.user_name_to_type(dic["location"])
                 parse.parse_users_passwords(session["db"],
-                    session["username"], file_name, full_path,userType)
+                    session["username"], file_name, full_path)
 
     return redirect(request.referrer)
 
@@ -1446,10 +1447,11 @@ def new_project():
     projectId = db.insert_new_project(data["name"], data["dbname"])
 
     db.add_new_user(data["username"], hashlib.sha256(data["password"].encode()).hexdigest(), projectId)
-    refresh_projects()
+
+    init(app)
     resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
     resp.set_cookie('reduser', "")
-    init(app)
+
     return resp
 
 def refresh_projects():
