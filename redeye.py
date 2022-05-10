@@ -741,6 +741,7 @@ def upload_file():
 def files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
     if request.method == 'GET':
         file_path = request.args.get('file_name')
         if not file_path:
