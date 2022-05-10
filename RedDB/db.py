@@ -338,7 +338,7 @@ def get_task(db, task_id):
 
 @check_input
 def get_all_tasks(db):
-    query = r'SELECT * FROM tasks WHERE relevent=1 and is_private=0'
+    query = r'SELECT * FROM tasks WHERE relevent=1 and is_private=0 order by is_task_done = "1";'
     return db_get(db, query)
 
 @check_input
