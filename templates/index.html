@@ -18,8 +18,8 @@
                 {% if comment[2] != display_name %} <span style="float: left;">{{ comment[2] }}</span> {% else %}
                 <form action="{{ url_for('delete_comment') }}" method="POST" id="delete-comment-form-{{ comment[0] }}">
                     <input type="hidden" name="id" value="{{ comment[0] }}">
-                    <a class="delete-tweet" href="javascript:$('#delete-comment-form-{{ comment[0] }}').submit();"><i class="fas fa-trash"
-                                            style="margin-left: 15px; color: rgb(201, 84, 84);"></i></a>
+                    <a class="delete-tweet" href="javascript:$.post(Flask.url_for('delete_comment', { id: {{ comment[0] }} }));"><i class="fas fa-trash"
+                        onclick="this.parentElement.parentElement.parentElement.parentElement.remove()"  style="margin-left: 15px; color: rgb(201, 84, 84);"></i></a>
                 </form>
                 {% endif %} {{ comment[3] }}
             </div>

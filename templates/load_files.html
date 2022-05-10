@@ -6,7 +6,7 @@
     <li data-action="Delete">Delete</li>
     <li data-action="Download">Download</li>
 </ul>
-<a href="{{ url_for('load_files')}}?dir_name={{ last_dir }}"><i style="float: left" class="fas fa-arrow-left fa-2x"></i></a>
+<a href="{{ url_for('load_files')}}?dir_name={{ last_dir }}" style="z-index: 999; float: left; padding: 15px;"><i class="fas fa-arrow-left fa-2x"></i></a>
 <div class="files">
     <form action="{{ url_for('load_files') }}" method="POST">
         <div class="container">
@@ -19,9 +19,6 @@
             <div class="col-lg-12">
                 <h1>{{ root }}</h1>
                 <p>
-                    <script>
-                        console.log("{{ files_found }}")
-                    </script>
                     {% if "None" != files_found %}
                     <span style="font-weight: bold;font-size: 20px">Files Found: {{ files_found }}</span> {% endif %}
                     <form action="{{ url_for('load_files') }}" method="GET">
@@ -88,6 +85,9 @@
     {% endif %}
 </div>
 
+{% include 'wrapper_end.html' %}
+
 <script src="{{ url_for('static', filename='js/lib/dropzone/dropzone.js') }}"></script>
+<script src="{{ url_for('static', filename='js/files.js') }}"></script>
 
 {% include 'footer.html' %}

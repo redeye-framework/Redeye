@@ -180,7 +180,7 @@
   max-width: 90%;
   border: 2px solid #535966;
   position: relative;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #9b9ea7;
   transition-duration: 0.4s;
   cursor: pointer;
@@ -235,8 +235,8 @@
 }
 
 .image_fit .file-upload-image {
-  height: 500px;
-  width: auto;
+  height: auto;
+  width: 100%;
   max-width: 900px;
   background-size: cover;
   background-position: center;

@@ -24,9 +24,11 @@
             <div class="sidebar-content">
                 <div class="sidebar-brand">
                     <a href="{{ url_for('index') }}" class="inline">Redeye</a>
-                    <a href="{{ url_for('login') }}" class="inline"><span id="user_span">@{{ username }}</span></a>
-                    <div class="icon" style="background-image: url(/static/pics/profiles/{{ profile }});">
-                    </div>
+                    <a href="{{ url_for('login') }}" class="inline">
+                        <div class="icon" style="background-image: url(/static/pics/profiles/{{ profile }});">
+                            <div id="user_name">@{{ username }}</div>
+                        </div>
+                    </a>
                 </div>
                 <!-- sidebar-header  -->
                 <div class="sidebar-search">
@@ -82,32 +84,11 @@
                             </div>
                         </li>
 
-                        <li class="sidebar-dropdown">
-                            <a href="#">
+                        <li>
+                            <a href="{{ url_for('load_files') }}">
                                 <i class="fa fa-folder"></i>
                                 <span>Files</span>
                             </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}/admin">Admin</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}/scans">Recon</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}/screenshots">Screenshots</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}/payloads">Payloads</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}/tools">Tools</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}">All</a>
-                                    </li>
-                                </ul>
                         </li>
 
                         <li class="header-menu">

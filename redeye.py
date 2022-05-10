@@ -73,7 +73,7 @@ def init(app):
     graph.init()
 
     for project in projects:
-        d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
+        d1,d2,d3,d4,d5,d6,d7 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -81,8 +81,6 @@ def init(app):
         makedirs(d5, exist_ok=True)
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
-        makedirs(d8, exist_ok=True)
-        makedirs(d9, exist_ok=True)
         makedirs(FILES_FOLDER, exist_ok=True)
 
 """
@@ -639,9 +637,10 @@ def delete_comment():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        comment_id = request.form.get('id')
+        dict = request.args.to_dict()
+        comment_id = dict["id"]
         db.delete_comment_by_id(session["db"], comment_id)
-        return redirect(url_for('index'))
+        return ('', 204)
 
 
 @app.route('/create_comment', methods=['POST'])
@@ -758,6 +757,7 @@ def upload_file():
 def files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
     if request.method == 'GET':
         file_path = request.args.get('file_name')
         if not file_path:

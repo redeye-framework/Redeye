@@ -23,40 +23,21 @@ SERVICES_FILE = "Tools/services"
 def setGlobals():
     global MAIN_FILES
     global FILES_FOLDER
-    global PASS_FOLDER
     global SCAN_FOLDER
     global JSON_FOLDER
     global PAYLOAD_FILES
     global SCREENSHOTS_FILES
-    global ADMIN_FILES
     global REPORT_IMAGES
     MAIN_FILES = "files/{}"
     FILES_FOLDER = "files/{}/data"
-    PASS_FOLDER = "files/{}/passwords"
     SCAN_FOLDER = "files/{}/scans"
     JSON_FOLDER = "files/{}/jsons"
     PAYLOAD_FILES = "files/{}/payloads"
     SCREENSHOTS_FILES = "files/{}/screenshots"
-    ADMIN_FILES = "files/{}/admin"
     REPORT_IMAGES = "files/{}/report_images"
 
 def setFilesFolder(folderName):
-    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), PASS_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), ADMIN_FILES.format(folderName), REPORT_IMAGES.format(folderName)
-     
-
-def dir_option(dirname):
-    if dirname == "All":
-        return MAIN_FILES.format(session["project"])
-    elif dirname == "Payloads":
-        return PAYLOAD_FILES.format(session["project"])
-    elif dirname == "Screenshots":
-        return PAYLOAD_FILES.format(session["project"])
-    elif dirname == "Recon":
-        return PASS_FOLDER.format(session["project"])
-    elif dirname == "Admin":
-        return ADMIN_FILES.format(session["project"])
-    else:
-        return None
+    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), REPORT_IMAGES.format(folderName)
 
 def save_image(name, data):
     """

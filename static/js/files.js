@@ -1,4 +1,5 @@
-var el = null
+var el = null;
+
 $(document.getElementsByTagName("button")).bind("contextmenu", function (event) {
     el = this;
     event.preventDefault();

@@ -50,6 +50,7 @@
     height: 100%;
     opacity: 0;
     float: left;
+    cursor: pointer;
 }
 
 .user-box .icon > .add-user-btn:hover {
@@ -71,10 +72,12 @@
 .user-box .prop > .name {
     font-size: 18px;
     font-weight: 700;
+    cursor: pointer;
 }
 
 .user-box .prop > .password {
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .user-box .prop > .input-password {
