@@ -70,7 +70,7 @@ def init(app):
     projects.reverse()
 
     for project in projects:
-        d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
+        d1,d2,d3,d4,d5,d6,d7 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -78,8 +78,6 @@ def init(app):
         makedirs(d5, exist_ok=True)
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
-        makedirs(d8, exist_ok=True)
-        makedirs(d9, exist_ok=True)
         makedirs(FILES_FOLDER, exist_ok=True)
 
 """
