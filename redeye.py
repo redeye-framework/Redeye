@@ -623,9 +623,10 @@ def delete_comment():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        comment_id = request.form.get('id')
+        dict = request.args.to_dict()
+        comment_id = dict["id"]
         db.delete_comment_by_id(session["db"], comment_id)
-        return redirect(url_for('index'))
+        return ('', 204)
 
 
 @app.route('/create_comment', methods=['POST'])
