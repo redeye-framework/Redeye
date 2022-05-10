@@ -32,6 +32,7 @@ import hashlib
 from fire import Fire
 from glob import glob
 import zipfile
+import graph
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -63,11 +64,13 @@ PRIVATE_MESSAGE = 1
 GROUP_MESSAGE = 2
 GLOBAL_MESSAGE = 3
 APP = "red"
+SERVER_URL = "http://redeye.local/server?id={}"
 #Init
 def init(app):
     global projects
     projects = db.get_projects()
     projects.reverse()
+    graph.init()
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
@@ -188,6 +191,7 @@ def delete_server():
     if request.method == 'POST':
         id = request.form.get('id')
         db.delete_server_by_id(session["db"], id, session["username"])
+        graph.delete_server(id)
         return redirect('servers')
 
 @app.route('/change_server', methods=['POST'])
@@ -205,9 +209,15 @@ def change_server():
         if id:
             db.update_server_details(
                 session["db"], session["username"], id, ip=ip, name=name, is_access=access, attain=attain, section_id=section_id)
+
+            graph.changeServerNode(id, ip=ip, name=name, is_access=access,sectionName=db.get_section_name_by_section_id(session["db"],section_id))
+
         else:
-            db.create_new_server(session["db"], session["username"],
+            server_id = db.create_new_server(session["db"], session["username"],
                                  ip, name, "", access, attain, section_id)
+        
+            graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
+
         return redirect(url_for('server') + '?ip=' + ip)
     
 @app.route('/add_server_from_file', methods=['POST'])
@@ -447,8 +457,10 @@ def create_user():
             else:
                 server_id = "NULL"
 
-        db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
+        user_id = db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
+
+        graph.addUserNode(user_id, user_name, user_pass, user_perm, server_id)
         return redirect(request.referrer)
 
 @app.route('/edit_user', methods=['POST'])
@@ -479,6 +491,9 @@ def edit_user():
         """
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
                      passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
+
+        graph.changeUserNode(user_id, username=user_name, password=user_pass, permmission=user_perm, found_on=user_found_on)
+
         if 'userid' in url:
             url = url.split('userid=')
             url = url[0] + 'userid=' + user_id
@@ -495,6 +510,7 @@ def delete_user():
     if request.method == 'GET':
         user_id = request.values.get('id')
         db.delete_user(session["db"], user_id, session["username"])
+        graph.deleteUserNode(user_id)
         return ('', 204)
 
 @app.route('/all_users', methods=['GET'])
@@ -1505,6 +1521,13 @@ def index(logged=False):
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     comments = db.get_all_comments(session["db"])
+
+    if len(projects) > 1:
+        for index, project in enumerate(projects):
+            if project[2] == session["project"]:
+                lastProject = projects.pop(index)
+
+        projects.insert(0,lastProject)
 
     return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], display_name=session["username"], comments=comments)
 
