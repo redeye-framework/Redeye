@@ -24,9 +24,11 @@
             <div class="sidebar-content">
                 <div class="sidebar-brand">
                     <a href="{{ url_for('index') }}" class="inline">Redeye</a>
-                    <a href="{{ url_for('login') }}" class="inline"><span id="user_span">@{{ username }}</span></a>
-                    <div class="icon" style="background-image: url(/static/pics/profiles/{{ profile }});">
-                    </div>
+                    <a href="{{ url_for('login') }}" class="inline">
+                        <div class="icon" style="background-image: url(/static/pics/profiles/{{ profile }});">
+                            <div id="user_name">@{{ username }}</div>
+                        </div>
+                    </a>
                 </div>
                 <!-- sidebar-header  -->
                 <div class="sidebar-search">
