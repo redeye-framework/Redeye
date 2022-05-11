@@ -62,9 +62,7 @@ python3 redeye.py --safe
 Build with Dockerfile and create the container.
 ```
 cd Redeye
-sudo docker build -t redeye:latest .
-sudo docker volume create RedeyeFiles
-sudo docker run -d --name Redeye -v RedeyeFiles:/redeye/files -p 5000:5000 redeye:latest
+sudo docker-compose up --build -d
 ```
 
 Pull from Dockerhub and create the container.

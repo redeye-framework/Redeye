@@ -1,18 +1,14 @@
 #Imports
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, flash, jsonify
-from os import walk, path, sep
+from flask import session
+from os import path
 import os
 from redeye import *
 from RedDB import db
-from Parse import Parse as parse
-from Report import report_gen as report
-from datetime import datetime, timedelta
 import base64
 from mimetypes import guess_extension
 from collections import defaultdict
 import shutil
 import hashlib
-import zipfile
 
 
 # Consts
@@ -28,6 +24,7 @@ def setGlobals():
     global PAYLOAD_FILES
     global SCREENSHOTS_FILES
     global REPORT_IMAGES
+    global PASS_FOLDER
     MAIN_FILES = "files/{}"
     FILES_FOLDER = "files/{}/data"
     SCAN_FOLDER = "files/{}/scans"
@@ -35,9 +32,10 @@ def setGlobals():
     PAYLOAD_FILES = "files/{}/payloads"
     SCREENSHOTS_FILES = "files/{}/screenshots"
     REPORT_IMAGES = "files/{}/report_images"
+    PASS_FOLDER = "files/{}/passwords"
 
 def setFilesFolder(folderName):
-    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), REPORT_IMAGES.format(folderName)
+    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), REPORT_IMAGES.format(folderName), PASS_FOLDER.format(folderName)
 
 def save_image(name, data):
     """

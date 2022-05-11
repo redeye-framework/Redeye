@@ -5,26 +5,21 @@ from flask import Flask, request, render_template, session, request, redirect, a
 from flask_jsglue import JSGlue
 import jwt
 import sys
-import sqlite3
-from os import walk, path, listdir, sep, makedirs, remove
+from os import  path, listdir, makedirs
 import os
 from RedDB import db
 from Parse import Parse as parse
 from Report import report_gen as report
 import Redhelper as helper
 import collections
-from werkzeug.utils import secure_filename
 import csv
 from datetime import datetime, timedelta
 from uuid import uuid4
-import base64
-import json
 from collections import defaultdict
 import urllib.parse
 from flask_socketio import SocketIO, emit
 import socketio as client_socket
-from threading import Thread, Lock
-from urllib.parse import unquote
+from threading import Lock
 from shutil import copy as copyFile
 from shutil import copytree as copyDir
 from shutil import rmtree as rmDir
@@ -55,25 +50,26 @@ projects = []
 
 # CONSTS
 IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less permissive) set this to False.
+IS_DOCKER_ENV = False
 PROFILE_PICS = r"static/pics/profiles"
 DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
 ZIP_FOLDER = r"zip"
 FILES_FOLDER = r"files/"
-PRIVATE_MESSAGE = 1
-GROUP_MESSAGE = 2
-GLOBAL_MESSAGE = 3
-APP = "red"
 SERVER_URL = "http://redeye.local/server?id={}"
+
+
 #Init
 def init(app):
     global projects
     projects = db.get_projects()
     projects.reverse()
-    graph.init()
+
+    if IS_DOCKER_ENV:
+        graph.init()
 
     for project in projects:
-        d1,d2,d3,d4,d5,d6,d7 = helper.setFilesFolder(project[2])
+        d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -81,6 +77,7 @@ def init(app):
         makedirs(d5, exist_ok=True)
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
+        makedirs(d8, exist_ok=True)
         makedirs(FILES_FOLDER, exist_ok=True)
 
 """
@@ -189,7 +186,10 @@ def delete_server():
     if request.method == 'POST':
         id = request.form.get('id')
         db.delete_server_by_id(session["db"], id, session["username"])
-        graph.delete_server(id)
+
+        if IS_DOCKER_ENV:
+            graph.delete_server(id)
+
         return redirect('servers')
 
 @app.route('/change_server', methods=['POST'])
@@ -208,13 +208,14 @@ def change_server():
             db.update_server_details(
                 session["db"], session["username"], id, ip=ip, name=name, is_access=access, attain=attain, section_id=section_id)
 
-            graph.changeServerNode(id, ip=ip, name=name, is_access=access,sectionName=db.get_section_name_by_section_id(session["db"],section_id))
+            if IS_DOCKER_ENV:
+                graph.changeServerNode(id, ip=ip, name=name, is_access=access,sectionName=db.get_section_name_by_section_id(session["db"],section_id))
 
         else:
             server_id = db.create_new_server(session["db"], session["username"],
                                  ip, name, "", access, attain, section_id)
-        
-            graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
+            if IS_DOCKER_ENV:
+                graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
 
         return redirect(url_for('server') + '?ip=' + ip)
     
@@ -457,8 +458,9 @@ def create_user():
 
         user_id = db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
+        if IS_DOCKER_ENV:
+            graph.addUserNode(user_id, user_name, user_pass, user_perm, server_id)
 
-        graph.addUserNode(user_id, user_name, user_pass, user_perm, server_id)
         return redirect(request.referrer)
 
 @app.route('/edit_user', methods=['POST'])
@@ -490,7 +492,15 @@ def edit_user():
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
                      passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
 
-        graph.changeUserNode(user_id, username=user_name, password=user_pass, permmission=user_perm, found_on=user_found_on)
+        if IS_DOCKER_ENV:
+            if db.get_server_id_by_name(session["db"], user_found_on):
+                server_id = db.get_server_id_by_name(session["db"], user_found_on)[0][0]
+            elif db.get_server_id_by_ip(session["db"], user_found_on):
+                server_id = db.get_server_id_by_ip(session["db"], user_found_on)[0][0]
+            else:
+                server_id = 0
+
+            graph.changeUserNode(user_id, username=user_name, password=user_pass, permissions=user_perm, server_id=server_id)
 
         if 'userid' in url:
             url = url.split('userid=')
@@ -508,7 +518,10 @@ def delete_user():
     if request.method == 'GET':
         user_id = request.values.get('id')
         db.delete_user(session["db"], user_id, session["username"])
-        graph.deleteUserNode(user_id)
+
+        if IS_DOCKER_ENV:
+            graph.deleteUserNode(user_id)
+
         return ('', 204)
 
 @app.route('/all_users', methods=['GET'])
@@ -584,7 +597,7 @@ def add_users_from_file():
             
             if file_name:
                 parse.parse_users_passwords(session["db"],
-                    session["username"], file_name, full_path)
+                    session["username"], file_name, full_path, IS_DOCKER_ENV)
 
     return redirect(request.referrer)
 
@@ -1378,9 +1391,17 @@ def add_scan(file):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id)
+
+                            if IS_DOCKER_ENV:
+                                graph.addServerNode(server_id,ip_addr,hostname,0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
+
                         else:
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id)
+
+                            if IS_DOCKER_ENV:
+                                graph.addServerNode(server_id,ip_addr,"Unknown",0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
+
                         for data in lst_ports:
                             port_num, state, service = data["port"], data["state"], data["service"]
                             db.insert_new_port(session["db"], 
@@ -1553,12 +1574,13 @@ def showHelpMenu():
     --debug     Debugging mode [Default: False].
     --port      Select listening port [Default: 5000].
     --safe      Set state to "safe" - Allows to create new projects [Default: False].
+    --docker    Should be set only when running from a docker container [Default: False].
     --help      Display this help message.
     """
     print(description)
     
 
-def startRedeye(reset=False,debug=False,port=5000,safe=False,help=False):
+def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=False):
     if help:
         showHelpMenu()
         sys.exit(0)
@@ -1599,6 +1621,10 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,help=False):
 
     global IS_ENV_SAFE
     IS_ENV_SAFE = safe
+
+    if docker:
+        global IS_DOCKER_ENV
+        IS_DOCKER_ENV = True
 
     if debug:
         socketio.run(app, debug=True, host='0.0.0.0', port=port)

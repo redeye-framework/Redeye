@@ -6,12 +6,12 @@ from neo4j import (
 import os
 import sys
 
-localhost = "192.168.240.1" # Will be changed to localhost
+localhost = "neo4j" # Will be changed to localhost
 url = os.getenv("NEO4J_URI", f"bolt://{localhost}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
 password = os.getenv("NEO4J_PASSWORD", "redeye")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
-database = os.getenv("NEO4J_DATABASE", "RedeyeProd")
+database = os.getenv("NEO4J_DATABASE", "env1")
 
 driver = GraphDatabase.driver(url, auth=basic_auth(username, password))
 
@@ -89,7 +89,7 @@ def deleteUserNode(id):
 
     executeWriteQuery(deleteUser) 
 
-def changeUserNode(id,username=None, password=None,permissions=None, found_on=None, server_id=None):
+def changeUserNode(id,username=None, password=None,permissions=None, server_id=None):
     def changeUserName(tx):
         if username:
             q = """ match (user:users) where user.id="%s" SET user.username="%s" """ % (id,username)
@@ -105,11 +105,6 @@ def changeUserNode(id,username=None, password=None,permissions=None, found_on=No
             q = """ match (user:users) where user.id="%s" SET user.permissions="%s" """ % (id,permissions)
             tx.run(q)
 
-    def chageUserFoundOn(tx):
-        if found_on:
-            q = """ match (user:users) where user.id="%s" SET user.found_on="%s" """ % (id,found_on)
-            tx.run(q)
-
     def deleteUserConnection(tx):
         if server_id:
             currentServerId = getUserProperties(id)["server_id"]
@@ -117,7 +112,7 @@ def changeUserNode(id,username=None, password=None,permissions=None, found_on=No
                 q = """ match (user:users)-[r:userTo]->(server) where user.id="%s" AND user.server_id="%s" AND server.id="%s" delete r""" % (id, currentServerId, currentServerId)
                 tx.run(q)
 
-    def reConnectUserConnection(tx):
+    def ConnectUserConnection(tx):
         if server_id:
             q = """ match (user:users), (server:servers) where user.id="%s" AND server.id ="%s" create (user)-[r:userTo]->(server) return type(r) """ % (id, server_id)
             tx.run(q)
@@ -126,10 +121,9 @@ def changeUserNode(id,username=None, password=None,permissions=None, found_on=No
     executeWriteQuery(changeUserName)
     executeWriteQuery(changeUserPassword)
     executeWriteQuery(changeUserPermission)
-    executeWriteQuery(chageUserFoundOn)
     # Need to fix that
     #executeWriteQuery(deleteUserConnection)
-    executeWriteQuery(reConnectUserConnection)
+    executeWriteQuery(ConnectUserConnection)
 
 
 def getUserProperties(id):
