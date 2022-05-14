@@ -6,12 +6,12 @@ from neo4j import (
 import os
 import sys
 
-localhost = "neo4j" # Will be changed to localhost
-url = os.getenv("NEO4J_URI", f"bolt://{localhost}:7687")
+neoServer = "neo4j" # Will be changed to localhost
+url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
 password = os.getenv("NEO4J_PASSWORD", "redeye")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
-database = os.getenv("NEO4J_DATABASE", "env1")
+database = os.getenv("NEO4J_DATABASE", "Redeye")
 
 driver = GraphDatabase.driver(url, auth=basic_auth(username, password))
 

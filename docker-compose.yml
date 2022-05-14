@@ -2,11 +2,14 @@ version: "3.3"
 services:
   redeye:
     container_name: "Redeye"
-    build: .
+    image: "redeyeframework/redeye:latest"
     ports:
       - "5000:5000"
     links:
       - "neo4j:neo4j"
+    volumes:
+      - /redeye/files
+      - /redeye/RedDB
   neo4j:
     image: "neo4j:latest"
     ports:
@@ -14,4 +17,3 @@ services:
       - "0.0.0.0:7687:7687"
     env_file:
       - graph.env
-      
