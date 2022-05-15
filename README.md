@@ -59,24 +59,21 @@ python3 redeye.py --safe
 
 ### Docker
 
-Build with Dockerfile and create the container.
+Pull from Dockerhub.
 ```
 cd Redeye
-sudo docker build -t redeye:latest .
-sudo docker volume create RedeyeFiles
-sudo docker run -d --name Redeye -v RedeyeFiles:/redeye/files -p 5000:5000 redeye:latest
-```
-
-Pull from Dockerhub and create the container.
-```
-docker pull redeyeframework/redeye:latest
-sudo docker volume create RedeyeFiles
-sudo docker run -d --name Redeye -v RedeyeFiles:/redeye/files -p 5000:5000 redeyeframework/redeye:latest
+docker-compose up -d
 ```
 
 Start/Stop the container
 ```
-sudo docker start/stop Redeye
+sudo docker-compose start/stop
+```
+
+Save/Load Redeye
+```
+docker save redeyeframework/redeye:latest neo4j:latest > Redeye.tar
+docker load < Redeye.tar
 ```
 
 ### General
@@ -85,6 +82,10 @@ Default Credentials:
 - username: redeye
 - password: redeye
 
+Neo4j will listen on: http://0.0.0.0:7474</br>
+Default Credentials:
+- username: neo4j
+- password: redeye
 
 ## Special-Thanks
 - Yoav Danino for mental support and beta testing.
@@ -110,4 +111,4 @@ Default Credentials:
     
 
 
-Redeye is under MIT License, if you own any Code/File in Redeye that is not under MIT License please contact us at: redeye.framework@gmail.com
+If you own any Code/File in Redeye that is not under MIT License please contact us at: redeye.framework@gmail.com

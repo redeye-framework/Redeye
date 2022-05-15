@@ -3,6 +3,7 @@ from RedDB import db
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from werkzeug.utils import secure_filename
+import graph
 
 """
 Gets path to nmap.xml and returns data
@@ -112,7 +113,7 @@ def get_all_data(path):
 #    pass
 
 
-def parse_users_passwords(dbName,exec,file_name,path):
+def parse_users_passwords(dbName,exec,file_name,path, isDockerEnv):
     with open(path,'r') as users_passwords:
         data = users_passwords.readlines()
 
@@ -135,10 +136,15 @@ def parse_users_passwords(dbName,exec,file_name,path):
     for line in data:
         try:
             user,password = line.split(":")
+            password.rstrip("\n")
         except:
             continue
 
-        db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
+        user_id = db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
+        
+        if isDockerEnv:
+            graph.addUserNode(user_id,user,password,"None")
+
 
 def check_nmap_file(file_path):
     """
