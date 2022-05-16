@@ -172,8 +172,12 @@ hr {
     background-color: #343a40;
     color: white;
     border: 1px solid rgb(86, 92, 104);
-    outline: none;
-    
+    outline: none;   
+}
+
+
+td .editable-inp {
+    display: none;
 }
 
 .server-page > form > select {
@@ -251,7 +255,7 @@ hr {
     text-decoration: none;
 }
 
-.server-content table .tr-add {
+.server-content .item-add {
     display: none;
     transition-duration: 0.3s;
 }
@@ -259,7 +263,6 @@ hr {
 .server-content .cols th{
     border-top: none;
 }
-
 
 .inline {
     display: inline-block;

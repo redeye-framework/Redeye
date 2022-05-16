@@ -34,7 +34,7 @@
                   style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
                             {% endfor %}
-                            <tr class="tr-add">
+                            <tr class="item-add">
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
                                 <input type="hidden" id="type" name="userType">
@@ -63,14 +63,29 @@
                         <tbody>
                             {% for vuln in vulns %}
                             <tr>
-                                <td>{{ vuln[1] }}</td>
-                                <td>{{ vuln[2] }}</td>
-                                <td>{{ vuln[3] }}</td>
+                                <td>
+                                    <span class="editable">{{ vuln[1] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[1] }}">
+                                    <input class="editable-type" type="hidden" value="vuln[1]">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ vuln[2] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[2] }}">
+                                    <input class="editable-type" type="hidden" value="vuln[2]">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ vuln[3] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[3] }}">
+                                    <input class="editable-type" type="hidden" value="vuln[3]">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
                                 <td><a href="{{ url_for('delete_vuln') }}?id={{ vuln[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                   style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
                             {% endfor %}
-                            <tr class="tr-add">
+                            <tr class="item-add">
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
                                 <td><input type="text" name="name" placeholder="Name"></td>
@@ -86,8 +101,9 @@
         </div>
         <div class="row">
             <div class="col col-sm-6 free-text">
-                <h1>Attain</h1>
+                <h1>Description</h1><!-- This was previously called Attain -->
                 <p style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
+                <textarea class="desc-add form-control" id="attain-input" rows="5" name="attain" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Attain..">{{ attain }}</textarea>
             </div>
 
             <div style="" class="col col-sm-auto">
@@ -120,7 +136,7 @@
                 style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
                             {% endfor %}
-                            <tr class="tr-add">
+                            <tr class="item-add">
                                 <input name="server_id" type="hidden" value="{{ server[0] }}">
                                 <td><input id="input_port1" name="port" type="text" size="3" placeholder="Port"></td>
                                 <td><input id="input_port2" name="service" type="text" size="3" placeholder="Service"></td>
@@ -155,7 +171,7 @@
                 style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                         </tr>
                         {% endfor %}
-                        <tr class="tr-add">
+                        <tr class="item-add">
                             <td>
                                 <form enctype="multipart/form-data" action="{{ url_for('upload_file') }}" method="POST">
                                     <input type="file" id="file_upload" onchange="form.submit()" name="upload_file" multiple>

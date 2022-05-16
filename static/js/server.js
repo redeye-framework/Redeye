@@ -91,9 +91,9 @@ function submitUsersForm() {
 }
 
 $("table").mouseover(function() {
-    $(this).find(".tr-add").show()
-        //$(this).find(".tr-add").animate({padding: '0px'}, {duration: 200});
-        //$(this).find(".tr-add").find('td')
+    $(this).find(".item-add").show()
+        //$(this).find(".item-add").animate({padding: '0px'}, {duration: 200});
+        //$(this).find(".item-add").find('td')
         //.wrapInner('<div style="display: block;" />')
         //.parent()
         //.find('td > div')
@@ -102,15 +102,15 @@ $("table").mouseover(function() {
         //});
 }).mouseleave(function() {
     if (!$(this).find(':focus').length > 0) {
-        $(this).find(".tr-add").hide()
+        $(this).find(".item-add").hide()
     } else {
         $(this).focusout(function() {
             if (!$(this).is(':hover')) {
-                $(this).find(".tr-add").hide()
+                $(this).find(".item-add").hide()
             }
         })
     }
-    //$(this).find(".tr-add").find('td')
+    //$(this).find(".item-add").find('td')
     //.wrapInner('<div style="display: none;" />')
     //.parent()
     //.find('td > div')
@@ -120,6 +120,23 @@ $("table").mouseover(function() {
     //});
 })
 
+$(".editable").click(function() {
+    var inp = $(this).parent().find(".editable-inp");
+    console.log(inp)
+    $(this).hide();
+    $(inp).show();
+    $(inp).focus();
+    $(inp).focusout(function(){
+        var spa = $(this).parent().find(".editable");
+        var type = $(this).parent().find(".editable-type");
+        var id = $(this).parent().find(".editable-id");
+        var val = $(inp).val();
+        $(inp).hide();
+        $(spa).show();
+        $(spa).text(val);
+        //TODO: pt put here socket io - use id, type and val.
+    })
+});
 
 // Get the input field
 $(document).ready(function() {
