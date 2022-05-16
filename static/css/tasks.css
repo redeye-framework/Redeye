@@ -335,3 +335,9 @@ i {
     width: 70%;
     margin: 5px;
 }
+
+.widget-content-right {
+    display: block;
+    width: 100px;
+
+}
