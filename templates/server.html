@@ -240,7 +240,10 @@
                         <tr class="item-add">
                             <td>
                                 <form enctype="multipart/form-data" action="{{ url_for('upload_file') }}" method="POST">
-                                    <input type="file" id="file_upload" onchange="form.submit()" name="upload_file" multiple>
+                                    <label class="file-upload-label">
+                                        <input type="file" id="file_upload" onchange="form.submit()" name="upload_file" multiple>
+                                        <i class="fas fa-file-upload" style="margin-right: 10px;"></i>Upload file
+                                    </label>
                                 </form>
                             </td>
                         </tr>
