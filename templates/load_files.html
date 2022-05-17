@@ -58,7 +58,7 @@
                         <i class="folder-icons"></i><br><br>
                         <form action="{{ url_for('add_new_dir') }}" method="POST">
                             <div class="folder-name-input">
-                                <input type="text" name="dir_name" id="myInput" class="main-file-input">
+                                <input type="text" name="dir_name" id="myInput" class="main-file-input" required>
                                 <button><i class="fa fa-plus"></i></button>
                             </div>
                         </form>

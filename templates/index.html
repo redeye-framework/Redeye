@@ -3,7 +3,7 @@
 <div class="page">
     <div class="input">
         <form action="{{ url_for('create_comment') }}" method="POST">
-            <input dir="auto" class="text" type="text" name="data" placeholder="Enter your thoughts and updates here...">
+            <input dir="auto" class="text" type="text" name="data" placeholder="Enter your thoughts and updates here..." required>
             <input class="button" type="submit" value="Submit">
         </form>
     </div>

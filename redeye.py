@@ -102,6 +102,14 @@ def server():
         server_id = request.values.get('id')
         server = db.get_server_by_id(session["db"], server_id)
 
+    section = ""
+    sections = db.get_sections(session["db"])
+    print(sections)
+    for sec in sections:
+        print(sec)
+        if sec[0] == server[0][7]:
+            section = sec[1]
+
     if server:
         server = server[0]
     else:
@@ -118,7 +126,7 @@ def server():
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():
@@ -198,26 +206,55 @@ def change_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        name = request.form.get('name')
-        ip = request.form.get('ip')
-        id = request.form.get('id')
-        attain = request.form.get('attain')
-        section_id = request.form.get('section')
-        access = 1 if request.form.get('access') else 0
-        if id:
-            db.update_server_details(
-                session["db"], session["username"], id, ip=ip, name=name, is_access=access, attain=attain, section_id=section_id)
 
-            if IS_DOCKER_ENV:
-                graph.changeServerNode(id, ip=ip, name=name, is_access=access,sectionName=db.get_section_name_by_section_id(session["db"],section_id))
+        dict = request.args.to_dict()
+
+        # If id is specified, we need to update the existing row
+        if "id" in dict:
+            id = dict["id"]
+            type = dict["type"]
+            obj = dict["obj"]
+            value = dict["value"]
+
+            if "port" == obj:
+                db.edit_port_by_id(session["db"], id, type, value)
+               
+            elif "vuln" == obj:
+                db.edit_vuln_by_id(session["db"], id, type, value)
+
+            elif "user" == obj:
+                if type == "type":
+                    typeId = db.get_user_type(session["db"],type)[0][0]
+                    if typeId:
+                        db.edit_user_by_id(session["db"], id, typeId, value)
+                    else:
+                        typeId = db.insert_new_user_type(session["db"],type)
+                        db.edit_user_by_id(session["db"], id, typeId, value)
+                        
+
+            elif "servers" == obj:
+                db.edit_server_by_id(session["db"], id, type, value)
+                if type == "ip":
+                    return redirect(url_for("server", ip=value))
+            
+            elif "description" == obj:
+                db.edit_server_by_id(session["db"], id, type, value)
 
         else:
+            name = request.form.get('name')
+            ip = request.form.get('ip')
+            attain = request.form.get('attain')
+            section_id = request.form.get('section')
+            access = 1 if request.form.get('access') else 0
+
             server_id = db.create_new_server(session["db"], session["username"],
                                  ip, name, "", access, attain, section_id)
             if IS_DOCKER_ENV:
                 graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
+            
+            return redirect(url_for("server", ip=ip))
 
-        return redirect(url_for('server') + '?ip=' + ip)
+        return redirect(request.referrer)
     
 @app.route('/add_server_from_file', methods=['POST'])
 def add_server_from_file():

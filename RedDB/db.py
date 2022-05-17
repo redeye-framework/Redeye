@@ -82,6 +82,11 @@ def insert_manual_user(db, type, found_on, username, password, permissions, exec
     return(result)
 
 @check_input
+def edit_user_by_id(db, userId, column, value):
+    query = 'UPDATE users SET "{}"="{}" WHERE id={}'.format(column, value,userId)
+    return get_db_with_actions(db, query)
+
+@check_input
 def update_user(db, id, type, server_id, username, password, permissions, exec):
     """
     Update user by id of the user.
@@ -434,6 +439,11 @@ def get_all_vullns(db):
     query = r'SELECT * FROM vulns WHERE relevent=1'
     return db_get(db, query)
 
+@check_input
+def edit_vuln_by_id(db, vulnId, column, value):
+    query = 'UPDATE vulns SET "{}"="{}" WHERE id={}'.format(column, value, vulnId)
+    return get_db_with_actions(db, query)
+
 """
 =======================================================
                 Devices Functions
@@ -554,6 +564,11 @@ def update_server_details(db, exec, id, ip=False, name=False, is_access=False, a
     create_log(db, "Server Updated", "server_id",
                id, "Updated Server", exec)
     return result
+
+@check_input
+def edit_server_by_id(db,serverId,column,value):
+    query = 'UPDATE servers SET "{}"="{}" WHERE id={}'.format(column, value,serverId)
+    return get_db_with_actions(db, query)
 
 @check_input
 def delete_server_by_id(db, server_id, exec):
@@ -824,6 +839,11 @@ def insert_new_port(db, port, state, service, vuln, object_id, object_value):
                   VALUES("{}","{}","{}","{}","{}") '''.format(object_id, port, state, service, vuln, object_value)
     result = get_db_with_actions(db, query)
     return(result)
+
+@check_input
+def edit_port_by_id(db, portId, type, value):
+    query = 'UPDATE ports SET "{}"="{}" WHERE id={}'.format(type,value,portId)
+    return get_db_with_actions(db, query)
 
 """
 =======================================================

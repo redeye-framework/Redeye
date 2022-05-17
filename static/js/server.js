@@ -120,46 +120,86 @@ $("table").mouseover(function() {
     //});
 })
 
-$(".editable").click(function() {
-    var inp = $(this).parent().find(".editable-inp");
-    console.log(inp)
-    $(this).hide();
+
+$(".editable").closest("td").click(function() {
+    var edi = $(this).find(".editable")
+    var inp = $(edi).parent().find(".editable-inp");
+
+    $(edi).hide();
     $(inp).show();
     $(inp).focus();
-    $(inp).focusout(function(){
+    $(inp).focusout(function() {
         var spa = $(this).parent().find(".editable");
-        var type = $(this).parent().find(".editable-type");
-        var id = $(this).parent().find(".editable-id");
+        var type = $(this).parent().find(".editable-type").val();
+        var obj = $(this).parent().find(".editable-obj").val();
+        var id = $(this).parent().find(".editable-id").val();
         var val = $(inp).val();
+
+        if (val == "") {
+            val = "-"
+        }
+
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
-        //TODO: pt put here socket io - use id, type and val.
+
+        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
     })
 });
 
+$(".editable-inp").each(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            var spa = $(this).parent().find(".editable");
+            var type = $(this).parent().find(".editable-type");
+            var id = $(this).parent().find(".editable-id");
+            var val = $(this).val();
+            $(this).hide();
+            $(spa).show();
+            $(spa).text(val);
+            //TODO: pt put here socket io - use id, type and val.
+        }
+    })
+})
+
 $(".editable-2").click(function() {
-    var inp = $(this).parent().find(".editable-inp-2");
-    console.log(inp)
-    $(this).hide();
+    var edi = $(this).find(".editable-2")
+    var inp = $(edi).parent().find(".editable-inp-2");
+    $(edi).hide();
     $(inp).show();
     $(inp).focus();
-    $(inp).focusout(function(){
+    $(inp).focusout(function() {
         var spa = $(this).parent().find(".editable-2");
-        var type = $(this).parent().find(".editable-type-2");
-        var id = $(this).parent().find(".editable-id-2");
+        var obj = $(this).parent().find(".editable-obj-2").val();
+        var type = $(this).parent().find(".editable-type-2").val();
+        var id = $(this).parent().find(".editable-id-2").val();
         var val = $(inp).val();
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
-        //TODO: pt put here socket io - use id, type and val.
+        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
     })
 });
+
+$(".editable-inp-2").each(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            var spa = $(this).parent().find(".editable-2");
+            var type = $(this).parent().find(".editable-type-2");
+            var id = $(this).parent().find(".editable-id-2");
+            var val = $(this).val();
+            $(this).hide();
+            $(spa).show();
+            $(spa).text(val);
+            //TODO: pt put here socket io - use id, type and val.
+        }
+    })
+})
 
 // Get the input field
 $(document).ready(function() {
-    $(".item-add").each(function(){
-        $(this).find("input").each(function(){
+    $(".item-add").each(function() {
+        $(this).find("input").each(function() {
             this.addEventListener("keyup", function(event) {
                 if (event.keyCode === 13) {
                     this.closest("form").submit();

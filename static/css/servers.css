@@ -184,7 +184,7 @@ td .editable-inp-2 {
     display: none;
 }
 
-.server-page > form > select {
+.server-page select {
     display: inline-block;
     padding: 5px;
     margin: 0 10px;
@@ -193,7 +193,6 @@ td .editable-inp-2 {
     color: white;
     border: 1px solid rgb(86, 92, 104);
     outline: none;
-    
 }
 
 .server-page textarea {
@@ -251,7 +250,7 @@ td .editable-inp-2 {
 }
 
 .server-content table a {
-    cursor: auto;
+    cursor: pointer;
 }
 
 .server-content table a:hover {
@@ -291,6 +290,50 @@ td .editable-inp-2 {
     cursor: pointer;
 }
 
-#file_upload {
-    width: 230px;
+.file-upload-label {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: rgb(67, 72, 82);
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    color: #ccd;
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.file-upload-label:hover {
+    filter: brightness(120%);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+span {
+    cursor: pointer;
+}
+
+.floating-btn{
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.floating-btn:hover{
+    filter: brightness(110%);
+}
+
+.delete {
+    background-color: rgb(212, 71, 71);
+    position: absolute;
+    bottom: 70px;
+    right: 15px;
+}
+
+.floating-btn > .fa-trash {
+    color: #eef;
 }

@@ -5,13 +5,19 @@
     <h1 class="head">
         <span class="editable">{{ server[2] }}</span>
         <input class="editable-inp" style="display:none;" type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name">
-        <input class="editable-type" type="hidden" value="server[2]">
-        <input class="editable-id" type="hidden" value="{{ server[0] }}">
-         - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
+        <input class="editable-type" type="hidden" value="name">
+        <input class="editable-obj" type="hidden" value="servers">
+        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
         <input class="editable-inp-2" style="display:none;" type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
-        <input class="editable-type-2" type="hidden" value="server[1]">
+        <input class="editable-type-2" type="hidden" value="ip">
+        <input class="editable-obj-2" type="hidden" value="servers">
         <input class="editable-id-2" type="hidden" value="{{ server[0] }}">
     </h1>
+    <select name="section" id="">
+        {% for sec in sections %}
+            <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
+        {% endfor %}
+    </select>
     <!--div class="edit head">
         <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
     </div-->
@@ -34,25 +40,29 @@
                             <tr>
                                 <td><a class="hover-user-details editable" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
                                     <input class="editable-inp" type="text" value="{{ user[2] }}">
-                                    <input class="editable-type" type="hidden" value="user[2]">
+                                    <input class="editable-type" type="hidden" value="username">
+                                    <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[3] }}</span>
                                     <input class="editable-inp" type="text" value="{{ user[3] }}">
-                                    <input class="editable-type" type="hidden" value="user[3]">
+                                    <input class="editable-type" type="hidden" value="password">
+                                    <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[1] }}</span>
                                     <input class="editable-inp" type="text" value="{{ user[1] }}">
-                                    <input class="editable-type" type="hidden" value="user[1]">
+                                    <input class="editable-type" type="hidden" value="type">
+                                    <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[4] }}</span>
                                     <input class="editable-inp" type="text" value="{{ user[4] }}">
-                                    <input class="editable-type" type="hidden" value="user[4]">
+                                    <input class="editable-type" type="hidden" value="permission">
+                                    <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td><a href="{{ url_for('delete_user') }}?id={{ user[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
@@ -66,7 +76,7 @@
                                 <td><input type="text" size="5" name="username" placeholder="User"></td>
                                 <td><input type="text" size="5" name="password" placeholder="Pass"></td>
                                 <td><input type="text" size="5" id="UserTypeForm" name="userTypeForm" placeholder="Type"></td>
-                                <td><input type="text" size="5" name="permissions" placeholder="Perm"></td>
+                                <td><input type="text" size="8" name="permissions" placeholder="Perm"></td>
                                 <td><a onclick="submitUsersForm()" href="#"><i class="fas fa-plus"
                             style="margin: 5px 15px; font-size: 18px;"></i></a></td>
                             </tr>
@@ -91,19 +101,22 @@
                                 <td>
                                     <span class="editable">{{ vuln[1] }}</span>
                                     <input class="editable-inp" type="text" value="{{ vuln[1] }}">
-                                    <input class="editable-type" type="hidden" value="vuln[1]">
+                                    <input class="editable-type" type="hidden" value="name">
+                                    <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ vuln[2] }}</span>
                                     <input class="editable-inp" type="text" value="{{ vuln[2] }}">
-                                    <input class="editable-type" type="hidden" value="vuln[2]">
+                                    <input class="editable-type" type="hidden" value="data">
+                                    <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ vuln[3] }}</span>
                                     <input class="editable-inp" type="text" value="{{ vuln[3] }}">
-                                    <input class="editable-type" type="hidden" value="vuln[3]">
+                                    <input class="editable-type" type="hidden" value="fix">
+                                    <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
                                 </td>
                                 <td><a href="{{ url_for('delete_vuln') }}?id={{ vuln[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
@@ -126,12 +139,16 @@
         </div>
         <div class="row">
             <div class="col col-sm-6 free-text">
-                <h1>Description</h1><!-- This was previously called Attain -->
+                <h1>Description</h1>
+                <!-- This was previously called Attain -->
                 <p class="editable" style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
-                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="attain" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Attain..">{{ attain }}</textarea>
+                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="Description" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Description..">{{ attain }}</textarea>
+                <input class="editable-obj" type="hidden" value="description">
+                <input class="editable-id" type="hidden" value="{{ server[0] }}">
+                <input class="editable-type" type="hidden" value="attain">
             </div>
 
-            <div style="" class="col col-sm-auto">
+            <div class="col col-sm-auto">
                 <select value="None" style="height: 40px;width: 150px; margin: 8px;" onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
           <option value="All" selected disabled hidden>All</option>
           <option>All</option>
@@ -156,25 +173,29 @@
                                 <td>
                                     <span class="editable">{{ port[1] }}</span>
                                     <input class="editable-inp" type="text" value="{{ port[1] }}">
-                                    <input class="editable-type" type="hidden" value="port[1]">
+                                    <input class="editable-type" type="hidden" value="port">
+                                    <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[2] }}</span>
                                     <input class="editable-inp" type="text" value="{{ port[2] }}">
-                                    <input class="editable-type" type="hidden" value="port[2]">
+                                    <input class="editable-type" type="hidden" value="service">
+                                    <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[3] }}</span>
                                     <input class="editable-inp" type="text" value="{{ port[3] }}">
-                                    <input class="editable-type" type="hidden" value="port[3]">
+                                    <input class="editable-type" type="hidden" value="state">
+                                    <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[4] }}</span>
                                     <input class="editable-inp" type="text" value="{{ port[4] }}">
-                                    <input class="editable-type" type="hidden" value="port[4]">
+                                    <input class="editable-type" type="hidden" value="vuln">
+                                    <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td><a href="{{ url_for('delete_port') }}?id={{ port[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
@@ -186,7 +207,7 @@
                                 <td><input id="input_port1" name="port" type="text" size="3" placeholder="Port"></td>
                                 <td><input id="input_port2" name="service" type="text" size="3" placeholder="Service"></td>
                                 <td><input id="input_port3" name="state" type="text" size="3" placeholder="State"></td>
-                                <td><input id="input_port4" name="vuln" type="text" size="5" placeholder="Vuln"></td>
+                                <td><input id="input_port4" name="vuln" type="text" size="10" placeholder="Vuln"></td>
                                 <td><a href="javascript:$('#port-form').submit();"><i class="fas fa-plus"
                       style="margin-left: 15px"></i></a></td>
                             </tr>
@@ -228,7 +249,8 @@
             </div>
         </div>
     </div>
-    {% include 'user.html' %}
+    <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
+        class="fas fa-trash"></i></a> {% include 'user.html' %}
 </div>
 </div>
 {% include 'wrapper_end.html' %}

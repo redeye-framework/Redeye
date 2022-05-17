@@ -5,7 +5,7 @@
     <form action="{{ url_for('change_server') }}" method="POST" id="name-form">
         <input type="hidden" value="{{ server[0] }}" name="id">
         <input type="hidden" value="{{ attain }}" id="attain-hidden-input" name="attain">
-        <h1 class="head inline"><input type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name"> - <input type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
+        <h1 class="head inline"><input type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name" required> - <input type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP" required>
 
         </h1>
         <select name="section" id="">
@@ -51,8 +51,7 @@
                                 <td><a href="{{ url_for('delete_user') }}?id={{ user[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                                             style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
-                            {% endfor %}
-                            {% if server[0] %}
+                            {% endfor %} {% if server[0] %}
                             <tr>
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
@@ -88,8 +87,7 @@
                                 <td><a href="{{ url_for('delete_vuln') }}?id={{ vuln[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                                             style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
-                            {% endfor %}
-                            {% if server[0] %}
+                            {% endfor %} {% if server[0] %}
                             <tr>
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
@@ -134,8 +132,7 @@
                                 <td><a href="{{ url_for('delete_port') }}?id={{ port[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                                         style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
-                            {% endfor %}
-                            {% if server[0] %}
+                            {% endfor %} {% if server[0] %}
                             <tr>
                                 <input name="server_id" type="hidden" value="{{ server[0] }}">
                                 <td><input id="input_port1" name="port" type="text" size="3"></td>
@@ -169,8 +166,7 @@
                             <td><a href="{{ url_for('delete_file') }}?id={{ file[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                                             style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                         </tr>
-                        {% endfor %}
-                        {% if server[0] %}
+                        {% endfor %} {% if server[0] %}
                         <tr>
                             <td>
                                 <form enctype="multipart/form-data" action="{{ url_for('upload_file') }}" method="POST">
@@ -192,24 +188,24 @@
     var input3 = document.getElementById("input_port3");
     var input4 = document.getElementById("input_port4");
     input1.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-        $('#port-form').submit();
-    }
+        if (event.keyCode === 13) {
+            $('#port-form').submit();
+        }
     });
     input2.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-        $('#port-form').submit();
-    }
+        if (event.keyCode === 13) {
+            $('#port-form').submit();
+        }
     });
     input3.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-        $('#port-form').submit();
-    }
+        if (event.keyCode === 13) {
+            $('#port-form').submit();
+        }
     });
     input4.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-        $('#port-form').submit();
-    }
+        if (event.keyCode === 13) {
+            $('#port-form').submit();
+        }
     });
 </script>
 {% include 'wrapper_end.html' %} {% include 'footer.html' %}
