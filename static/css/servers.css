@@ -251,7 +251,7 @@ td .editable-inp-2 {
 }
 
 .server-content table a {
-    cursor: auto;
+    cursor: pointer;
 }
 
 .server-content table a:hover {
@@ -309,4 +309,8 @@ td .editable-inp-2 {
 
 input[type="file"] {
     display: none;
+}
+
+span {
+    cursor: pointer;
 }
