@@ -120,10 +120,10 @@ $("table").mouseover(function() {
     //});
 })
 
-$(".editable").click(function() {
-    var inp = $(this).parent().find(".editable-inp");
-    console.log(inp)
-    $(this).hide();
+$(".editable").closest("td").click(function() {
+    var edi = $(this).find(".editable")
+    var inp = $(edi).parent().find(".editable-inp");
+    $(edi).hide();
     $(inp).show();
     $(inp).focus();
     $(inp).focusout(function(){
@@ -154,9 +154,9 @@ $(".editable-inp").each(function(){
 })
 
 $(".editable-2").click(function() {
-    var inp = $(this).parent().find(".editable-inp-2");
-    console.log(inp)
-    $(this).hide();
+    var edi = $(this).find(".editable-2")
+    var inp = $(edi).parent().find(".editable-inp-2");
+    $(edi).hide();
     $(inp).show();
     $(inp).focus();
     $(inp).focusout(function(){
