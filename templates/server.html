@@ -5,8 +5,12 @@
     <h1 class="head">
         <span class="editable">{{ server[2] }}</span>
         <input class="editable-inp" style="display:none;" type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name">
+        <input class="editable-type" type="hidden" value="server[2]">
+        <input class="editable-id" type="hidden" value="{{ server[0] }}">
          - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
         <input class="editable-inp-2" style="display:none;" type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
+        <input class="editable-type-2" type="hidden" value="server[1]">
+        <input class="editable-id-2" type="hidden" value="{{ server[0] }}">
     </h1>
     <!--div class="edit head">
         <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>

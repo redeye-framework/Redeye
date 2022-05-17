@@ -158,24 +158,13 @@ $(".editable-2").click(function() {
 
 // Get the input field
 $(document).ready(function() {
-    document.getElementById("input_port1").addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            $('#port-form').submit();
-        }
-    });
-    document.getElementById("input_port2").addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            $('#port-form').submit();
-        }
-    });
-    document.getElementById("input_port3").addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            $('#port-form').submit();
-        }
-    });
-    document.getElementById("input_port4").addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            $('#port-form').submit();
-        }
-    });
+    $(".item-add").each(function(){
+        $(this).find("input").each(function(){
+            this.addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) {
+                    this.closest("form").submit();
+                }
+            })
+        })
+    })
 });
