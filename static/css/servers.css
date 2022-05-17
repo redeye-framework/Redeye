@@ -291,6 +291,22 @@ td .editable-inp-2 {
     cursor: pointer;
 }
 
-#file_upload {
-    width: 230px;
+.file-upload-label {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: rgb(67, 72, 82);
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    color: #ccd;
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.file-upload-label:hover {
+    filter: brightness(120%);
+}
+
+input[type="file"] {
+    display: none;
 }
