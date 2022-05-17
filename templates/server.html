@@ -2,12 +2,15 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}"> {% include 'wrapper.html' %}
 <div class="server-page">
-    <h1 class="head">{{ server[2] }} - <span title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" class="ip" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
+    <h1 class="head">
+        <span class="editable">{{ server[2] }}</span>
+        <input class="editable-inp" style="display:none;" type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name">
+         - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
+        <input class="editable-inp-2" style="display:none;" type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
     </h1>
-    <div class="edit head">
-        <a href="{{ url_for('edit_server') }}?ip={{ server[1] }}"><i class="fas fa-edit fa-2x"></i></a>
+    <!--div class="edit head">
         <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
-    </div>
+    </div-->
     <div class="container-fluid server-content">
         <div class="row">
             <div class="col col-sm-4 users">
@@ -25,11 +28,29 @@
                         <tbody>
                             {% for user in users %}
                             <tr>
-                                <td><a class="hover-user-details" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
+                                <td><a class="hover-user-details editable" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
+                                    <input class="editable-inp" type="text" value="{{ user[2] }}">
+                                    <input class="editable-type" type="hidden" value="user[2]">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
-                                <td>{{ user[3] }}</td>
-                                <td>{{ user[1] }}</td>
-                                <td>{{ user[4] }}</td>
+                                <td>
+                                    <span class="editable">{{ user[3] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ user[3] }}">
+                                    <input class="editable-type" type="hidden" value="user[3]">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ user[1] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ user[1] }}">
+                                    <input class="editable-type" type="hidden" value="user[1]">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ user[4] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ user[4] }}">
+                                    <input class="editable-type" type="hidden" value="user[4]">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
                                 <td><a href="{{ url_for('delete_user') }}?id={{ user[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                   style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>
@@ -102,8 +123,8 @@
         <div class="row">
             <div class="col col-sm-6 free-text">
                 <h1>Description</h1><!-- This was previously called Attain -->
-                <p style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
-                <textarea class="desc-add form-control" id="attain-input" rows="5" name="attain" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Attain..">{{ attain }}</textarea>
+                <p class="editable" style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
+                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="attain" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Attain..">{{ attain }}</textarea>
             </div>
 
             <div style="" class="col col-sm-auto">
@@ -128,10 +149,30 @@
                         <tbody>
                             {% for port in ports %}
                             <tr>
-                                <td>{{ port[1] }}</td>
-                                <td>{{ port[2] }}</td>
-                                <td>{{ port[3] }}</td>
-                                <td>{{ port[4] }}</td>
+                                <td>
+                                    <span class="editable">{{ port[1] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ port[1] }}">
+                                    <input class="editable-type" type="hidden" value="port[1]">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[2] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ port[2] }}">
+                                    <input class="editable-type" type="hidden" value="port[2]">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[3] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ port[3] }}">
+                                    <input class="editable-type" type="hidden" value="port[3]">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[4] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ port[4] }}">
+                                    <input class="editable-type" type="hidden" value="port[4]">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
                                 <td><a href="{{ url_for('delete_port') }}?id={{ port[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                 style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
                             </tr>

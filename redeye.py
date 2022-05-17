@@ -698,6 +698,7 @@ def create_server_port():
     if port_dict["state"]== "":
         port_dict["state"] = "open"
 
+    print(session['db'])
     db.insert_new_port(session["db"], port_dict["port"], port_dict["state"], port_dict["service"],
                        port_dict["vuln"], "server_id", port_dict["server_id"])
 

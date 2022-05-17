@@ -138,6 +138,24 @@ $(".editable").click(function() {
     })
 });
 
+$(".editable-2").click(function() {
+    var inp = $(this).parent().find(".editable-inp-2");
+    console.log(inp)
+    $(this).hide();
+    $(inp).show();
+    $(inp).focus();
+    $(inp).focusout(function(){
+        var spa = $(this).parent().find(".editable-2");
+        var type = $(this).parent().find(".editable-type-2");
+        var id = $(this).parent().find(".editable-id-2");
+        var val = $(inp).val();
+        $(inp).hide();
+        $(spa).show();
+        $(spa).text(val);
+        //TODO: pt put here socket io - use id, type and val.
+    })
+});
+
 // Get the input field
 $(document).ready(function() {
     document.getElementById("input_port1").addEventListener("keyup", function(event) {

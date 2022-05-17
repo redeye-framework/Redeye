@@ -180,6 +180,10 @@ td .editable-inp {
     display: none;
 }
 
+td .editable-inp-2 {
+    display: none;
+}
+
 .server-page > form > select {
     display: inline-block;
     padding: 5px;
