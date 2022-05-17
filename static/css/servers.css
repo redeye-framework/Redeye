@@ -184,7 +184,7 @@ td .editable-inp-2 {
     display: none;
 }
 
-.server-page > form > select {
+.server-page select {
     display: inline-block;
     padding: 5px;
     margin: 0 10px;
@@ -193,7 +193,6 @@ td .editable-inp-2 {
     color: white;
     border: 1px solid rgb(86, 92, 104);
     outline: none;
-    
 }
 
 .server-page textarea {

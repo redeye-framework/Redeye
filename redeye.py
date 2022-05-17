@@ -102,6 +102,14 @@ def server():
         server_id = request.values.get('id')
         server = db.get_server_by_id(session["db"], server_id)
 
+    section = ""
+    sections = db.get_sections(session["db"])
+    print(sections)
+    for sec in sections:
+        print(sec)
+        if sec[0] == server[0][7]:
+            section = sec[1]
+
     if server:
         server = server[0]
     else:
@@ -118,7 +126,7 @@ def server():
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():

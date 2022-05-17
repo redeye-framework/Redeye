@@ -12,6 +12,11 @@
         <input class="editable-type-2" type="hidden" value="server[1]">
         <input class="editable-id-2" type="hidden" value="{{ server[0] }}">
     </h1>
+    <select name="section" id="">
+        {% for sec in sections %}
+            <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
+        {% endfor %}
+    </select>
     <!--div class="edit head">
         <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
     </div-->
