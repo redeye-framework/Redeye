@@ -138,6 +138,21 @@ $(".editable").click(function() {
     })
 });
 
+$(".editable-inp").each(function(){
+        this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            var spa = $(this).parent().find(".editable");
+            var type = $(this).parent().find(".editable-type");
+            var id = $(this).parent().find(".editable-id");
+            var val = $(this).val();
+            $(this).hide();
+            $(spa).show();
+            $(spa).text(val);
+            //TODO: pt put here socket io - use id, type and val.
+        }
+    })
+})
+
 $(".editable-2").click(function() {
     var inp = $(this).parent().find(".editable-inp-2");
     console.log(inp)
@@ -155,6 +170,21 @@ $(".editable-2").click(function() {
         //TODO: pt put here socket io - use id, type and val.
     })
 });
+
+$(".editable-inp-2").each(function(){
+        this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            var spa = $(this).parent().find(".editable-2");
+            var type = $(this).parent().find(".editable-type-2");
+            var id = $(this).parent().find(".editable-id-2");
+            var val = $(this).val();
+            $(this).hide();
+            $(spa).show();
+            $(spa).text(val);
+            //TODO: pt put here socket io - use id, type and val.
+        }
+    })
+})
 
 // Get the input field
 $(document).ready(function() {
