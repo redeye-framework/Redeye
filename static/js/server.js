@@ -120,11 +120,9 @@ $("table").mouseover(function() {
     //});
 })
 
-
 $(".editable").closest("td").click(function() {
     var edi = $(this).find(".editable")
     var inp = $(edi).parent().find(".editable-inp");
-
     $(edi).hide();
     $(inp).show();
     $(inp).focus();

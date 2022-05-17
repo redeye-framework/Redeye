@@ -39,28 +39,28 @@
                             {% for user in users %}
                             <tr>
                                 <td><a class="hover-user-details editable" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
-                                    <input class="editable-inp" type="text" value="{{ user[2] }}">
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[2] }}">
                                     <input class="editable-type" type="hidden" value="username">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[3] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ user[3] }}">
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[3] }}">
                                     <input class="editable-type" type="hidden" value="password">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[1] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ user[1] }}">
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[1] }}">
                                     <input class="editable-type" type="hidden" value="type">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[4] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ user[4] }}">
+                                    <input class="editable-inp" size="8" type="text" value="{{ user[4] }}">
                                     <input class="editable-type" type="hidden" value="permission">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
@@ -172,28 +172,28 @@
                             <tr>
                                 <td>
                                     <span class="editable">{{ port[1] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ port[1] }}">
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[1] }}">
                                     <input class="editable-type" type="hidden" value="port">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[2] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ port[2] }}">
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[2] }}">
                                     <input class="editable-type" type="hidden" value="service">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[3] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ port[3] }}">
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[3] }}">
                                     <input class="editable-type" type="hidden" value="state">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[4] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ port[4] }}">
+                                    <input class="editable-inp" size="10" type="text" value="{{ port[4] }}">
                                     <input class="editable-type" type="hidden" value="vuln">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
@@ -252,8 +252,9 @@
             </div>
         </div>
     </div>
-    <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
-        class="fas fa-trash"></i></a> {% include 'user.html' %}
+    <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack">
+        <i class="fas fa-trash"></i>
+    </a> {% include 'user.html' %}
 </div>
 </div>
 {% include 'wrapper_end.html' %}
