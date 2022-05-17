@@ -113,6 +113,7 @@ i {
 .widget-content .widget-content-wrapper {
     display: flex;
     flex: 1;
+    width: 100%;
     position: relative;
     align-items: center;
 }
@@ -121,6 +122,10 @@ i {
     visibility: hidden;
     opacity: 0;
     transition: opacity .2s;
+}
+
+.widget-content-left {
+    width: calc(100% - 40px);
 }
 
 .widget-content .widget-content-right {
