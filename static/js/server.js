@@ -213,9 +213,8 @@ $("input.editable-inp").each(function() {
 })
 
 $(".editable-2").click(function() {
-    var edi = $(this).find(".editable-2")
-    var inp = $(edi).parent().find(".editable-inp-2");
-    $(edi).hide();
+    var inp = $(this).parent().find(".editable-inp-2");
+    $(this).hide();
     $(inp).show();
     $(inp).focus();
     $(inp).focusout(function() {
@@ -236,12 +235,13 @@ $(".editable-inp-2").each(function() {
         if (event.keyCode === 13) {
             var spa = $(this).parent().find(".editable-2");
             var type = $(this).parent().find(".editable-type-2");
+            var obj = $(this).parent().find(".editable-obj-2").val();
             var id = $(this).parent().find(".editable-id-2");
             var val = $(this).val();
             $(this).hide();
             $(spa).show();
             $(spa).text(val);
-            //TODO: pt put here socket io - use id, type and val.
+            $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
         }
     })
 })

@@ -106,7 +106,6 @@ def server():
     sections = db.get_sections(session["db"])
     
     for sec in sections:
-        
         if sec[0] == server[0][7]:
             section = sec[1]
 
