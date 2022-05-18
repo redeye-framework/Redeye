@@ -191,7 +191,11 @@ def delete_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        id = request.form.get('id')
+        if request.form.get('id'):
+            id = request.form.get('id')
+        else:
+            id = request.args.to_dict()["id"]
+
         db.delete_server_by_id(session["db"], id, session["username"])
 
         if IS_DOCKER_ENV:
@@ -233,11 +237,9 @@ def change_server():
                 else:
                     db.edit_user_by_id(session["db"], id, type, value)
 
-                
             elif "servers" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
     
-            
             elif "description" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
 
@@ -286,6 +288,16 @@ def add_new_section():
 
     db.create_new_server_section(session["db"],"NewSection")
     return redirect('servers')
+
+@app.route('/change_server_section', methods=['POST'])
+def change_server_section():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+
+    db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
+    return redirect(request.referrer)
 
 """
 =======================================================

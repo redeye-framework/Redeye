@@ -13,7 +13,7 @@
         <input class="editable-obj-2" type="hidden" value="servers">
         <input class="editable-id-2" type="hidden" value="{{ server[0] }}">
     </h1>
-    <select name="section" id="">
+    <select name="section" id="{{ server[0] }}">
         {% for sec in sections %}
             <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
         {% endfor %}
@@ -255,7 +255,7 @@
             </div>
         </div>
     </div>
-    <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack">
+    <a class="delete floating-btn" href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
     </a> {% include 'user.html' %}
 </div>
