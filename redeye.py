@@ -104,9 +104,9 @@ def server():
 
     section = ""
     sections = db.get_sections(session["db"])
-    print(sections)
+    
     for sec in sections:
-        print(sec)
+        
         if sec[0] == server[0][7]:
             section = sec[1]
 
@@ -224,12 +224,16 @@ def change_server():
 
             elif "user" == obj:
                 if type == "type":
-                    typeId = db.get_user_type(session["db"],type)[0][0]
+                    # Check if the user type is already exists
+                    typeId = db.get_user_type(session["db"],value)
                     if typeId:
-                        db.edit_user_by_id(session["db"], id, typeId, value)
+                        db.edit_user_by_id(session["db"], id, type, typeId[0][0])
                     else:
-                        typeId = db.insert_new_user_type(session["db"],type)
-                        db.edit_user_by_id(session["db"], id, typeId, value)
+                        typeId = db.insert_new_user_type(session["db"],value)
+                        db.edit_user_by_id(session["db"], id, type, typeId)
+                else:
+                    db.edit_user_by_id(session["db"], id, type, value)
+
                         
 
             elif "servers" == obj:
@@ -735,7 +739,7 @@ def create_server_port():
     if port_dict["state"]== "":
         port_dict["state"] = "open"
 
-    print(session['db'])
+    
     db.insert_new_port(session["db"], port_dict["port"], port_dict["state"], port_dict["service"],
                        port_dict["vuln"], "server_id", port_dict["server_id"])
 

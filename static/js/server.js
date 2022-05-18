@@ -140,6 +140,31 @@ $(".editable").closest("td").click(function() {
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
+        console.log(type, obj, id, val);
+
+        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+    })
+});
+
+$("p.editable").click(function() {
+    var inp = $(this).parent().find(".editable-inp");
+    $(this).hide();
+    $(inp).show();
+    $(inp).focus();
+    $(inp).focusout(function() {
+        var spa = $(this).parent().find(".editable");
+        var type = $(this).parent().find(".editable-type").val();
+        var obj = $(this).parent().find(".editable-obj").val();
+        var id = $(this).parent().find(".editable-id").val();
+        var val = $(inp).val();
+
+        if (val == "") {
+            val = "-"
+        }
+
+        $(inp).hide();
+        $(spa).show();
+        $(spa).text(val);
 
         $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
     })
@@ -150,12 +175,14 @@ $(".editable-inp").each(function() {
         if (event.keyCode === 13) {
             var spa = $(this).parent().find(".editable");
             var type = $(this).parent().find(".editable-type");
+            var obj = $(this).parent().find(".editable-obj").val();
             var id = $(this).parent().find(".editable-id");
             var val = $(this).val();
             $(this).hide();
             $(spa).show();
             $(spa).text(val);
-            //TODO: pt put here socket io - use id, type and val.
+
+            $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
         }
     })
 })
