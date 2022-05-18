@@ -247,6 +247,16 @@ $(".editable-inp-2").each(function() {
     })
 })
 
+function deleteServer(serverId) {
+    console.log(serverId)
+    $.post(Flask.url_for('delete_server', { id: serverId }));
+    window.location.href = "servers"
+}
+
+$('select').on('change', function() {
+    $.post(Flask.url_for('change_server_section', { sectionId: this.value, serverId: this.id }));
+});
+
 // Get the input field
 $(document).ready(function() {
     $(".item-add").each(function() {
