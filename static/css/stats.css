@@ -1,4 +1,39 @@
 
+.card {
+    padding: 8px;
+    box-shadow: 4px 4px 10px black;
+    background-color: #31353D !important;
+    font-size: 32px;
+    font-weight:600;
+    height: 115px;
+    display: block;
+}
+
+.card .number {
+    background-color: rgb(116, 122, 134);
+    height: 90%;
+    width: 70px;
+    margin: auto;
+    text-align: center;
+    color: #f8faff;
+    float: left;
+    border-radius: 5px;
+}
+
+.card .name {
+    float: left;
+    margin-top: ;
+}
+
 .checkbox {
     margin-top: 8px;
+}
+
+.vcenter {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }

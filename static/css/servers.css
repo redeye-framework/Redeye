@@ -310,7 +310,7 @@ input[type="file"] {
     display: none;
 }
 
-span {
+.editable {
     cursor: pointer;
 }
 

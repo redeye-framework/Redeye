@@ -9,59 +9,46 @@
 {% include 'wrapper.html' %}
 <div style="margin-right: 20px;" class="row">
     <div class="col-md-3">
+        <div class="card">
+            <div class="vcenter"><span class="number">{{ servers_len }}</span></div>
+            <div class="vcenter"><span class="name">Servers</span></div>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-bag f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ servers_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Servers</p>
-                </div>
+            <div class="media-left meida media-middle">
+                <span><i class="ti-comment f-s-40"></i></span>
+            </div>
+            <div class="media-body media-text-right">
+                <h2 class="color-white">{{ users_len }}</h2>
+                <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Users</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-comment f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ users_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Users</p>
-                </div>
+            <div class="media-left meida media-middle">
+                <span><i class="ti-vector f-s-40"></i></span>
+            </div>
+            <div class="media-body media-text-right">
+                <h2 class="color-white">{{ netdevices_len }}</h2>
+                <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">NetDevices</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-vector f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ netdevices_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">NetDevices</p>
-                </div>
+            <div class="media-left meida media-middle">
+                <span><i class="ti-location-pin f-s-40"></i></span>
             </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-location-pin f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ vullns_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Vullnerabilites</p>
-                </div>
+            <div class="media-body media-text-right">
+                <h2 class="color-white">{{ vullns_len }}</h2>
+                <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Vullnerabilites</p>
             </div>
         </div>
     </div>
 </div>
-
+<!--
 <div class="col-sm-6 col-md-4">
     <div class="panel">
     </br>
@@ -130,7 +117,7 @@
             <div id="gauge" style="height: 450%;"></div>
         </div>
     </div>
-</div>
+</div>-->
 {% include 'wrapper_end.html' %}
     <script>
         function parseJwt () {
