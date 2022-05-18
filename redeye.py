@@ -233,12 +233,10 @@ def change_server():
                 else:
                     db.edit_user_by_id(session["db"], id, type, value)
 
-                        
-
+                
             elif "servers" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
-                if type == "ip":
-                    return redirect(url_for("server", ip=value))
+    
             
             elif "description" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
