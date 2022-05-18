@@ -3,37 +3,50 @@
     padding: 8px;
     box-shadow: 4px 4px 10px black;
     background-color: #31353D !important;
-    font-size: 32px;
+    font-size: 24px;
     font-weight:600;
     height: 115px;
     display: block;
 }
 
+.card-left {
+    display: inline-block;
+}
+
+.card-right {
+    height: 100%;
+    width: calc(100% - 100px);
+    display: inline-block;
+}
+
 .card .number {
     background-color: rgb(116, 122, 134);
-    height: 90%;
-    width: 70px;
-    margin: auto;
+    min-width: 70px;
+    padding: 15px;
+    margin: 15px;
     text-align: center;
     color: #f8faff;
     float: left;
     border-radius: 5px;
 }
 
-.card .name {
-    float: left;
-    margin-top: ;
+.card .card-right .name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-30%, -50%);
 }
 
 .checkbox {
     margin-top: 8px;
 }
 
-.vcenter {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.panel {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 7px;
+    box-shadow: 4px 4px 10px black;
+    background-color: #31353D !important;
+    display: block;
 }
