@@ -120,6 +120,31 @@ $("table").mouseover(function() {
     //});
 })
 
+$(".editable").click(function() {
+    var inp = $(this).parent().find(".editable-inp");
+    $(this).hide();
+    $(inp).show();
+    $(inp).focus();
+    $(inp).focusout(function() {
+        var spa = $(this).parent().find(".editable");
+        var type = $(this).parent().find(".editable-type").val();
+        var obj = $(this).parent().find(".editable-obj").val();
+        var id = $(this).parent().find(".editable-id").val();
+        var val = $(inp).val();
+
+        if (val == "") {
+            val = "-"
+        }
+
+        $(inp).hide();
+        $(spa).show();
+        $(spa).text(val);
+        console.log(type, obj, id, val);
+
+        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+    })
+});
+
 $(".editable").closest("td").click(function() {
     var edi = $(this).find(".editable")
     var inp = $(edi).parent().find(".editable-inp");
