@@ -139,7 +139,6 @@ $(".editable").click(function() {
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
-        console.log(type, obj, id, val);
 
         $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
     })
@@ -165,7 +164,6 @@ $(".editable").closest("td").click(function() {
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
-        console.log(type, obj, id, val);
 
         $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
     })
@@ -226,7 +224,9 @@ $(".editable-2").click(function() {
         $(inp).hide();
         $(spa).show();
         $(spa).text(val);
+
         $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+        window.location.href = "server?ip=" + val
     })
 });
 
@@ -241,6 +241,7 @@ $(".editable-inp-2").each(function() {
             $(this).hide();
             $(spa).show();
             $(spa).text(val);
+
             $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
         }
     })
