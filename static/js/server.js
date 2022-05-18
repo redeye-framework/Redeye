@@ -170,7 +170,7 @@ $("p.editable").click(function() {
     })
 });
 
-$(".editable-inp").each(function() {
+$("input.editable-inp").each(function() {
     this.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             var spa = $(this).parent().find(".editable");
