@@ -11,7 +11,7 @@
         <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
         <div class="row">
             {% for server in data[section]['info'] %}
-            <a href="{{ url_for('server') }}?ip={{ data[section]['info'][server]['srvDetails'][1] }}">
+            <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}">
                 <div class="server-box {% if not data[section]['info'][server]['srvDetails'][4] %}server-box-no-access{% endif %}">
                     <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
                     <div class="content">
@@ -33,7 +33,7 @@
                 </div>
             </a>
             {% endfor %}
-            <a href="{{ url_for('edit_server') }}?section={{ data[section]['name'] }}">
+            <a href="javascript:editServerSubmit('{{ data[section]['name'] }}');">
                 <div class="server-box" style="border-top: 4px solid #ccc;">
                     <div class="new">
                         <i class="fas fa-plus"></i>
@@ -54,6 +54,7 @@
         <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
     </form>
 </div>
+<!--input type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:55px; height:35px;"-->
 {% include 'wrapper_end.html' %}
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>
 {% include 'footer.html' %}

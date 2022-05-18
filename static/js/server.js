@@ -64,6 +64,14 @@
     }
 });*/
 
+function editServerSubmit(section) {
+    $('#name-form').submit()
+    // TODO: elat_pt
+    // add { url_for('change_server') }} to create new server of defined section to default name with "-" as ip.
+    $.post(Flask.url_for('change_server', { section: section }));
+    
+}
+
 function sort_ports() {
     var state = document.getElementById('state').value;
     var table = document.getElementById('ports_table');
