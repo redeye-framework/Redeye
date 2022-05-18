@@ -137,11 +137,7 @@ function removeUser() {
     hideUser();
 }
 
-function editServerSubmit() {
-    var attain = $("#attain-input").val();
-    $("#attain-hidden-input").val(attain);
-    $('#name-form').submit()
-}
+
 
 function showNote(tasknmae, data, task_id, attain, exec) {
     $(".taskbox-info > .taskname").text(tasknmae);

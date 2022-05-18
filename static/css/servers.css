@@ -187,13 +187,25 @@ td .editable-inp-2 {
 .server-page select {
     display: inline-block;
     padding: 5px;
-    margin: 0 10px;
+    margin: 0 2px;
     border-radius: 8px;
     background-color: #343a40;
     color: white;
     border: 1px solid rgb(86, 92, 104);
     outline: none;
 }
+
+option:after {
+    content: " ";
+    height: 5px;
+    width: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+option.red:after { background: #c00; }
+option.green:after { background: #0c0; }
+option.blue:after { background: #00c; }
 
 .server-page textarea {
     border-radius: 8px;
@@ -336,4 +348,8 @@ input[type="file"] {
 
 .floating-btn > .fa-trash {
     color: #eef;
+}
+
+.state { 
+    margin: 20px 20px 0 0;
 }

@@ -18,9 +18,12 @@
             <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
         {% endfor %}
     </select>
-    <!--div class="edit head">
-        <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
-    </div-->
+    <select name="section" id="">
+            <option value="1" selected="selected">Owned</div></option>
+            <option value="2">Not checked</option>
+            <option value="3">Hack-proof</option>
+            <option value="4">What is this</option>
+    </select>
     <div class="container-fluid server-content">
         <div class="row">
             <div class="col col-sm-4 users">
