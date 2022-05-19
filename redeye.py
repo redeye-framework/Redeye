@@ -56,6 +56,7 @@ DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
 ZIP_FOLDER = r"zip"
 FILES_FOLDER = r"files/"
+PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
 
 
@@ -288,6 +289,7 @@ def add_new_section():
 
     db.create_new_server_section(session["db"],"NewSection")
     return redirect('servers')
+
 
 @app.route('/change_server_section', methods=['POST'])
 def change_server_section():
@@ -795,9 +797,8 @@ def upload_file():
         except Exception:
             current_dir = helper.FILES_FOLDER.format(session["project"])
 
-        if "edit_server" in request.referrer:
-            server_id = db.get_server_id_by_ip(session["db"], 
-                (request.referrer).split(r"=")[-1])[0][0]
+        if "server" in request.referrer:
+            server_id = request.referrer.split("=")[1]
 
         for file in files:
             # Problem with secure_filename - not supporting hebrew
@@ -1500,6 +1501,7 @@ def login():
                 session["db"] = db.set_project_db(session["project"])
                 session["profile"] = db.get_profilePicture_by_id(check_id)[0][0]
                 session["project"] = helper.get_project_name(projects, session["project"])
+                db.add_defult_colors(session["db"])
                 clients[session["uid"]] = socketio
                 token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
                 ) + timedelta(hours=2)}, app.secret_key)
@@ -1537,6 +1539,7 @@ def new_project():
     db.add_new_user(data["username"], hashlib.sha256(data["password"].encode()).hexdigest(), projectId)
 
     init(app)
+    
     resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
     resp.set_cookie('reduser', "")
 

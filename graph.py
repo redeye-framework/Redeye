@@ -1,12 +1,10 @@
-from neo4j import (
-    GraphDatabase,
-    basic_auth,
-)
+from neo4j import *
 
 import os
 import sys
 
-neoServer = "neo4j" # Will be changed to localhost
+#neoServer = "neo4j"
+neoServer = "localhost"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
 password = os.getenv("NEO4J_PASSWORD", "redeye")
@@ -158,30 +156,35 @@ def init():
 
 
 def test():
+    def t(tx):
+        q = "create DATABASE danino"
+        tx.run(q)
 
-    addServerNode(220,"5.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
-    addServerNode(221,"6.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
-    addUserNode(250,"admin", "123231", 220)
-    addUserNode(251,"admin", "123231", 221)
-    ########################################################################
+    executeWriteQuery(t)
 
-    changeUserNode(220,username="elad")
-    changeUserNode(221,password="ABC")
-    #changeUserNode(208,server_id=216)
-    
-    ########################################################################
-
-    changeServerNode(221, ip="1.2.3.4")
-    changeServerNode(221, name="localhost")
-    changeServerNode(221, is_access=0)
-    changeServerNode(221, sectionName="lolllll")
-
-    ########################################################################
-
-    deleteServerNode(220)
-    deleteServerNode(221)
-    deleteUserNode(250)
-    deleteUserNode(251)
+    #addServerNode(220,"5.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
+    #addServerNode(221,"6.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
+    #addUserNode(250,"admin", "123231", 220)
+    #addUserNode(251,"admin", "123231", 221)
+    #########################################################################
+#
+    #changeUserNode(220,username="elad")
+    #changeUserNode(221,password="ABC")
+    ##changeUserNode(208,server_id=216)
+    #
+    #########################################################################
+#
+    #changeServerNode(221, ip="1.2.3.4")
+    #changeServerNode(221, name="localhost")
+    #changeServerNode(221, is_access=0)
+    #changeServerNode(221, sectionName="lolllll")
+#
+    #########################################################################
+#
+    #deleteServerNode(220)
+    #deleteServerNode(221)
+    #deleteUserNode(250)
+    #deleteUserNode(251)
 
 
 if __name__ == '__main__':

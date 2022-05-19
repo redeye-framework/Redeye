@@ -13,6 +13,7 @@ PROJECT_DB = r""
 PROJECT_PATH = r"RedDB/Projects/"
 TABLES_SQL = r"RedDB/tables.sql"
 INIT_SQL = r"RedDB/init.sql"
+INIT_COLORS = r"RedDB/colors.init"
 REGEX = re.compile('|'.join(map(re.escape, ["..","OR","SELECT","FROM","WHERE","LIKE"])))
 
 """
@@ -999,6 +1000,25 @@ def update_notebookName(db,name,id):
 
 """
 =======================================================
+                Colors Functions
+=======================================================
+"""
+
+@check_input
+def add_defult_colors(db):
+
+    with open(INIT_COLORS,'r') as data:
+        colors = data.readlines()
+
+    for color in colors:
+        name, hexColor = color.split(':')
+        query = f'INSERT INTO colors(name,hexColor) VALUES("%s","%s");' % (name, hexColor)
+        get_db_with_actions(db, query)
+
+    return
+
+"""
+=======================================================
                 Helpers Functions
 =======================================================
 """
@@ -1087,6 +1107,10 @@ def get_projectId_by_projectName(projectName):
 
 def get_projectId_by_DBName(dbName):
     query = r'SELECT id FROM projects WHERE filename="{}"'.format(dbName)
+    return db_get(MANAGE_DB, query)[0][0]
+
+def get_project_by_id(projectId):
+    query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
 
 """

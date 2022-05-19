@@ -60,6 +60,8 @@ CREATE TABLE IF NOT EXISTS servers (
                                       attain text,
                                       relevent INTEGER NOT NULL DEFAULT 1,
                                       section_id INTEGER NOT NULL DEFAULT 1,
+                                      color_id INTEGER NOT NULL DEFAULT 1,
+                                      FOREIGN KEY(color_id) REFERENCES colors(id),
                                       FOREIGN KEY(section_id) REFERENCES sections(id)
                                   );
 CREATE TABLE IF NOT EXISTS netdevices (
@@ -137,4 +139,9 @@ CREATE TABLE IF NOT EXISTS notebooks (
                                       data text,
                                       creatorId INTEGER, 
                                       isPrivate INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS colors (
+                                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                      name text text NOT NULL, 
+                                      hexColor text NOT NULL
 );
