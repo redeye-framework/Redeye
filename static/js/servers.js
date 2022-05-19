@@ -51,3 +51,11 @@ $(".section-hide-all-btn").click(function (){
     }
 })
 
+function editServerStatus() {
+    $(".edit-server-status-box").css("display", "inline-block");
+    $(".sections").css("filter", "brightness(40%)");
+    $(".sections").click(function () {
+        $(".edit-server-status-box").css("display", "none");
+        $(".sections").css("filter", "brightness(100%)");
+    })
+}
