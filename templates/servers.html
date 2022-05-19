@@ -1,6 +1,5 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}"> 
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}"> {% include 'wrapper.html' %}
 <div class="section-hide-all-btn"><i class="fas fa-angle-down"></i></div>
 <div class="sections">
     {% for section in data %}
@@ -42,8 +41,7 @@
             </a>
         </div>
     </div>
-    <hr><br> 
-    {% endfor %}
+    <hr><br> {% endfor %}
     <div class="section">
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
             <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
@@ -76,11 +74,11 @@
         </tr>
         <tr>
             <td class="status"><input type="text" size="4"></td>
-            <td class="status-color"><input type="color" onchange="clickColor(0, -1, -1, 5)" value="#cccccc" style="width:50px; height:30px;"</td>
-            <td class="add"><i class="fas fa-plus"></i></td>
+            <td class="status-color"><input type="color" onchange="clickColor(0, -1, -1, 5)" value="#cccccc" style="width:50px; height:30px;" </td>
+                <td onclick="addNewColor()" class="add"><i class="fas fa-plus"></i></td>
         </tr>
     </table>
-    
+
 </div>
 {% include 'wrapper_end.html' %}
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>

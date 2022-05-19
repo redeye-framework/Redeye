@@ -66,10 +66,10 @@
 
 function editServerSubmit(section) {
     $('#name-form').submit()
-    // TODO: elat_pt
-    // add { url_for('change_server') }} to create new server of defined section to default name with "-" as ip.
+        // TODO: elat_pt
+        // add { url_for('change_server') }} to create new server of defined section to default name with "-" as ip.
     $.post(Flask.url_for('change_server', { section: section }));
-    
+
 }
 
 function sort_ports() {
@@ -276,4 +276,14 @@ $(document).ready(function() {
             })
         })
     })
+});
+
+
+$('select').on('change', function(e) {
+    var serverId = this.id;
+    var color = this.value;
+    var colorId = $(this).children(":selected").attr("id");
+    serverIp = document.getElementsByClassName("ip")[0].style.backgroundColor = color;
+
+    $.post(Flask.url_for('change_server_color', { serverId: serverId, colorId: colorId }));
 });

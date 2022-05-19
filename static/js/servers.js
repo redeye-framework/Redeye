@@ -17,7 +17,7 @@ $(".section-name").click(function() {
     })
 })
 
-$(".section-hide-btn").click(function (){
+$(".section-hide-btn").click(function() {
     var i = $(this).find("i")
     if (i.hasClass("fa-angle-down")) {
         i.removeClass("fa-angle-down")
@@ -32,20 +32,20 @@ $(".section-hide-btn").click(function (){
     }
 })
 
-$(".section-hide-all-btn").click(function (){
+$(".section-hide-all-btn").click(function() {
     var i = $(this).find("i")
     if (i.hasClass("fa-angle-down")) {
         i.removeClass("fa-angle-down")
         i.addClass("fa-angle-up")
-        
-        $(".sections").find(".fa-angle-down").each(function () {
+
+        $(".sections").find(".fa-angle-down").each(function() {
             $(this).click()
         })
     } else {
         i.removeClass("fa-angle-up")
         i.addClass("fa-angle-down")
 
-        $(".sections").find(".fa-angle-up").each(function () {
+        $(".sections").find(".fa-angle-up").each(function() {
             $(this).click()
         })
     }
@@ -54,8 +54,19 @@ $(".section-hide-all-btn").click(function (){
 function editServerStatus() {
     $(".edit-server-status-box").css("display", "inline-block");
     $(".sections").css("filter", "brightness(40%)");
-    $(".sections").click(function () {
+    $(".sections").click(function() {
         $(".edit-server-status-box").css("display", "none");
         $(".sections").css("filter", "brightness(100%)");
     })
+}
+
+$('colors').on('change', function(e) {
+    var optionSelected = $("option:selected", this);
+    var valueSelected = this.value;
+    console.log(optionSelected, valueSelected);
+});
+
+function addNewColor() {
+    // Add here color name and the hex color
+    //$.post(Flask.url_for('add_color', { name: colorName, hexColor: color }));
 }

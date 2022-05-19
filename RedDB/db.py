@@ -658,10 +658,24 @@ def get_servers_by_section_id(db, section_id):
     return db_get(db, query)
 
 @check_input
+def get_color_by_server_id(db, server_id):
+    query = r'SELECT color_id FROM servers WHERE id="%s"' % (server_id)
+    return db_get(db, query)
+
+@check_input
 def change_section_id(db, id, newName):
     query = '''UPDATE sections
               SET name = "{}" 
               WHERE id = "{}" '''.format(newName,id)
+
+    result = get_db_with_actions(db, query)
+    return(result)
+
+@check_input
+def change_server_color(db, serverId, colorId):
+    query = '''UPDATE servers
+              SET color_id = "%s" 
+              WHERE id = "%s" ''' % (colorId, serverId)
 
     result = get_db_with_actions(db, query)
     return(result)
@@ -1010,12 +1024,39 @@ def add_defult_colors(db):
     with open(INIT_COLORS,'r') as data:
         colors = data.readlines()
 
+    colors = list(map(str.strip, colors))
+
     for color in colors:
         name, hexColor = color.split(':')
         query = f'INSERT INTO colors(name,hexColor) VALUES("%s","%s");' % (name, hexColor)
         get_db_with_actions(db, query)
 
     return
+
+
+@check_input
+def add_color(db, colorName, hexColor):
+    query = ''' INSERT INTO colors(name,hexColor)
+                  VALUES("%s","%s") ''' % (colorName, hexColor)
+
+    result = get_db_with_actions(db, query)
+    return(result)
+
+
+@check_input
+def change_color(db, column, value, colorId):
+    query = 'UPDATE colors SET "%s"="%s" WHERE id=%s' % (column, value, colorId)
+    return get_db_with_actions(db, query)
+
+@check_input
+def get_colors(db):
+    query = r'SELECT * FROM colors'
+    return db_get(db, query)
+
+@check_input
+def get_color_by_id(db, colorId):
+    query = r'SELECT hexColor FROM colors WHERE id="%s"' % (colorId)
+    return db_get(db, query)
 
 """
 =======================================================

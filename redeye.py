@@ -105,6 +105,7 @@ def server():
 
     section = ""
     sections = db.get_sections(session["db"])
+    colors = db.get_colors(session["db"])
     
     for sec in sections:
         if sec[0] == server[0][7]:
@@ -121,12 +122,14 @@ def server():
     ports = db.get_ports_by_server_id(session["db"], server[0])
     attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
     vendor = db.get_vendor_by_server_id(session["db"], server[0])[0][0]
+    colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
+    color = db.get_color_by_id(session["db"], colorId)[0][0]
     users_with_type = []
     for user in users:
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():
@@ -299,6 +302,17 @@ def change_server_section():
     dict = request.args.to_dict()
 
     db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
+    return redirect(request.referrer)
+
+
+@app.route('/change_server_color', methods=['POST'])
+def change_server_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+
+    db.change_server_color(session["db"],dict["serverId"], dict["colorId"])
     return redirect(request.referrer)
 
 """
@@ -1420,7 +1434,32 @@ def updateNoteName(json):
 
     db.update_notebookName(session["db"],json["noteId"], json["data"])
 
+"""
+=======================================================
+                Colors Functions
+=======================================================
+"""
 
+@app.route('/add_color',methods=['POST'])
+def add_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.add_color(session["db"], dict["name"], dict["hexColor"])
+    
+    return redirect(request.referrer)
+
+
+@app.route('/change_color',methods=['POST'])
+def change_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.change_color(session["db"], session["obj"], session["value"], dict["id"])    
+
+    return redirect(request.referrer)
 
 """
 =======================================================

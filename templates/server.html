@@ -7,7 +7,7 @@
         <input class="editable-inp" style="display:none;" type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name">
         <input class="editable-type" type="hidden" value="name">
         <input class="editable-obj" type="hidden" value="servers">
-        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {% if server[4] %}#04a11e{% else %}#933{% endif %};">{{ server[1] }}</span>
+        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {{ color }};">{{ server[1] }}</span>
         <input class="editable-inp-2" style="display:none;" type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
         <input class="editable-type-2" type="hidden" value="ip">
         <input class="editable-obj-2" type="hidden" value="servers">
@@ -18,11 +18,14 @@
             <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
         {% endfor %}
     </select>
-    <select name="section" id="">
-            <option value="1">Owned</div></option>
-            <option value="2" selected="selected">Not checked</option>
-            <option value="3">Hack-proof</option>
-            <option value="4">What is this</option>
+    <select name="colors" id="{{ server[0] }}">
+        {% for data in colors %}
+            {% if data[2] == color %}
+                <option id="{{ data[0] }}" value="{{ data[2] }}" selected="selected">{{ data[1] }}</option>
+            {% else %}
+                <option id="{{ data[0] }}" value="{{ data[2] }}">{{ data[1] }}</option>
+            {% endif %}
+        {% endfor %}
     </select>
     <div class="container-fluid server-content">
         <div class="row">
