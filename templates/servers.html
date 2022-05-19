@@ -54,7 +54,35 @@
         <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
     </form>
 </div>
-<!--input type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:55px; height:35px;"-->
+<a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status">
+    <i class="fas fa-edit"></i> Server Status
+</a>
+<div class="edit-server-status-box">
+    <h2>Edit server status</h2><br>
+    <table style="width: 100%;" id="users-table" class="table table-dark table-striped">
+        <tr>
+            <td class="status">
+                <span class="editable">name</span>
+                <input class="editable-inp" type="text" size="4" value="name" style="display: none;">
+            </td>
+            <td class="status-color">
+                <input type="color" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:50px; height:30px;">
+            </td>
+            <td>
+                <a href="#" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td class="status"><input type="text" size="4"></td>
+            <td class="status-color"><input type="color" onchange="clickColor(0, -1, -1, 5)" value="#cccccc" style="width:50px; height:30px;"</td>
+            <td class="add"><i class="fas fa-plus"></i></td>
+        </tr>
+    </table>
+    
+</div>
 {% include 'wrapper_end.html' %}
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/server.js') }}"></script>
 {% include 'footer.html' %}

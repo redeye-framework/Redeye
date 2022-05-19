@@ -195,18 +195,6 @@ td .editable-inp-2 {
     outline: none;
 }
 
-option:after {
-    content: " ";
-    height: 5px;
-    width: 5px;
-    border-radius: 5px;
-    display: inline-block;
-}
-
-option.red:after { background: #c00; }
-option.green:after { background: #0c0; }
-option.blue:after { background: #00c; }
-
 .server-page textarea {
     border-radius: 8px;
     background-color: rgb(67, 72, 82);
@@ -343,7 +331,7 @@ input[type="file"] {
     background-color: rgb(212, 71, 71);
     position: absolute;
     bottom: 70px;
-    right: 15px;
+    right: 30px;
 }
 
 .floating-btn > .fa-trash {
@@ -352,4 +340,48 @@ input[type="file"] {
 
 .state { 
     margin: 20px 20px 0 0;
+}
+
+.edit-server-status {
+    background-color: #3f6ad8;
+    position: absolute;
+    bottom: 35px;
+    left: 300px;
+}
+
+.edit-server-status:hover {
+    text-decoration: none;
+}
+
+.edit-server-status-box {
+    padding: 40px 20px;
+    border-radius: 7px;
+    box-shadow: 4px 4px 10px black;
+    background-color: #31353D !important;
+    display: none;
+    width: 650px;
+    min-height: 400px;
+    z-index: 999;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit-server-status-box h2 {
+    margin-left: 20px;
+}
+
+
+.edit-server-status-box table {
+    border-radius: 10px;;
+}
+
+
+.edit-server-status-box input {
+    border-radius: 8px;
+    background-color: rgb(67, 72, 82);
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
+    color: #ccd
 }
