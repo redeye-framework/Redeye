@@ -170,7 +170,10 @@ def servers():
         for server in servers:
             ports = db.get_ports_by_server_id(session["db"], server[0])
             users = db.get_users_by_server_id(session["db"], server[0])
-            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users }
+            colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
+            colorHex = db.get_color_by_id(session["db"], colorId)[0][0]
+
+            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users, 'color': colorHex }
         allData[sectionId] = {'name': name,'info': serverData} 
 
     # {'SectionId': {

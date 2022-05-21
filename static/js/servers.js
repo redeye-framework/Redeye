@@ -60,12 +60,6 @@ function editServerStatus() {
     })
 }
 
-$('colors').on('change', function(e) {
-    var optionSelected = $("option:selected", this);
-    var valueSelected = this.value;
-    console.log(optionSelected, valueSelected);
-});
-
 function addNewColor() {
     // Add here color name and the hex color
     //$.post(Flask.url_for('add_color', { name: colorName, hexColor: color }));
