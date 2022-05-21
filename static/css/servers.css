@@ -1,5 +1,4 @@
-
-.section { 
+.section {
     position: relative;
     padding-top: 70px;
 }
@@ -47,6 +46,7 @@
     outline: none;
     transition-duration: 0.2s;
     font-size: 1.1rem;
+    text-align: center;
 }
 
 .new-section {
@@ -59,7 +59,7 @@
     transition-duration: 0.3s;
 }
 
-.new-section:hover{
+.new-section:hover {
     filter: brightness(130%)
 }
 
@@ -127,7 +127,7 @@
     border-left: 0.8px solid #ccc;
 }
 
-.server-box .content > div {
+.server-box .content>div {
     display: inline-block;
     padding: 10px;
     margin: 5px 0;
@@ -142,7 +142,9 @@ hr {
     position: relative
 }
 
+
 /*-------------- Server page ----------------*/
+
 .server-page {
     padding: 30px 50px;
 }
@@ -172,9 +174,8 @@ hr {
     background-color: #343a40;
     color: white;
     border: 1px solid rgb(86, 92, 104);
-    outline: none;   
+    outline: none;
 }
-
 
 td .editable-inp {
     display: none;
@@ -220,7 +221,7 @@ td .editable-inp-2 {
     padding: 20px 0;
 }
 
-.server-content .row div{
+.server-content .row div {
     display: inline-block;
     margin: 30px;
     padding: 0;
@@ -235,7 +236,7 @@ td .editable-inp-2 {
     cursor: pointer;
 }
 
-.server-content table{
+.server-content table {
     margin: 5px;
     box-shadow: 2px 2px 5px black !important;
     border-radius: 10px;
@@ -263,7 +264,7 @@ td .editable-inp-2 {
     transition-duration: 0.3s;
 }
 
-.server-content .cols th{
+.server-content .cols th {
     border-top: none;
 }
 
@@ -271,7 +272,7 @@ td .editable-inp-2 {
     display: inline-block;
 }
 
-#state{
+#state {
     outline: none;
 }
 
@@ -314,7 +315,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.floating-btn{
+.floating-btn {
     color: #eef !important;
     border-radius: 30px;
     box-shadow: 0px 0px 4px black;
@@ -323,7 +324,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.floating-btn:hover{
+.floating-btn:hover {
     filter: brightness(110%);
 }
 
@@ -334,11 +335,11 @@ input[type="file"] {
     right: 30px;
 }
 
-.floating-btn > .fa-trash {
+.floating-btn>.fa-trash {
     color: #eef;
 }
 
-.state { 
+.state {
     margin: 20px 20px 0 0;
 }
 
@@ -372,11 +373,10 @@ input[type="file"] {
     margin-left: 20px;
 }
 
-
 .edit-server-status-box table {
-    border-radius: 10px;;
+    border-radius: 10px;
+    ;
 }
-
 
 .edit-server-status-box input {
     border-radius: 8px;

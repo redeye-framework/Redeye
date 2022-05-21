@@ -1239,6 +1239,7 @@ def set_project_db(project):
         with open(INIT_SQL, "r") as initialize:
             init = initialize.read()
         create_tables(db, tables, init)
+        add_defult_colors(db)
     
     return db
 """

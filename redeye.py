@@ -161,10 +161,12 @@ def servers():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dbsections = db.get_sections(session["db"])
+    colors = []
     allData = {}
     for section in dbsections:
         sectionId = section[0]
         name = section[1]
+        colors = db.get_colors(session["db"])
         servers = db.get_servers_by_section_id(session["db"], sectionId)
         serverData = {}
         for server in servers:
@@ -179,7 +181,7 @@ def servers():
     # {'SectionId': {
     #   servers : {id:{'server':(tuple),'ports':[ports],'users':[users]},..,}
     # , "SectionName2"...}
-    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], data=allData)
+    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], data=allData, colors=colors)
 
 @app.route('/update_server_attain', methods=['POST'])
 def update_server_attain():
@@ -1448,8 +1450,8 @@ def add_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    dict = request.args.to_dict()
-    db.add_color(session["db"], dict["name"], dict["hexColor"])
+    dict = request.form.to_dict()
+    db.add_color(session["db"], dict["colorName"], dict["hexColor"])
     
     return redirect(request.referrer)
 
@@ -1460,7 +1462,8 @@ def change_color():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.args.to_dict()
-    db.change_color(session["db"], session["obj"], session["value"], dict["id"])    
+    
+    db.change_color(session["db"], dict["obj"], "#%s" % (dict["value"]), dict["id"])    
 
     return redirect(request.referrer)
 
@@ -1542,8 +1545,7 @@ def login():
                 session["project"] = creds["project"] # TODO: Validate project existance.
                 session["db"] = db.set_project_db(session["project"])
                 session["profile"] = db.get_profilePicture_by_id(check_id)[0][0]
-                session["project"] = helper.get_project_name(projects, session["project"])
-                db.add_defult_colors(session["db"])
+                session["project"] = helper.get_project_name(projects, session["project"])           
                 clients[session["uid"]] = socketio
                 token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
                 ) + timedelta(hours=2)}, app.secret_key)

@@ -68,7 +68,7 @@ function editServerSubmit(section) {
     $('#name-form').submit()
         // TODO: elat_pt
         // add { url_for('change_server') }} to create new server of defined section to default name with "-" as ip.
-    $.post(Flask.url_for('change_server', { section: section }));
+        //$.post(Flask.url_for('change_server', { section: section }));
 
 }
 
@@ -148,7 +148,12 @@ $(".editable").click(function() {
         $(spa).show();
         $(spa).text(val);
 
-        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+        $.post(Flask.url_for('change_server', {
+            id: id,
+            type: type,
+            obj: obj,
+            value: val
+        }));
     })
 });
 
@@ -173,7 +178,12 @@ $(".editable").closest("td").click(function() {
         $(spa).show();
         $(spa).text(val);
 
-        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+        $.post(Flask.url_for('change_server', {
+            id: id,
+            type: type,
+            obj: obj,
+            value: val
+        }));
     })
 });
 
@@ -197,7 +207,12 @@ $("p.editable").click(function() {
         $(spa).show();
         $(spa).text(val);
 
-        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+        $.post(Flask.url_for('change_server', {
+            id: id,
+            type: type,
+            obj: obj,
+            value: val
+        }));
     })
 });
 
@@ -213,7 +228,12 @@ $("input.editable-inp").each(function() {
             $(spa).show();
             $(spa).text(val);
 
-            $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+            $.post(Flask.url_for('change_server', {
+                id: id,
+                type: type,
+                obj: obj,
+                value: val
+            }));
         }
     })
 })
@@ -233,7 +253,12 @@ $(".editable-2").click(function() {
         $(spa).show();
         $(spa).text(val);
 
-        $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+        $.post(Flask.url_for('change_server', {
+            id: id,
+            type: type,
+            obj: obj,
+            value: val
+        }));
         window.location.href = "server?ip=" + val
     })
 });
@@ -250,7 +275,12 @@ $(".editable-inp-2").each(function() {
             $(spa).show();
             $(spa).text(val);
 
-            $.post(Flask.url_for('change_server', { id: id, type: type, obj: obj, value: val }));
+            $.post(Flask.url_for('change_server', {
+                id: id,
+                type: type,
+                obj: obj,
+                value: val
+            }));
         }
     })
 })
@@ -262,7 +292,10 @@ function deleteServer(serverId) {
 }
 
 $('select').on('change', function() {
-    $.post(Flask.url_for('change_server_section', { sectionId: this.value, serverId: this.id }));
+    $.post(Flask.url_for('change_server_section', {
+        sectionId: this.value,
+        serverId: this.id
+    }));
 });
 
 // Get the input field
@@ -285,5 +318,8 @@ $('select').on('change', function(e) {
     var colorId = $(this).children(":selected").attr("id");
     serverIp = document.getElementsByClassName("ip")[0].style.backgroundColor = color;
 
-    $.post(Flask.url_for('change_server_color', { serverId: serverId, colorId: colorId }));
+    $.post(Flask.url_for('change_server_color', {
+        serverId: serverId,
+        colorId: colorId
+    }));
 });

@@ -13,7 +13,10 @@ $(".section-name").click(function() {
         $(sec).text(new_name)
         $(this).hide()
         $(sec).show()
-        $.post(Flask.url_for('change_section_name', { id: sectionId, newName: new_name }));
+        $.post(Flask.url_for('change_section_name', {
+            id: sectionId,
+            newName: new_name
+        }));
     })
 })
 
@@ -60,7 +63,14 @@ function editServerStatus() {
     })
 }
 
-function addNewColor() {
-    // Add here color name and the hex color
-    //$.post(Flask.url_for('add_color', { name: colorName, hexColor: color }));
-}
+
+$(".status-color").change(function() {
+    colorId = this.childNodes[1].id;
+    hexColor = this.childNodes[1].value;
+    $.post(Flask.url_for('change_color', {
+        obj: 'hexColor',
+        id: colorId,
+        value: hexColor.substring(1)
+    }));
+    location.reload();
+})
