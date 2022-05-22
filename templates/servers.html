@@ -40,7 +40,7 @@
             <a href="javascript:createNewServer('{{ section }}');">
                 <div class="server-box" style="border-top: 4px solid #ccc;">
                     <div class="new">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-plus add-server-btn"></i>
                     </div>
                 </div>
             </a>
@@ -148,6 +148,7 @@
 <script>
     key_sc($(".section-hide-all-btn"), 'm');
     key_sc($(".new-section"), 'N');
+    key_sc($(".add-server-btn")[0], 'n');
     key_sc($(".edit-server-status"), 'e');
     key_sc($(".import-btn"), 'u');
 </script>
