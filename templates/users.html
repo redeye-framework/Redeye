@@ -5,7 +5,7 @@
     <h2 style="font-weight: bolder;font-size: 36px;" class="inline">Users</h2>
 
     <form action="{{ url_for('export_users') }}" method="POST" class="inline">
-        <button style="float:right; margin-top: 10px;" name="type" value="csv" class="btn btn-primary inline">export to
+        <button style="float:right; margin-top: 10px;" name="type" value="csv" class="btn btn-primary export-users-btn inline">export to
       CSV</button>
     </form>
     <select value="None" onchange="sortUsers()" class="select-type" id="type" name="sort_ports">
@@ -129,6 +129,8 @@
 {% include 'user.html' %} 
 {% include 'wrapper_end.html' %} 
 <script>
+    key_sc($(".export-users-btn", 'e'));
     key_sc($(".username-create-input"), 'n');
+    key_sc($(".import-btn"), 'u');
 </script>
 {% include 'footer.html' %}

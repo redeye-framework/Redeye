@@ -4,9 +4,14 @@
 <div class="sections">
     {% for section in data %}
     <div class="container-fluid section">
-        <h4 class="section-name">{{ data[section]['name'] }}</h4>
+        <h4 class="section-name">
+            {% if not data[section]['info'] %}
+            <a href="#" onclick="this.parentElement.parentElement.remove();" class="section-delete-btn">
+                <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+            </a>
+            {% endif %}
+            {{ data[section]['name'] }}</h4>
         <input class="section-name-input" type="text" value="{{ section }}">
-        <!--div class="section-delete-btn"><i class="fas fa-angle-down"></i></div-->
         <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
         <div class="row">
             {% for server in data[section]['info'] %}
@@ -93,8 +98,9 @@
                 </form>
             </div>
         </div>
+        <hr><br>
     </div>
-    <hr><br> {% endfor %}
+     {% endfor %}
     <div class="section">
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
             <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
@@ -106,7 +112,7 @@
     </form>
 </div>
 <a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status">
-    <i class="fas fa-edit"></i> Server Status
+    <i class="fas fa-edit"></i> Server Label
 </a>
 <div class="edit-server-status-box">
     <h2>Edit server status</h2><br>
