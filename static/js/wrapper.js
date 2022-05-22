@@ -138,7 +138,6 @@ function removeUser() {
 }
 
 
-
 function showNote(tasknmae, data, task_id, attain, exec) {
     $(".taskbox-info > .taskname").text(tasknmae);
 
@@ -215,3 +214,12 @@ socket.on('connect', function() {
     socket.emit('socket_connection', 'client socket connected!');
     console.log('connected to socket.');
 });
+
+function key_sc(obj, key) {
+    document.addEventListener("keyup", function(event) {
+        if (event.key === key) {
+            $(obj).click();
+            $(obj).focus();
+        }
+    })
+}

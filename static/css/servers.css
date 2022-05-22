@@ -345,7 +345,7 @@ input[type="file"] {
 
 .edit-server-status {
     background-color: #3f6ad8;
-    position: absolute;
+    position: fixed;
     bottom: 35px;
     left: 300px;
 }
@@ -363,7 +363,7 @@ input[type="file"] {
     width: 650px;
     min-height: 400px;
     z-index: 999;
-    position: absolute;
+    position: fixed;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);

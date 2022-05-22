@@ -10,7 +10,7 @@
 <div class="files">
     <form action="{{ url_for('load_files') }}" method="POST">
         <div class="container">
-            <input name="key_word" type="text" placeholder="Search...">
+            <input class="find-file-btn" name="key_word" type="text" placeholder="Search...">
             <div class="search"></div>
         </div>
     </form>
@@ -86,8 +86,11 @@
 </div>
 
 {% include 'wrapper_end.html' %}
-
 <script src="{{ url_for('static', filename='js/lib/dropzone/dropzone.js') }}"></script>
+<script>
+    key_sc($(".main-file-input"), 'n');
+    key_sc($(".dropzone"), 'u');
+    key_sc($(".find-file-btn"), 'f');
+</script>
 <script src="{{ url_for('static', filename='js/files.js') }}"></script>
-
 {% include 'footer.html' %}

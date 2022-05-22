@@ -50,7 +50,7 @@
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
                     <input type="hidden" name="type" value="{{ type }}">
                     <input type="hidden" id="userTypeForm" name="userType">
-                    <td><input class="modern-input" type="text" name="username" placeholder="Username"></td>
+                    <td><input class="username-create-input modern-input" type="text" name="username" placeholder="Username"></td>
                     <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
                     <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
                     <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
@@ -126,4 +126,9 @@
         $('#user-form').submit();
     }
 </script>
-{% include 'user.html' %} {% include 'wrapper_end.html' %} {% include 'footer.html' %}
+{% include 'user.html' %} 
+{% include 'wrapper_end.html' %} 
+<script>
+    key_sc($(".username-create-input"), 'n');
+</script>
+{% include 'footer.html' %}
