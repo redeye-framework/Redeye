@@ -375,6 +375,21 @@ input[type="file"] {
     transform: translate(-50%, -50%);
 }
 
+.create-server-box {
+    padding: 40px 20px;
+    border-radius: 7px;
+    box-shadow: 4px 4px 10px black;
+    background-color: #31353D !important;
+    display: none;
+    width: 650px;
+    min-height: 430px;
+    z-index: 999;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .edit-server-status-box h2 {
     margin-left: 20px;
 }
@@ -390,4 +405,32 @@ input[type="file"] {
     border: 1px solid rgb(86, 92, 104);
     outline: none;
     color: #ccd
+}
+
+.modern-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    margin-left: -4px;
+    text-align: center;
+}
+
+.create-server {
+    background-color: #3f6ad8;
+    position: fixed;
+    bottom: 5px;
+    left: 275px;
+}
+
+.server-selector {
+    display: inline-block;
+    padding: 5px;
+    margin: 0 2px;
+    border-radius: 8px;
+    background-color: #343a40;
+    color: white;
+    border: 1px solid rgb(86, 92, 104);
+    outline: none;
 }
