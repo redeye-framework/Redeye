@@ -258,11 +258,14 @@
             </div>
         </div>
     </div>
-    <a class="delete floating-btn" href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
+    <a class="delete floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
     </a> {% include 'user.html' %}
 </div>
 </div>
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".delete-server-btn"), 'd');
+</script>
 <script src="{{ url_for('static', filename='js/server.js') }}"></script>
 {% include 'footer.html' %}

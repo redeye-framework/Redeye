@@ -286,9 +286,10 @@ $(".editable-inp-2").each(function() {
 })
 
 function deleteServer(serverId) {
-    console.log(serverId)
-    $.post(Flask.url_for('delete_server', { id: serverId }));
-    window.location.href = "servers"
+    if (confirm("Press ok to delete server.")) {
+        $.post(Flask.url_for('delete_server', { id: serverId }));
+        window.location.href = "servers"
+    }
 }
 
 $('select').on('change', function() {

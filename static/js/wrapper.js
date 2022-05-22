@@ -218,7 +218,7 @@ socket.on('connect', function() {
 function key_sc(obj, key) {
     
     document.addEventListener("keyup", function(event) {
-        if (event.key === key && document.activeElement.tagName !== "INPUT") {
+        if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
             $(obj).click();
             $(obj).focus();
         }
@@ -228,7 +228,6 @@ function key_sc(obj, key) {
 $("input").focus(function() {
     this.addEventListener("keyup", function(event) {
         if (event.keyCode === 27) {
-            console.log(2)
             $(this).blur();
         }
     })
