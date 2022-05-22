@@ -61,6 +61,12 @@ function editServerStatus() {
         $(".edit-server-status-box").css("display", "none");
         $(".sections").css("filter", "brightness(100%)");
     })
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(".edit-server-status-box").css("display", "none");
+            $(".sections").css("filter", "brightness(100%)");
+        }
+    })
 }
 
 

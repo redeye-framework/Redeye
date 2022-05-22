@@ -59,7 +59,7 @@
     </form>
 </div>
 <a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status">
-    <i class="fas fa-edit"></i> Server Label
+    <i class="fas fa-edit"></i> Edit Labels
 </a>
 <div class="edit-server-status-box">
     <h2>Edit server status</h2><br>
@@ -94,6 +94,7 @@
 <script>
     key_sc($(".section-hide-all-btn"), 'm');
     key_sc($(".new-section"), 'N');
+    key_sc($(".edit-server-status"), 'e');
     key_sc($(".import-btn"), 'u');
 </script>
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>

@@ -216,7 +216,7 @@ socket.on('connect', function() {
 });
 
 function key_sc(obj, key) {
-    
+    console.log()
     document.addEventListener("keyup", function(event) {
         if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
             $(obj).focus();
