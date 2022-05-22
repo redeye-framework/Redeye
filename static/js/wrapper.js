@@ -219,13 +219,21 @@ function key_sc(obj, key) {
     
     document.addEventListener("keyup", function(event) {
         if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
-            $(obj).click();
             $(obj).focus();
+            $(obj).click();
         }
     })
 }
 
 $("input").focus(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(this).blur();
+        }
+    })
+})
+
+$("textarea").focus(function() {
     this.addEventListener("keyup", function(event) {
         if (event.keyCode === 27) {
             $(this).blur();

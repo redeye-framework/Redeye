@@ -118,6 +118,11 @@
 </script>
 
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".section-name-input"), 'n');
+    key_sc($(".file-upload-input"), 'u');
+    key_sc($("#section-submit-btn"), 's');
+</script>
 <script src="{{ url_for('static', filename='js/pre_report.js') }}"></script>
 <script src="{{ url_for('static', filename='js/download.js') }}"></script>
 {% include 'footer.html' %}

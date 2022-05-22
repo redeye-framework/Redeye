@@ -23,7 +23,7 @@
         <nav id="sidebar" class="sidebar-wrapper" style="float: left; display: inline-block;">
             <div class="sidebar-content">
                 <div class="sidebar-brand">
-                    <a href="{{ url_for('index') }}" class="inline">Redeye</a>
+                    <a href="{{ url_for('index') }}" class="inline link-home-page">Redeye</a>
                     <a href="{{ url_for('login') }}" class="inline">
                         <div class="icon" style="background-image: url(/static/pics/profiles/{{ profile }});">
                             <div id="user_name">@{{ username }}</div>
@@ -54,13 +54,13 @@
                         <li>
                             <a href="{{ url_for('servers') }}">
                                 <i class="fa fa-server"></i>
-                                <span>Servers</span>
+                                <span class="link-servers-page">Servers</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('all_users') }}">
                                 <i class="fa fa-users"></i>
-                                <span>Users</span>
+                                <span class="link-users-page">Users</span>
                             </a>
                         </li>
                         <li class="sidebar-dropdown" style="display: none;">
@@ -87,7 +87,7 @@
                         <li>
                             <a href="{{ url_for('load_files') }}?dir_name=files/{{ project }}">
                                 <i class="fa fa-folder"></i>
-                                <span>Files</span>
+                                <span class="link-files-page">Files</span>
                             </a>
                         </li>
 
@@ -97,43 +97,43 @@
                         <li>
                             <a href="{{ url_for('stats') }}">
                                 <i class="fa fa-arrows-alt"></i>
-                                <span>Stats</span>
+                                <span class="link-stats-page">Stats</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('attack') }}">
                                 <i class="fas fa-bullseye"></i>
-                                <span>Attack Vectors</span>
+                                <span class="link-attacks-page">Attack Vectors</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('exploits') }}">
                                 <i class="fa fa-lock-open"></i>
-                                <span>Exploits</span>
+                                <span class="link-exploits-page">Exploits</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('tasks') }}">
                                 <i class="fa fa-check-square"></i>
-                                <span>Tasks</span>
+                                <span class="link-tasks-page">Tasks</span>
                             </a>
                         </li>
                         <!--<li>
                             <a href="{{ url_for('notebook') }}">
                                 <i class="fa fa-file"></i>
-                                <span>Notebook</span>
+                                <span class="link-notebook-page">Notebook</span>
                             </a>
                         </li>-->
                         <li>
                             <a href="{{ url_for('logs') }}">
                                 <i class="fa fa-file"></i>
-                                <span>Logs</span>
+                                <span class="link-logs-page">Logs</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('management') }}">
                                 <i class="fa fa-users"></i>
-                                <span>Management</span>
+                                <span class="link-management-page">Management</span>
                             </a>
                         </li>
                         <li class="header-menu">
@@ -142,7 +142,7 @@
                         <li>
                             <a href="{{ url_for('pre_report') }}">
                                 <i class="fa fa-image"></i>
-                                <span>Pre Report</span>
+                                <span class="link-pre_report-page">Pre Report</span>
                             </a>
                         </li>
                         <!--<li>
