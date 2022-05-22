@@ -11,6 +11,12 @@
     color: rgb(204, 204, 207);
 }
 
+.section-delete-btn {
+    font-size: 18px;
+    margin-right: 20px;
+    padding: 5px;
+}
+
 .section-hide-btn {
     font-size: 1.8em;
     float: right;
