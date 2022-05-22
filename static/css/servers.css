@@ -356,7 +356,7 @@ input[type="file"] {
     left: 300px;
 }
 
-.edit-server-status:hover {
+.floating-btn:hover {
     text-decoration: none;
 }
 
@@ -376,7 +376,7 @@ input[type="file"] {
 }
 
 .create-server-box {
-    padding: 40px 20px;
+    padding: 60px 40px 40px;
     border-radius: 7px;
     box-shadow: 4px 4px 10px black;
     background-color: #31353D !important;
@@ -419,9 +419,8 @@ input[type="file"] {
 
 .create-server {
     background-color: #3f6ad8;
-    position: fixed;
-    bottom: 5px;
-    left: 275px;
+    margin: 10px;
+    float: right;
 }
 
 .server-selector {
