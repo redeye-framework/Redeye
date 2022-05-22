@@ -55,6 +55,7 @@ $(".section-hide-all-btn").click(function() {
 })
 
 function editServerStatus() {
+    $(".create-server-box").css("display", "none");
     $(".edit-server-status-box").css("display", "inline-block");
     $(".sections").css("filter", "brightness(40%)");
     $(".sections").click(function() {
@@ -69,12 +70,22 @@ function editServerStatus() {
     })
 }
 
-function createNewServer() {
+function createNewServer(section) {
     $(".create-server-box").css("display", "inline-block");
+    if (section != "") {
+        $("#newServerSection").val(section);
+    }
+    $("#newServerLabel").val(1);
     $(".sections").css("filter", "brightness(40%)");
     $(".sections").click(function() {
-        $(".edit-server-status-box").css("display", "none");
+        $(".create-server-box").css("display", "none");
         $(".sections").css("filter", "brightness(100%)");
+    })
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(".create-server-box").css("display", "none");
+            $(".sections").css("filter", "brightness(100%)");
+        }
     })
 }
 
