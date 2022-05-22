@@ -15,7 +15,7 @@
         <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
         <div class="row">
             {% for server in data[section]['info'] %}
-            <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}">
+            <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}" tabindex="1">
                 <div class="server-box" style="border-top: 4px solid {{ data[section]['info'][server]['color'] }}">
                     <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
                     <div class="content">
@@ -112,7 +112,7 @@
         </table>
     </form>
     <a class="create-server floating-btn" href="#" onclick="document.getElementById('add_server_form').submit();" title="Create New Server">
-        <i class="fas fa-edit"></i>Create
+        <i class="fas fa-edit"></i><span> Create </span>
     </a>
 </div>
 <div class="edit-server-status-box">
