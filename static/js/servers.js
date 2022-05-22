@@ -63,6 +63,14 @@ function editServerStatus() {
     })
 }
 
+function createNewServer() {
+    $(".create-server-box").css("display", "inline-block");
+    $(".sections").css("filter", "brightness(40%)");
+    $(".sections").click(function() {
+        $(".edit-server-status-box").css("display", "none");
+        $(".sections").css("filter", "brightness(100%)");
+    })
+}
 
 $(".status-color").change(function() {
     colorId = this.childNodes[1].id;

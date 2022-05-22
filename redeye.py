@@ -161,12 +161,11 @@ def servers():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dbsections = db.get_sections(session["db"])
-    colors = []
+    colors = db.get_colors(session["db"])
     allData = {}
     for section in dbsections:
         sectionId = section[0]
         name = section[1]
-        colors = db.get_colors(session["db"])
         servers = db.get_servers_by_section_id(session["db"], sectionId)
         serverData = {}
         for server in servers:
@@ -181,7 +180,7 @@ def servers():
     # {'SectionId': {
     #   servers : {id:{'server':(tuple),'ports':[ports],'users':[users]},..,}
     # , "SectionName2"...}
-    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], data=allData, colors=colors)
+    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
 def update_server_attain():
@@ -287,6 +286,7 @@ def change_section_name():
 
     dict = request.args.to_dict()
     db.change_section_id(session["db"], dict['id'], dict['newName'])
+
     return redirect('servers')
 
 
@@ -296,6 +296,7 @@ def add_new_section():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     db.create_new_server_section(session["db"],"NewSection")
+
     return redirect('servers')
 
 
@@ -305,8 +306,8 @@ def change_server_section():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.args.to_dict()
-
     db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
+
     return redirect(request.referrer)
 
 
@@ -316,8 +317,19 @@ def change_server_color():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.args.to_dict()
-
     db.change_server_color(session["db"],dict["serverId"], dict["colorId"])
+
+    return redirect(request.referrer)
+
+@app.route('/add_new_server', methods=['POST'])
+def add_new_server():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.form.to_dict()
+    # Uncomment that when front is ready
+    #db.create_new_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+
     return redirect(request.referrer)
 
 """

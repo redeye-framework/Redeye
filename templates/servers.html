@@ -32,13 +32,66 @@
                 </div>
             </a>
             {% endfor %}
-            <a href="javascript:editServerSubmit('{{ data[section]['name'] }}');">
+            <a onclick="createNewServer()" href="javascript:editServerSubmit('{{ data[section]['name'] }}');">
                 <div class="server-box" style="border-top: 4px solid #ccc;">
                     <div class="new">
                         <i class="fas fa-plus"></i>
                     </div>
                 </div>
             </a>
+            <div class="create-server-box">
+                <h2>Create New Server</h2><br>
+                <form action="{{ url_for('add_new_server')}}" method="post" id="add_server_form">
+                    <table style="width: 100%;" id="server-table" class="table table-dark table-striped">
+                        <tr>
+                            <td>
+                                <span class="">Server Name</span>
+
+                            </td>
+                            <td>
+                                <input value="bab" id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="">Server IP</span>
+                            </td>
+                            <td>
+                                <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="">Label</span>
+                            </td>
+                            <td>
+                                <select id="newServerSection" class="server-selector" name="section-id">
+                                    <option selected disabled hidden>Select an Option</option>
+                                    {% for sec in sections %}
+                                        <option value="{{ sec[0] }}">{{ sec[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="">Section</span>
+                            </td>
+                            <td>
+                                <select id="newServerLabel" class="server-selector" name="color-id">
+                                    <option selected disabled hidden>Select an Option</option>
+                                    {% for data in colors %}
+                                        <option value="{{ data[0] }}">{{ data[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <a class="create-server floating-btn" href="#" onclick="document.getElementById('add_server_form').submit();" title="Create New Server">
+                            <i class="fas fa-edit"></i>Create
+                        </a>
+                    </table>
+                </form>
+            </div>
         </div>
     </div>
     <hr><br> {% endfor %}
@@ -57,7 +110,7 @@
 </a>
 <div class="edit-server-status-box">
     <h2>Edit server status</h2><br>
-    <table style="width: 100%;" id="users-table" class="table table-dark table-striped">
+    <table style="width: 100%;" id="labels-table" class="table table-dark table-striped">
         {% for color in colors %}
         <tr>
             <td class="status">

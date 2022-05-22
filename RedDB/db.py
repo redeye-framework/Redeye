@@ -525,6 +525,18 @@ def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id)
     return(result)
 
 @check_input
+def create_new_server(db, name, ip, section_id, colorId):
+    """
+    Add new server to data base.
+    """
+    query = ''' INSERT INTO servers(ip, name, section_id, color_id)
+                  VALUES("%s","%s","%s","%s") ''' % (name, ip, section_id, colorId)
+
+    result = get_db_with_actions(db, query)
+    create_log(db, "Server Created", "server_id", result, "New Server Added", exec)
+    return(result)
+
+@check_input
 def update_server_details(db, exec, id, ip=False, name=False, is_access=False, attain=False, section_id=False):
     """
     Update server by id of the server.
