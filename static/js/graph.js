@@ -1,3 +1,5 @@
+var viz;
+
 $(document).ready(function() {
     draw();
 });
@@ -8,9 +10,21 @@ $(".submit-graph").click(function() {
     draw(query = queryValue)
 })
 
+$(".stabilize-graph").click(function() {
+    viz.stabilize();
+})
+
+
+$(".modern-input").each(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            queryValue = document.getElementById("query").value;
+            draw(query = queryValue)
+        }
+    })
+})
 
 function draw(query = "MATCH (n) RETURN n") {
-    var viz;
     var config = {
         container_id: "RedeyeGraph",
         server_url: "bolt://localhost:7687",
@@ -18,12 +32,33 @@ function draw(query = "MATCH (n) RETURN n") {
         server_password: "redeye",
         labels: {
             "users": {
-                caption: "username"
+                caption: "username",
+                "font": {
+                    "size": 24,
+                    "color": "black"
+                },
+                "image": 'static\\pics\\graph\\user.png'
             },
             "servers": {
-                caption: "name"
+                caption: "ip",
+                "font": {
+                    "size": 24,
+                    "color": "black"
+                },
+                "image": 'static\\pics\\graph\\server.png'
+            },
+        },
+        relationships: {
+            "userTo": {
+                caption: false,
+                tickness: "weight",
+            },
+            [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
+                "thickness": "defaultThicknessProperty",
+                "caption": "defaultCaption"
             }
         },
+        initial_cypher: "MATCH (n)-[r:INTERACTS]->(m) RETURN n,r,m",
 
         initial_cypher: query,
         arrows: true,

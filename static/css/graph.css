@@ -9,6 +9,7 @@
     width: 500px;
     height: 60px;
     font-size: 28px;
+    outline: solid;
 }
 
 .submit-graph {
@@ -16,6 +17,13 @@
     position: fixed;
     top: 30px;
     left: 800px;
+}
+
+.stabilize-graph {
+    background-color: #3f6ad8;
+    position: fixed;
+    top: 30px;
+    left: 925px;
 }
 
 .floating-btn {
