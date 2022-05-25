@@ -1,0 +1,16 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">{% include 'wrapper.html' %}
+
+<div class="query">
+    <input class="modern-input" id="query" name="query">
+    <a class="submit-graph floating-btn" id="sumbit" href="#" title="Search">
+        <i class="fas fa-search"></i> Search
+    </a>
+</div>
+
+<div id="RedeyeGraph" style="height:1000px;"></div>
+
+
+{% include 'wrapper_end.html' %} {% include 'footer.html' %}
+<script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>

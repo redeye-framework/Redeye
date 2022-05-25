@@ -1,0 +1,36 @@
+.modern-input {
+    border-radius: 25px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    margin-left: -4px;
+    text-align: left;
+    width: 500px;
+    height: 60px;
+    font-size: 28px;
+}
+
+.submit-graph {
+    background-color: #3f6ad8;
+    position: fixed;
+    top: 30px;
+    left: 800px;
+}
+
+.floating-btn {
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.floating-btn:hover {
+    filter: brightness(110%);
+}
+
+.floating-btn>.fa-trash {
+    color: #eef;
+}

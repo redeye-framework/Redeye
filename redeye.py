@@ -327,8 +327,11 @@ def add_new_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.form.to_dict()
-    db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
 
+    if IS_DOCKER_ENV:
+        graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
+        
     return redirect(request.referrer)
 
 """
@@ -1477,6 +1480,19 @@ def change_color():
     db.change_color(session["db"], dict["obj"], "#%s" % (dict["value"]), dict["id"])    
 
     return redirect(request.referrer)
+
+"""
+=======================================================
+                Graph Functions
+=======================================================
+"""
+
+@app.route('/load_graph',methods=['GET'])
+def load_graph():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"])
 
 """
 =======================================================
