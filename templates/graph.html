@@ -9,6 +9,32 @@
     <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
         <i class="fas fa-stop"></i> Stabilize
     </a>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Command</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="overflow:scroll">
+                <td>Show all users</td>
+                <td>MATCH (user:users) RETURN user</td>
+            </tr>
+            <tr style="overflow:scroll">
+                <td>Show all servers</td>
+                <td>MATCH (server:servers) RETURN server</td>
+            </tr>
+            <tr style="overflow:scroll">
+                <td>Show all relationships</td>
+                <td>MATCH relations=()-->() RETURN relations</td>
+            </tr>
+            <tr style="overflow:scroll">
+                <td>Show all users with X password</td>
+                <td>MATCH (user:users) where user.password="{}" RETURN user</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div id="RedeyeGraph" style="height:1000px;"></div>

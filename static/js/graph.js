@@ -7,7 +7,12 @@ $(document).ready(function() {
 
 $(".submit-graph").click(function() {
     queryValue = document.getElementById("query").value;
-    draw(query = queryValue)
+    if (queryValue == "") {
+        draw()
+    } else {
+        draw(query = queryValue)
+    }
+
 })
 
 $(".stabilize-graph").click(function() {
@@ -19,12 +24,29 @@ $(".modern-input").each(function() {
     this.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             queryValue = document.getElementById("query").value;
-            draw(query = queryValue)
+            if (queryValue == "") {
+                draw()
+            } else {
+                draw(query = queryValue)
+            }
         }
     })
 })
 
-function draw(query = "MATCH (n) RETURN n") {
+$(".table").find("td:nth-child(2)").click(function() {
+    queryValue = $(this).text();
+    if (queryValue.includes("{}")) {
+
+        value = prompt("Value:");
+        queryValue = queryValue.replace("{}", value)
+        draw(query = queryValue);
+
+    } else {
+        draw(query = queryValue);
+    }
+});
+
+function draw(query = "MATCH relations=()-->() RETURN relations") {
     var config = {
         container_id: "RedeyeGraph",
         server_url: "bolt://localhost:7687",
