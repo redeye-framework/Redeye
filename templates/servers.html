@@ -9,8 +9,7 @@
             <a href="#" onclick="this.parentElement.parentElement.remove();" class="section-delete-btn">
                 <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
             </a>
-            {% endif %}
-            {{ data[section]['name'] }}</h4>
+            {% endif %} {{ data[section]['name'] }}</h4>
         <input class="section-name-input" type="text" value="{{ section }}">
         <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
         <div class="row">
@@ -44,11 +43,11 @@
                     </div>
                 </div>
             </a>
-            
+
         </div>
         <hr><br>
     </div>
-     {% endfor %}
+    {% endfor %}
     <div class="section">
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
             <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>

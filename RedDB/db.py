@@ -513,24 +513,24 @@ def get_netdevices_by_id(db, id):
 """
 
 @check_input
-def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id):
+def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id, color_id):
     """
     Add new server to data base.
     """
-    query = ''' INSERT INTO servers(ip, name, vendor, is_access, attain, section_id)
-                  VALUES("{}","{}","{}","{}","{}","{}") '''.format(ip, name, vendor, is_access, attain, section_id)
+    query = ''' INSERT INTO servers(ip, name, vendor, is_access, attain, section_id, color_id)
+                  VALUES("{}","{}","{}","{}","{}","{}", "{}") '''.format(ip, name, vendor, is_access, attain, section_id, color_id)
 
     result = get_db_with_actions(db, query)
     create_log(db, "Server Created", "server_id", result, "New Server Added", exec)
     return(result)
 
 @check_input
-def create_new_server(db, name, ip, section_id, colorId):
+def create_new_single_server(db, name, ip, section_id, colorId):
     """
     Add new server to data base.
     """
     query = ''' INSERT INTO servers(ip, name, section_id, color_id)
-                  VALUES("%s","%s","%s","%s") ''' % (name, ip, section_id, colorId)
+                  VALUES("%s","%s","%s","%s") ''' % (ip, name, section_id, colorId)
 
     result = get_db_with_actions(db, query)
     create_log(db, "Server Created", "server_id", result, "New Server Added", exec)

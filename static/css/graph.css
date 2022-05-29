@@ -1,0 +1,77 @@
+.modern-input {
+    border-radius: 25px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    margin-left: -4px;
+    text-align: left;
+    width: 500px;
+    height: 60px;
+    position: fixed;
+    font-size: 28px;
+    outline: solid;
+    z-index: 999;
+}
+
+.submit-graph {
+    background-color: #3f6ad8;
+    position: fixed;
+    top: 30px;
+    left: 800px;
+    z-index: 999;
+}
+
+.stabilize-graph {
+    background-color: #3f6ad8;
+    position: fixed;
+    top: 30px;
+    left: 925px;
+    z-index: 999;
+}
+
+.floating-btn {
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.floating-btn:hover {
+    filter: brightness(110%);
+}
+
+.floating-btn>.fa-trash {
+    color: #eef;
+}
+
+.query .table {
+    box-shadow: 4px 4px 10px black !important;
+    border-radius: 15px;
+}
+
+.query table thead tr th {
+    border-color: transparent;
+    border-radius: 10px;
+}
+
+.query table tbody tr td {
+    cursor: pointer;
+}
+
+table {
+    position: fixed;
+    z-index: 999;
+    width: 700px !important;
+    background-color: #31353D !important;
+    right: 25px;
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #31353D;
+    text-align: center;
+}

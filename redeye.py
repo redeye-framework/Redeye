@@ -327,9 +327,11 @@ def add_new_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.form.to_dict()
-    # Uncomment that when front is ready
-    #db.create_new_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
 
+    if IS_DOCKER_ENV:
+        graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
+        
     return redirect(request.referrer)
 
 """
@@ -1481,6 +1483,19 @@ def change_color():
 
 """
 =======================================================
+                Graph Functions
+=======================================================
+"""
+
+@app.route('/load_graph',methods=['GET'])
+def load_graph():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"])
+
+"""
+=======================================================
                 Helpers Functions
 =======================================================
 """
@@ -1492,6 +1507,7 @@ def add_scan(file):
         if parse.check_nmap_file(full_path):
             if file_name:
                 nmap_dic = parse.get_nmap_data(full_path)
+
                 for ip_addr, data in nmap_dic.items():
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
@@ -1499,14 +1515,14 @@ def add_scan(file):
                     if not db.check_if_server_exsist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
-                            , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id)
+                            , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id, 1)
 
                             if IS_DOCKER_ENV:
                                 graph.addServerNode(server_id,ip_addr,hostname,0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
 
                         else:
                             server_id = db.create_new_server(session["db"], session["username"]
-                            , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id)
+                            , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id, 1)
 
                             if IS_DOCKER_ENV:
                                 graph.addServerNode(server_id,ip_addr,"Unknown",0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
