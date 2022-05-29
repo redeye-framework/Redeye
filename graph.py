@@ -3,8 +3,8 @@ from neo4j import *
 import os
 import sys
 
-#neoServer = "neo4j"
-neoServer = "localhost"
+neoServer = "neo4j"
+#neoServer = "localhost"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
 password = os.getenv("NEO4J_PASSWORD", "redeye")
@@ -152,7 +152,7 @@ def init():
         q = "CREATE (servers), (users)"
         tx.run(q)
 
-    executeWriteQuery(query)    
+    executeWriteQuery(query)
 
 
 def test():
