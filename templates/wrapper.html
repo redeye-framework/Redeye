@@ -35,7 +35,7 @@
                     <div>
                         <form id="search_form" action="{{ url_for('search') }}" method="POST">
                             <div class="input-group">
-                                <input onchange="document.getElementById('search_form').submit();" type="text" name="keyword" class="form-control search-menu" id="search-box" placeholder="Search...">
+                                <input onchange="document.getElementById('search_form').submit();" type="text" name="keyword" class="form-control search-menu" id="search-box" placeholder="Search..." tabindex="-1">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -158,7 +158,7 @@
                             </a>
                         </li>-->
                     </ul>
-                    <button onclick="document.cookie='username=';location.href='login'" class="btn btn-primary logout">LogOut</button>
+                    <button onclick="document.cookie='username=';location.href='login'" class="btn btn-primary logout" tabindex="-1">LogOut</button>
                     </div>
                     <!-- sidebar-menu  -->
                 </div>

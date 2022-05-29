@@ -37,7 +37,7 @@
                 </div>
             </a>
             {% endfor %}
-            <a href="javascript:createNewServer('{{ section }}');">
+            <a href="javascript:createNewServer('{{ section }}');" tabindex="-1">
                 <div class="server-box" style="border-top: 4px solid #ccc;">
                     <div class="new">
                         <i class="fas fa-plus add-server-btn"></i>
@@ -59,7 +59,7 @@
         <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
     </form>
 </div>
-<a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status">
+<a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status" tabindex="-1">
     <i class="fas fa-edit"></i> Edit Labels
 </a>
 <div class="create-server-box">
