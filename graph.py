@@ -156,12 +156,7 @@ def init():
 
 
 def test():
-    def t(tx):
-        q = "create DATABASE danino"
-        tx.run(q)
-
-    executeWriteQuery(t)
-
+    pass
     #addServerNode(220,"5.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
     #addServerNode(221,"6.5.5.5","new",1,"newSection", "https://dsadsa/dsdsa")
     #addUserNode(250,"admin", "123231", 220)
