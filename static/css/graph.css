@@ -1,33 +1,72 @@
+body {
+    background: linear-gradient(315deg, #1E2229 10%, #242a38 70%);
+}
+
+.up {
+    position: fixed;
+    left: 50%;
+    top: 0px;
+    padding-top: 40px;
+    z-index: 500;
+}
+
+.right {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+}
+
+.left {
+    position: fixed;
+    z-index: 200;
+    padding-left: 25px;
+    right: 35px;
+    top: 25px;
+}
+
+.down {
+    position: fixed;
+    bottom: 0;
+    left: 550px;
+    z-index: 200;
+}
+
+.hidden {
+    display: none;
+}
+
 .modern-input {
-    border-radius: 25px;
-    padding: 5px;
+    border-radius: 20px;
     background-color: rgb(67, 72, 82);
     border-color: transparent;
     color: #ccd;
-    margin-left: -4px;
     text-align: left;
     width: 500px;
-    height: 60px;
-    position: fixed;
-    font-size: 28px;
-    outline: solid;
-    z-index: 999;
+    height: 50px;
+    transform: translateX(-50%);
+    font-size: 24px;
+    padding: 15px;
+    box-shadow: 0 0 10px black;
+    transition-duration: 0.3s;
+}
+
+.modern-input:focus {
+    border: 0.5px solid #ccc;
+    width: 800px;
 }
 
 .submit-graph {
     background-color: #3f6ad8;
-    position: fixed;
-    top: 30px;
-    left: 800px;
-    z-index: 999;
 }
 
-.stabilize-graph {
+.stabilize-btn {
     background-color: #3f6ad8;
-    position: fixed;
-    top: 30px;
-    left: 925px;
-    z-index: 999;
+}
+
+.floating-btns {
+    padding: 20px;
+    display: grid;
 }
 
 .floating-btn {
@@ -37,41 +76,120 @@
     font-size: 18px;
     padding: 15px 20px;
     cursor: pointer;
+    margin: 8px;
 }
 
 .floating-btn:hover {
     filter: brightness(110%);
+    text-decoration: none;
 }
 
 .floating-btn>.fa-trash {
     color: #eef;
 }
 
-.query .table {
-    box-shadow: 4px 4px 10px black !important;
-    border-radius: 15px;
+.pcaps {
+    padding: 40px 20px;
 }
 
-.query table thead tr th {
-    border-color: transparent;
-    border-radius: 10px;
+.pcaps .import-btn {
+    background-color: #06a821;
+    color: #ccd;
+    padding: 20px;
 }
 
-.query table tbody tr td {
-    cursor: pointer;
+.pcaps .toggle-pcap {
+    color: #ccd;
+    background-color: #999;
+    border: 1px solid #ccd;
+    transition-duration: 0.2s;
 }
 
-table {
-    position: fixed;
-    z-index: 999;
-    width: 700px !important;
-    background-color: #31353D !important;
-    right: 25px;
+.pcaps .active {
+    border: 1px solid #3f6ad8;
+    background-color: #3f6ad8;
 }
 
-.table-dark td,
-.table-dark th,
-.table-dark thead th {
-    border-color: #31353D;
+.pcaps .remove-pcap {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 7px 7px 2px;
+    margin-right: 7px;
+    transition-duration: 0.2s;
+    border-radius: 5px;
+}
+
+.pcaps .remove-pcap:hover {
+    background-color: rgb(240, 58, 58);
+}
+
+#RedeyeGraph {
+    height: 100vh;
+    width: 100%;
+    z-index: 100;
+}
+
+.notifications {
+    display: none;
+}
+
+.left-section {
+    width: 500px;
+    height: auto;
+    background-color: rgb(67, 72, 82);
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px black;
+}
+
+.left-section .title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #ccd;
     text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.left-section .commands {
+    display: grid;
+}
+
+.left-section .command {
+    color: #ccd;
+    padding: 5px 15px;
+    font-size: 20px;
+    text-align: center;
+    background-color: rgb(49, 53, 61);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+}
+
+.left-section .command:hover {
+    filter: brightness(110%);
+}
+
+.left-section .options .opt {
+    display: inline-block;
+    color: #ccd;
+    padding: 5px 10px;
+    font-size: 20px;
+    background-color: rgb(49, 53, 61);
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+    transition-duration: 0.2s;
+}
+
+.left-section .options .opt:hover {
+    filter: brightness(110%);
+}
+
+.left-section .options .active {
+    border: 1px solid #a8adb9;
+    background-color: #3f6ad8;
 }

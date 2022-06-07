@@ -15,7 +15,7 @@ $(".submit-graph").click(function() {
 
 })
 
-$(".stabilize-graph").click(function() {
+$(".stabilize-btn").click(function() {
     viz.stabilize();
 })
 
@@ -33,8 +33,8 @@ $(".modern-input").each(function() {
     })
 })
 
-$(".table").find("td:nth-child(2)").click(function() {
-    queryValue = $(this).text();
+$(".table").find("a").click(function() {
+    queryValue = $(this).attr('title');
     if (queryValue.includes("{}")) {
 
         value = prompt("Value:");
@@ -51,7 +51,7 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         container_id: "RedeyeGraph",
         server_url: "bolt://localhost:7687",
         server_user: "neo4j",
-        server_password: "redeye",
+        server_password: "test",
         labels: {
             "users": {
                 caption: "username",

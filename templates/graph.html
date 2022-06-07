@@ -2,42 +2,51 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">{% include 'wrapper.html' %}
 
 <div class="query">
-    <input class="modern-input" id="query" name="query">
-    <a class="submit-graph floating-btn" id="sumbit" href="#" title="Search">
-        <i class="fas fa-search"></i> Search
-    </a>
-    <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
-        <i class="fas fa-stop"></i> Stabilize
-    </a>
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th>Command</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="overflow:scroll">
-                <td>Show all users</td>
-                <td>MATCH (user:users) RETURN user</td>
-            </tr>
-            <tr style="overflow:scroll">
-                <td>Show all servers</td>
-                <td>MATCH (server:servers) RETURN server</td>
-            </tr>
-            <tr style="overflow:scroll">
-                <td>Show all relationships</td>
-                <td>MATCH relations=()-->() RETURN relations</td>
-            </tr>
-            <tr style="overflow:scroll">
-                <td>Show all users with X password</td>
-                <td>MATCH (user:users) where user.password="{}" RETURN user</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="up">
+        <input class="modern-input" id="query" name="query">
+    </div>
+    <div class="right">
+        <div class="floating-btns">
+            <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                <i class="fas fa-stop"></i> Stabilize
+            </a>
+        </div>
+    </div>
+    <div class="left">
+        <div class="table left-section">
+            <div class="title">Commands</div>
+            <div class="commands">
+                <a href="#" class="command" title="MATCH (user:users) RETURN user">
+                        Show all Users
+                    </a>
+                <a href="#" class="command" title="MATCH (server:servers) RETURN server">
+                        Show all Servers
+                    </a>
+                <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
+                        Show all relationships
+                    </a>
+            </div>
+        </div>
+    </div>
+    <div class="down">
+        <div class="pcaps">
+            <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                <i class="fas fa-upload"></i></a>
+        </div>
+    </div>
+</div>
+<div class="down">
+    <div class="pcaps">
+        <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+            <i class="fas fa-upload"></i>
+        </a>
+        <div class="hidden">
+            <input type="file" id="upload-file" onchange="alert(1)">
+        </div>
+    </div>
 </div>
 
-<div id="RedeyeGraph" style="height:1000px;"></div>
+<div id="RedeyeGraph"></div>
 
 
 {% include 'wrapper_end.html' %} {% include 'footer.html' %}

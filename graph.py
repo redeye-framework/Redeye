@@ -3,11 +3,11 @@ from neo4j import *
 import os
 import sys
 
-neoServer = "neo4j"
-#neoServer = "localhost"
+#neoServer = "neo4j"
+neoServer = "localhost"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
-password = os.getenv("NEO4J_PASSWORD", "redeye")
+password = os.getenv("NEO4J_PASSWORD", "test")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "Redeye")
 
@@ -27,7 +27,7 @@ driver = GraphDatabase.driver(url, auth=basic_auth(username, password))
 # Add server node
 def addServerNode(id, ip, name, is_access, sectionName, url):
     def addServer(tx):
-        q = """ CREATE (server: servers {id:"%s",ip:"%s",name:"%s",is_access:"%s",sectionName:"%s",url:"%s"}) """ % (
+        q = """ MERGE (server: servers {id:"%s",ip:"%s",name:"%s",is_access:"%s",sectionName:"%s",url:"%s"}) """ % (
             id, ip, name, is_access, sectionName, url)
         tx.run(q)
     
@@ -69,12 +69,12 @@ def changeServerNode(id, ip=None, name=None, is_access=None, sectionName=None):
 # Add user node
 def addUserNode(id, username, password, perm,server_id = 0):
     def addUser(tx):
-        q = """ CREATE (user: users {id:"%s", username:"%s", password:"%s", server_id:"%s", permissions:"%s"}) """ % (id,username,password,server_id,perm)
+        q = """ MERGE (user: users {id:"%s", username:"%s", password:"%s", server_id:"%s", permissions:"%s"}) """ % (id,username,password,server_id,perm)
         tx.run(q)
     
     def addRelation(tx):
         if server_id:
-            q = """ match (user:users), (server:servers) where user.id="%s" AND user.server_id ="%s" AND server.id ="%s" create (user)-[r:userTo]->(server) return type(r) """ % (id,server_id, server_id)
+            q = """ match (user:users), (server:servers) where user.id="%s" AND user.server_id ="%s" AND server.id ="%s" MERGE (user)-[r:userTo]->(server) return type(r) """ % (id,server_id, server_id)
             tx.run(q)
     
     executeWriteQuery(addUser)
@@ -112,7 +112,7 @@ def changeUserNode(id,username=None, password=None,permissions=None, server_id=N
 
     def ConnectUserConnection(tx):
         if server_id:
-            q = """ match (user:users), (server:servers) where user.id="%s" AND server.id ="%s" create (user)-[r:userTo]->(server) return type(r) """ % (id, server_id)
+            q = """ match (user:users), (server:servers) where user.id="%s" AND server.id ="%s" MERGE (user)-[r:userTo]->(server) return type(r) """ % (id, server_id)
             tx.run(q)
 
 
@@ -149,7 +149,7 @@ def executeReadQuery(func, obj):
 
 def init():
     def query(tx):
-        q = "CREATE (servers), (users)"
+        q = "MERGE (servers), (users)"
         tx.run(q)
 
     executeWriteQuery(query)
