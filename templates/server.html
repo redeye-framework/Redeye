@@ -2,13 +2,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}"> {% include 'wrapper.html' %}
 <div class="server-page">
-    <h1 class="head">
+    <h1 class="head" style="border-bottom-color: {{ color }};">
         <span class="editable">{{ server[2] }}</span>
-        <input class="editable-inp" style="display:none;" type="text" size="12" value="{{ server[2] }}" name="name" placeholder="Name">
+        <input class="editable-inp" style="display:none;" type="text" size="10" value="{{ server[2] }}" name="name" placeholder="Name">
         <input class="editable-type" type="hidden" value="name">
         <input class="editable-obj" type="hidden" value="servers">
-        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" style="background-color: {{ color }};">{{ server[1] }}</span>
-        <input class="editable-inp-2" style="display:none;" type="text" size="12" value="{{ server[1] }}" name="ip" placeholder="IP">
+        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" >{{ server[1] }}</span>
+        <input class="editable-inp-2" style="display:none;" type="text" size="10" value="{{ server[1] }}" name="ip" placeholder="IP">
         <input class="editable-type-2" type="hidden" value="ip">
         <input class="editable-obj-2" type="hidden" value="servers">
         <input class="editable-id-2" type="hidden" value="{{ server[0] }}">

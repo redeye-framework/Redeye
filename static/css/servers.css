@@ -157,6 +157,9 @@ hr {
 
 .server-page .head {
     display: inline;
+    border-bottom-style: solid;
+    border-radius: 3px;
+    margin-right: 15px;
 }
 
 .server-page .edit a {
@@ -169,13 +172,11 @@ hr {
 
 .server-page .ip {
     display: inline-block;
-    padding: 5px;
-    border-radius: 8px;
 }
 
 .server-page input {
     display: inline-block;
-    padding: 5px;
+    padding: 0px 5px;
     border-radius: 8px;
     background-color: #343a40;
     color: white;

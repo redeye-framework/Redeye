@@ -317,7 +317,7 @@ $('select').on('change', function(e) {
     var serverId = this.id;
     var color = this.value;
     var colorId = $(this).children(":selected").attr("id");
-    serverIp = document.getElementsByClassName("ip")[0].style.backgroundColor = color;
+    serverIp = $(".head").css("border-bottom-color", color);
 
     $.post(Flask.url_for('change_server_color', {
         serverId: serverId,
