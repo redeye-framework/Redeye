@@ -1,7 +1,4 @@
 
-.query {
-    height: calc(100vh - 70px);
-}
 
 .up {
     position: absolute;
@@ -14,7 +11,7 @@
 .right {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 70px;
     z-index: 200;
 }
 
@@ -93,70 +90,14 @@
     color: #eef;
 }
 
-.pcaps {
-    padding: 20px 20px;
-}
-
-.pcaps form {
-    margin-block-end: 0;
-}
-
-.pcaps .import-btn {
-    background-color: #727a89;;
-    color: #ccd;
-    border-radius: 30px;
-    display: inline-block;
-}
-
-.pcaps .import-btn i {
-}
-
-.pcaps .import-btn-round {
-    background-color: #06a821;
-    color: #ccd;
-    display: block;
-    width: 60px;
-    height: 60px;
-    position: relative;
-    border-radius: 30px;
-}
-
-.pcaps .import-btn-round i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.pcaps .toggle-pcap {
-    color: #ccd;
-    background-color: #999;
-    border: 1px solid #ccd;
-    transition-duration: 0.2s;
-}
-
-.pcaps .active {
-    border: 1px solid #3f6ad8;
-    background-color: #3f6ad8;
-}
-
-.pcaps .remove-pcap {
-    font-size: 16px;
-    font-weight: 600;
-    padding: 7px 7px 2px;
-    margin-right: 7px;
-    transition-duration: 0.2s;
-    border-radius: 5px;
-}
-
-.pcaps .remove-pcap:hover {
-    background-color: rgb(240, 58, 58);
-}
-
 #Graph {
     height: 100vh;
     width: 100%;
     z-index: 100;
+}
+
+#Graph:focus {
+    border: none;
 }
 
 .notifications {

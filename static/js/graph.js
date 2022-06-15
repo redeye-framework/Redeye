@@ -80,7 +80,7 @@ $(".table").find("a").click(function() {
 
 function draw(query = "MATCH relations=()-->() RETURN relations") {
     var config = {
-        container_id: "RedeyeGraph",
+        container_id: "Graph",
         server_url: "bolt://localhost:7687",
         server_user: "neo4j",
         server_password: "test",

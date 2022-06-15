@@ -205,15 +205,6 @@ $(".user-details").mouseover(function(e) {
     }
 });
 
-// SocketIO
-var socket = io();
-//    socket.on('connect', function() {
-//       socket.emit('my event', {data: 'I\'m connected!'});
-//    });
-socket.on('connect', function() {
-    socket.emit('socket_connection', 'client socket connected!');
-    console.log('connected to socket.');
-});
 
 function key_sc(obj, key) {
     console.log()

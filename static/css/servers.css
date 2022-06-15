@@ -337,8 +337,8 @@ input[type="file"] {
 
 .delete {
     background-color: rgb(212, 71, 71);
-    position: absolute;
-    bottom: 70px;
+    position: fixed;
+    bottom: 40px;
     right: 30px;
 }
 

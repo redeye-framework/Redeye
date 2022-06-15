@@ -17,6 +17,8 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 from collections import defaultdict
 import urllib.parse
+from flask_socketio import SocketIO, emit
+import socketio as client_socket
 from threading import Lock
 from shutil import copy as copyFile
 from shutil import copytree as copyDir
@@ -29,10 +31,15 @@ import graph
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
+socketio = SocketIO(app, cors_allowed_origins="http://localhost")
+
+# Connect to redeye
+sio = client_socket.Client()
 
 app.config['SESSION_COOKIE_NAME'] = "RedSession"
 app.secret_key = str(uuid4())  # Nice
 
+clients = {} #key: username; value: list of sockets
 #/SocketIO
 connected_hosts = {} # key: host_id. value: last time asked for actions.
 thread = None
@@ -1439,14 +1446,12 @@ def notebook():
     return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"],notebooks=notebooks)
 
 
-'''
 @socketio.on('updateNoteName')
 def updateNoteName(json):
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     db.update_notebookName(session["db"],json["noteId"], json["data"])
-'''
 
 """
 =======================================================
@@ -1569,6 +1574,7 @@ def login():
                 session["db"] = db.set_project_db(session["project"])
                 session["profile"] = db.get_profilePicture_by_id(check_id)[0][0]
                 session["project"] = helper.get_project_name(projects, session["project"])           
+                clients[session["uid"]] = socketio
                 token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
                 ) + timedelta(hours=2)}, app.secret_key)
                 resp = make_response(index(token.decode('UTF-8')))
@@ -1642,11 +1648,9 @@ def emit_to_all_users(details, function_name):
         if str(uid) in clients.keys():
             emit(function_name,details ,room=clients[str(uid)])
 
-'''
 @socketio.on('socket_connection')
 def socket_connection(msg):
     clients[str(session['uid'])] = request.sid
-'''
 
 @app.after_request
 def add_header(response):
@@ -1749,9 +1753,9 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
         IS_DOCKER_ENV = True
 
     if debug:
-        app.run(debug=True, host='0.0.0.0', port=port)
+        socketio.run(app, debug=True, host='0.0.0.0', port=port)
     else:
-        app.run(debug=False, host='0.0.0.0', port=port)
+        socketio.run(app, debug=False, host='0.0.0.0', port=port)
 
 
 if __name__ == "__main__":
