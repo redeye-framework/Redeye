@@ -2,6 +2,38 @@ var viz;
 
 $(document).ready(function() {
     draw();
+
+    this.addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (!$(".modern-input").is(":focus")) {
+            if (event.key == "f") {
+                showAll();
+                $(".modern-input").focus();
+            } else if (event.keyCode == 27) {
+                hideAll();
+                $(".modern-input").blur();
+            } else if (event.key == 's') {
+                viz.stabilize();
+            } else {
+                showAll();
+            }
+
+        } else {
+            if (event.keyCode == 13) {
+                queryValue = document.getElementById("query").value;
+                if (queryValue == "") {
+                    draw()
+                } else {
+                    draw(query = queryValue)
+                }
+                hideAll();
+                $(".modern-input").blur();
+            } else if (event.keyCode == 27) {
+                hideAll();
+                $(".modern-input").blur();
+            }
+        }
+    });
 });
 
 
@@ -90,4 +122,16 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
 
     viz = new NeoVis.default(config);
     viz.render();
+}
+
+function hideAll() {
+    $(".up").animate({ "top": '-95px' });
+    $(".right").animate({ "right": '-200px' });
+    $(".left").animate({ "left": '-1000px' });
+}
+
+function showAll() {
+    $(".up").animate({ "top": '0px' });
+    $(".right").animate({ "right": '0px' });
+    $(".left").animate({ "left": '0px' });
 }
