@@ -29,24 +29,30 @@
         </div>
     </div>
     <div class="down">
-        <div class="pcaps">
-            <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                <i class="fas fa-upload"></i></a>
+            <div class="pcaps">
+                <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-upload"></i> Upload Pcap
+                </a>
+                <!--a class="import-btn-round floating-btn" id="stabilize" href="#" title="Stabilize">
+                        upload pcap <i class="fas fa-upload"></i>
+                    </a-->
+                <div class="hidden">
+                    <input type="file" name="pcap" id="upload-file" onchange='uploadPcap()'>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<div class="down">
-    <div class="pcaps">
-        <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-            <i class="fas fa-upload"></i>
-        </a>
-        <div class="hidden">
-            <input type="file" id="upload-file" onchange="alert(1)">
         </div>
-    </div>
-</div>
+        <div class="notifications">
+            <div class="noti">
 
-<div id="RedeyeGraph"></div>
+            </div>
+        </div>
+        <div class="loader">
+            <div class="gif"><i class="fas fa-spinner fa-spin"></i></div>
+            <div class="percentage"><span class="per-number">0</span>%</div>
+        </div>
+    </div>
+    <div id="RedeyeGraph"></div>
 
 
 {% include 'wrapper_end.html' %} {% include 'footer.html' %}

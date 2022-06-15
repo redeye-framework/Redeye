@@ -1,9 +1,10 @@
-body {
-    background: linear-gradient(315deg, #1E2229 10%, #242a38 70%);
+
+.query {
+    height: calc(100vh - 70px);
 }
 
 .up {
-    position: fixed;
+    position: absolute;
     left: 50%;
     top: 0px;
     padding-top: 40px;
@@ -11,29 +12,33 @@ body {
 }
 
 .right {
-    position: fixed;
+    position: absolute;
     right: 0;
     bottom: 0;
     z-index: 200;
 }
 
 .left {
-    position: fixed;
+    position: absolute;
     z-index: 200;
     padding-left: 25px;
-    right: 35px;
+    left: 0px;
     top: 25px;
 }
 
 .down {
-    position: fixed;
+    position: absolute;
     bottom: 0;
-    left: 550px;
+    left: 0px;
     z-index: 200;
 }
 
 .hidden {
     display: none;
+}
+
+.darken {
+    filter: brightness(60%);
 }
 
 .modern-input {
@@ -53,7 +58,7 @@ body {
 
 .modern-input:focus {
     border: 0.5px solid #ccc;
-    width: 800px;
+    width: 600px;
 }
 
 .submit-graph {
@@ -89,13 +94,38 @@ body {
 }
 
 .pcaps {
-    padding: 40px 20px;
+    padding: 20px 20px;
+}
+
+.pcaps form {
+    margin-block-end: 0;
 }
 
 .pcaps .import-btn {
+    background-color: #727a89;;
+    color: #ccd;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.pcaps .import-btn i {
+}
+
+.pcaps .import-btn-round {
     background-color: #06a821;
     color: #ccd;
-    padding: 20px;
+    display: block;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    border-radius: 30px;
+}
+
+.pcaps .import-btn-round i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .pcaps .toggle-pcap {
@@ -123,7 +153,7 @@ body {
     background-color: rgb(240, 58, 58);
 }
 
-#RedeyeGraph {
+#Graph {
     height: 100vh;
     width: 100%;
     z-index: 100;
@@ -136,7 +166,7 @@ body {
 .left-section {
     width: 500px;
     height: auto;
-    background-color: rgb(67, 72, 82);
+    background-color: #31353D;
     padding: 20px 30px;
     border-radius: 20px;
     box-shadow: 0px 0px 15px black;
@@ -161,7 +191,7 @@ body {
     padding: 5px 15px;
     font-size: 20px;
     text-align: center;
-    background-color: rgb(49, 53, 61);
+    background-color: rgb(63 69 79);
     margin-bottom: 10px;
     border-radius: 10px;
     box-shadow: 0px 0px 2px black;
@@ -177,7 +207,7 @@ body {
     color: #ccd;
     padding: 5px 10px;
     font-size: 20px;
-    background-color: rgb(49, 53, 61);
+    background-color: rgb(63 69 79);
     margin: 5px;
     border-radius: 10px;
     box-shadow: 0px 0px 2px black;
@@ -192,4 +222,20 @@ body {
 .left-section .options .active {
     border: 1px solid #a8adb9;
     background-color: #3f6ad8;
+}
+
+.loader {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    font-size: 32px;
+    text-align: center;
+    display: none;
+    color: rgb(222, 222, 233);
+}
+
+.loader .gif {
+    font-size: 62px;
 }

@@ -102,6 +102,7 @@ input:focus {
     width: calc(100% - 260px);
     margin-left: 260px;
     padding: 30px;
+    position: relative;
     text-shadow: 1px 1px 1px black;
     transition-duration: 0.2s;
 }
