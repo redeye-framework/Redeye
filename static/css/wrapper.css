@@ -523,11 +523,15 @@ input:checked+.slider:before {
     animation: sonar 1.5s infinite;
 }
 
-.logout {
+.sidebar-btns {
     bottom: 10px;
-    left: 25px;
+    left: 20px;
     border-radius: 10px;
     position: fixed !important;
+}
+
+.sidebar-btns button {
+    margin-right: 15px;
 }
 
 
