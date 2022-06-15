@@ -158,6 +158,7 @@ hr {
 .server-page .head {
     display: inline;
     border-bottom-style: solid;
+    padding-bottom: 5px;
     border-radius: 3px;
     margin-right: 15px;
 }
