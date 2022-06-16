@@ -1,7 +1,7 @@
 $(".section-name").click(function() {
     var val = $(this).text()
     var inp = $(this).parent().find("input")
-    $(inp).val(val)
+    $(inp).val($.trim(val))
     $(this).hide()
     $(inp).show()
     $(inp).focus()
