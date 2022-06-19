@@ -1411,23 +1411,25 @@ def importAll():
         imported.extractall(ZIP_FOLDER)
     
     # Get the db file name
-    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))[0]
+    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))
+    projectFiles = listdir(ZIP_FOLDER)
     managementFile = path.join(ZIP_FOLDER,MANAGEMENT_DB)
 
     # Only if the user uploaded any files
     if dbFile:
-        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile)
+        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile[0])
         # Copy the DB file to the Projects DB folder
         copyFile(dbFilePath, "RedDB/Projects")
 
     # Copy files dir to Redeye files dir
-    copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
+    if projectName in projectFiles:
+        copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
 
     # Create new Project in managment DB
-    newProjectId = db.insert_new_project(projectName,dbFile)
+    newProjectId = db.insert_new_project(projectName,dbFile[0])
 
     # Insert new Project into management DB
-    db.merge_new_project_db(managementFile,newProjectId)
+    db.merge_new_project_db(managementFile,newProjectId,dbFile[0])
 
     # Refresh projects global
     refresh_projects()

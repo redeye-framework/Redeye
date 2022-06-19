@@ -1254,15 +1254,25 @@ def set_project_db(project):
     
     return db
 
-def merge_new_project_db(projectManager, newProjectId):
+def merge_new_project_db(projectManager, newProjectId, dbFile):
 
+    # Connect to imported DB
     conn = create_connection(MANAGE_DB)
-    conn.execute(f"ATTACH '{projectManager}' as pdb")
 
+    # Attach new DB as pdb
+    conn.execute(f"ATTACH '{projectManager}' as pdb")
     conn.execute("BEGIN")
+
+    # Get the id of the imported project
+    cur = conn.cursor()
+    cur.execute(f'SELECT id FROM pdb.projects WHERE filename="{dbFile}"')
+    pId = cur.fetchall()[0][0]
+
+    # Insert all users from this specific project to current DB
     for row in conn.execute("SELECT * FROM pdb.redeye_users"):
-        query = f"""INSERT INTO redeye_users(username,password,profile_pic,projectID) VALUES("{row[1]}","{row[2]}","{row[3]}",{newProjectId}) """
-        conn.execute(query)
+        if row[4] == pId:
+            query = f"""INSERT INTO redeye_users(username,password,profile_pic,projectID) VALUES("{row[1]}","{row[2]}","{row[3]}",{newProjectId}) """
+            conn.execute(query)
     conn.commit()
     conn.execute("detach database pdb")
 
