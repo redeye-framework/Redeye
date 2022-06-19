@@ -1431,8 +1431,8 @@ def importAll():
     # Insert new Project into management DB
     db.merge_new_project_db(managementFile,newProjectId,dbFile[0])
 
-    # Refresh projects global
-    refresh_projects()
+    # init new project
+    init(app)
 
     # Delete zip folder - It will be created again with new Import/Export
     rmDir(ZIP_FOLDER)
