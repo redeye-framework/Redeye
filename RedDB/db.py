@@ -1165,7 +1165,6 @@ def get_projectId_by_DBName(dbName):
 def get_project_by_id(projectId):
     query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
-
 """
 =======================================================
                 DB Functions
@@ -1254,6 +1253,19 @@ def set_project_db(project):
         add_defult_colors(db)
     
     return db
+
+def merge_new_project_db(projectManager, newProjectId):
+
+    conn = create_connection(MANAGE_DB)
+    conn.execute(f"ATTACH '{projectManager}' as pdb")
+
+    conn.execute("BEGIN")
+    for row in conn.execute("SELECT * FROM pdb.redeye_users"):
+        query = f"""INSERT INTO redeye_users(username,password,profile_pic,projectID) VALUES("{row[1]}","{row[2]}","{row[3]}",{newProjectId}) """
+        conn.execute(query)
+    conn.commit()
+    conn.execute("detach database pdb")
+
 """
 =======================================================
                 Init Function

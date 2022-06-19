@@ -54,6 +54,7 @@ IS_DOCKER_ENV = False
 PROFILE_PICS = r"static/pics/profiles"
 DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
+MANAGEMENT_DB = r"RedDB/managementDB.db"
 ZIP_FOLDER = r"zip"
 FILES_FOLDER = r"files/"
 PROJECTS = r"RedDB/Projects/{}"
@@ -1377,7 +1378,7 @@ def exportAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    # Create zip folder to export
+    # Create zip folder to export if not already exists
     makedirs(ZIP_FOLDER, exist_ok=True)
 
     # Create new zip file contains:
@@ -1385,13 +1386,14 @@ def exportAll():
     # 2) All files from that env
     with zipfile.ZipFile(f'zip/RedEye-{session["project"]}.zip', 'w', zipfile.ZIP_DEFLATED) as exported:
         helper.zipdir(f'files/{session["project"]}/',exported)
-        exported.write(f'{session["db"]}')
+        exported.write(session["db"])
+        exported.write(MANAGEMENT_DB)
     
     # Send user the zip file
     return send_from_directory(ZIP_FOLDER, f'RedEye-{session["project"]}.zip')
 
 
-@app.route('/importAll',methods=['GET'])
+@app.route('/importAll',methods=['POST'])
 def importAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1399,20 +1401,22 @@ def importAll():
     # Make sure zip folder is present
     makedirs(ZIP_FOLDER, exist_ok=True)
     
-    # Test with temp zip file - Waiting for UI
-    testing = path.join(ZIP_FOLDER,"RedEye-test.zip")
-    projectName = testing.split('-')[1].split('.')[0]
+    importFile = request.files.get("import-file")
+    filePath, filename = helper.save_file(importFile, ZIP_FOLDER)
+
+    projectName = filename.split('-')[1].split('.')[0]
 
     # Extract all files to the zip folder
-    with zipfile.ZipFile(testing, 'r') as imported:
+    with zipfile.ZipFile(filePath, 'r') as imported:
         imported.extractall(ZIP_FOLDER)
     
     # Get the db file name
-    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))
+    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))[0]
+    managementFile = path.join(ZIP_FOLDER,MANAGEMENT_DB)
 
     # Only if the user uploaded any files
     if dbFile:
-        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile[0])
+        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile)
         # Copy the DB file to the Projects DB folder
         copyFile(dbFilePath, "RedDB/Projects")
 
@@ -1420,7 +1424,10 @@ def importAll():
     copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
 
     # Create new Project in managment DB
-    db.insert_new_project(projectName,dbFile)
+    projectID = db.insert_new_project(projectName,dbFile)
+
+    # Insert new Project into management DB
+    db.merge_new_project_db(managementFile,projectID)
 
     # Refresh projects global
     refresh_projects()
@@ -1716,8 +1723,8 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
         allFiles = glob("files/**", recursive=True)
 
         # Remove management DB
-        if path.exists("RedDB/managementDB.db"):
-            os.remove("RedDB/managementDB.db")
+        if path.exists(MANAGEMENT_DB):
+            os.remove(MANAGEMENT_DB)
 
         # Remove all project files
         if projectsFiles:
