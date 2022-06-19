@@ -1424,10 +1424,10 @@ def importAll():
     copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
 
     # Create new Project in managment DB
-    projectID = db.insert_new_project(projectName,dbFile)
+    newProjectId = db.insert_new_project(projectName,dbFile)
 
     # Insert new Project into management DB
-    db.merge_new_project_db(managementFile,projectID)
+    db.merge_new_project_db(managementFile,newProjectId)
 
     # Refresh projects global
     refresh_projects()
