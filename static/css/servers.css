@@ -336,7 +336,7 @@ input[type="file"] {
     filter: brightness(110%);
 }
 
-.delete {
+.delete-server {
     background-color: rgb(212, 71, 71);
     position: fixed;
     bottom: 40px;

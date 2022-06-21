@@ -7,7 +7,7 @@
         <input class="editable-inp" style="display:none;" type="text" size="10" value="{{ server[2] }}" name="name" placeholder="Name">
         <input class="editable-type" type="hidden" value="name">
         <input class="editable-obj" type="hidden" value="servers">
-        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" >{{ server[1] }}</span>
+        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}">{{ server[1] }}</span>
         <input class="editable-inp-2" style="display:none;" type="text" size="10" value="{{ server[1] }}" name="ip" placeholder="IP">
         <input class="editable-type-2" type="hidden" value="ip">
         <input class="editable-obj-2" type="hidden" value="servers">
@@ -258,7 +258,7 @@
             </div>
         </div>
     </div>
-    <a class="delete floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
+    <a class="delete-server floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
     </a> {% include 'user.html' %}
 </div>
