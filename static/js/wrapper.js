@@ -175,7 +175,7 @@ function editNote() {
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text);
-    tempAlert(text, 3000);
+    tempAlert(text, 1000);
 }
 
 function tempAlert(msg, duration) {
@@ -192,7 +192,7 @@ $(".hover-user-details").mouseover(function(e) {
     $(".user-details").show();
     $(".user-details").css({
         top: e.pageY,
-        left: e.pageX
+        left: e.pageX - 260 // Size of sidebar.
     });
 }).mouseout(function() {
     $(".user-details").hide();
