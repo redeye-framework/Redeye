@@ -15,7 +15,7 @@ RUN pip install -r requirements.txt
 RUN apt-get update && apt-get install -y sqlite3
 
 # Expose the port
-EXPOSE 5000
+EXPOSE 8443
 
 # Init the DB
 RUN python RedDB/db.py
@@ -24,4 +24,4 @@ RUN python RedDB/db.py
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["redeye.py", "--safe", "--docker"]
+CMD ["redeye.py", "--safe", "--docker", "--port", "8443"]

@@ -525,7 +525,7 @@ input:checked+.slider:before {
 
 .sidebar-btns {
     bottom: 10px;
-    width: calc(12% - 20px);
+    width: 220px;
     text-align: center;
     left: 20px;
     border-radius: 10px;

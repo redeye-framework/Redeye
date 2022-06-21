@@ -60,11 +60,17 @@ def changeServerNode(id, ip=None, name=None, is_access=None, sectionName=None):
         if sectionName:
             q = """ match (server:servers) where server.id="%s" SET server.sectionName="%s" """ % (id,password)
             tx.run(q)
+    if ip:
+        executeWriteQuery(changeIP)
 
-    executeWriteQuery(changeIP)
-    executeWriteQuery(changeServerName)
-    executeWriteQuery(changeIsAccess)
-    executeWriteQuery(changeSectionName)
+    if name:
+        executeWriteQuery(changeServerName)
+
+    if is_access:
+        executeWriteQuery(changeIsAccess)
+
+    if password:
+        executeWriteQuery(changeSectionName)
 
 # Add user node
 def addUserNode(id, username, password, perm,server_id = 0):
@@ -149,7 +155,7 @@ def executeReadQuery(func, obj):
 
 def init():
     def query(tx):
-        q = "MERGE (servers), (users)"
+        q = "CREATE (servers), (users)"
         tx.run(q)
 
     executeWriteQuery(query)

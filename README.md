@@ -80,7 +80,7 @@ docker load < Redeye.tar
 ```
 
 ### General
-Redeye will listen on: http://0.0.0.0:5000</br>
+Redeye will listen on: http://0.0.0.0:8443</br>
 Default Credentials:
 - username: redeye
 - password: redeye

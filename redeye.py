@@ -248,6 +248,10 @@ def change_server():
 
             elif "servers" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
+                if type == "name":
+                    graph.changeServerNode(id,name=value)
+                elif type == "ip":
+                    graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
@@ -308,6 +312,8 @@ def change_server_section():
 
     dict = request.args.to_dict()
     db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
+    sectionName = db.get_section_name_by_section_id(session["db"],dict["sectionId"])
+    graph.changeServerNode(id,sectionName=sectionName)
 
     return redirect(request.referrer)
 
@@ -1501,7 +1507,7 @@ def load_graph():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"])
+    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV)
 
 """
 =======================================================

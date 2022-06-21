@@ -4,7 +4,7 @@ services:
     container_name: "Redeye"
     image: "redeyeframework/redeye:latest"
     ports:
-      - "5000:5000"
+      - "8443:8443"
     links:
       - "neo4j:neo4j"
     volumes:
