@@ -130,7 +130,7 @@ def server():
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():
@@ -153,8 +153,8 @@ def edit_server():
             files = db.get_files_by_server_id(session["db"], server[0])
             ports = db.get_ports_by_server_id(session["db"], server[0])
             attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
-            return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
-    return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
+            return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
+    return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
 
 @app.route('/servers')
 def servers():
@@ -181,7 +181,7 @@ def servers():
     # {'SectionId': {
     #   servers : {id:{'server':(tuple),'ports':[ports],'users':[users]},..,}
     # , "SectionName2"...}
-    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], data=allData, colors=colors, sections=dbsections)
+    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
 def update_server_attain():
@@ -356,7 +356,7 @@ def logs():
 
     else:
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-    return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
+    return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
 @app.route('/logs2',methods=['GET','POST'])
 def logs2():
@@ -374,7 +374,7 @@ def logs2():
     else:
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
 
-    return render_template('logs2.html', project=session["project"], username=session["username"], profile=session["profile"], objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
+    return render_template('logs2.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
 @app.route('/export_logs', methods=['POST'])
 def export_logs():
@@ -426,7 +426,7 @@ def tasks():
 
     projectId = db.get_projectId_by_projectName(session["project"])
     team_members = db.get_redeye_users_names(projectId)
-    return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
+    return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
 def edit_note():
@@ -644,7 +644,7 @@ def all_users():
     for index,typeName in enumerate(allUserTypes):
         allUserTypes[index] = typeName[0]
 
-    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], data=data, type=6, allUserTypes=allUserTypes)
+    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, type=6, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
 def export_users():
@@ -914,17 +914,17 @@ def load_files():
                     keyword_files[key].append(val)
     
             if keyword_files:
-                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"],root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
 
             else:
                 root, dirs, files,last_dir = helper.share_files(full_path)
-                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
         else:
             root, dirs, files,last_dir = helper.share_files(full_path)
-            return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
+            return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
     else:
         root, dirs, files,last_dir = helper.share_files(full_path)
-        return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
+        return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
 
 @app.route('/add_new_dir', methods=['POST'])
 def add_new_dir():
@@ -962,7 +962,7 @@ def stats():
     achievements = db.get_achievements(session["db"])
     days, time = helper.time_left()
 
-    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vullns_len=len(vullns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
+    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vullns_len=len(vullns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
 
 """
 =======================================================
@@ -995,7 +995,7 @@ def new_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()
     
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
 
 
 @app.route('/attack', methods=['GET', 'POST'])
@@ -1035,7 +1035,7 @@ def attack():
             dic_data[attack] = data.read()
         
 
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
 
 @app.route('/delete_attack')
@@ -1057,7 +1057,7 @@ def delete_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()    
 
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
 
 """
 =======================================================
@@ -1082,7 +1082,7 @@ def pre_report():
     data = db.get_all_report_data(session["db"])
     for image in data:
         images.append(helper.get_image(image[4]))
-    return render_template('pre_report.html', project=session["project"], username=session["username"], profile=session["profile"], data=data, len=len(data), images=images)
+    return render_template('pre_report.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, len=len(data), images=images)
 
 
 @app.route('/add_report', methods=['POST'])
@@ -1214,7 +1214,7 @@ def search():
         for match in matches:
             info[match[4]].append(db.get_data_by_table(session["db"], match[4],match[1]))
 
-    return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"],keyword=keyword,data_len=len(matches),data=info)
+    return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,keyword=keyword,data_len=len(matches),data=info)
 
 """
 =======================================================
@@ -1229,7 +1229,7 @@ def exploits():
     
     exploits = db.get_all_exploits(session["db"])
 
-    return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], exploits=exploits, exploits_len=len(exploits))
+    return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, exploits=exploits, exploits_len=len(exploits))
 
 @app.route('/add_exploit',methods=['POST'])
 def add_exploit():
@@ -1297,7 +1297,7 @@ def management():
     for i,user in enumerate(users):
         users[i] = users[i][:2] + ("*********************",) + users[i][3:] + ("RedTeam",)
         
-    return render_template("management.html", project=session["project"], username=session["username"], profile=session["profile"], users=users)
+    return render_template("management.html", project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, users=users)
 
 
 @app.route('/add_user',methods=['POST'])
@@ -1452,7 +1452,7 @@ def notebook():
 
     # get all notebooks
     notebooks = db.get_all_notebooks(session["db"],session["uid"])
-    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"],notebooks=notebooks)
+    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,notebooks=notebooks)
 
 
 @socketio.on('updateNoteName')
@@ -1685,7 +1685,7 @@ def index(logged=False):
 
         projects.insert(0,lastProject)
 
-    return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], display_name=session["username"], comments=comments)
+    return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, display_name=session["username"], comments=comments)
 
 
 @app.errorhandler(404)
