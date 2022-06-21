@@ -169,12 +169,12 @@
                     <div class="sidebar-btns">
                         <button style="display: none;" onclick="document.cookie='username=';location.href='login'" class="btn btn-primary logout" tabindex="-1">LogOut</button>
                         <form action="{{ url_for('exportAll')}}" method="GET">
-                            <button type="file" class="btn btn-success export" tabindex="-1">Export</button>
+                            <button type="file" class="btn btn-secondary export" tabindex="-1">Export</button>
                         </form>
                         <form enctype="multipart/form-data" action="{{ url_for('importAll')}}" method="POST" id="import-form">
                             <label class="btn btn-success import">
                                 <input onchange='document.getElementById("import-form").submit()' style="display: none" type="file" id="file_upload" name="import-file">
-                                <i style="margin-right: 10px;">Import</i>
+                                <i>Import</i>
                             </label>
                         </form>
                     </div>

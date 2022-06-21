@@ -173,13 +173,13 @@ input:focus {
     display: inline-block;
 }
 
-.sidebar-wrapper .sidebar-brand > a {
+.sidebar-wrapper .sidebar-brand>a {
     font-size: 25px;
     font-weight: bold;
     flex-grow: 1;
 }
 
-.sidebar-wrapper .sidebar-brand > a > .icon {
+.sidebar-wrapper .sidebar-brand>a>.icon {
     width: 40px;
     height: 40px;
     background-size: auto 40px;
@@ -188,7 +188,7 @@ input:focus {
     border-radius: 50%;
     float: left;
     margin: 0px 5px 15px 5px;
-    display:block;
+    display: block;
 }
 
 .sidebar-wrapper .sidebar-brand a #user_name {
@@ -201,7 +201,7 @@ input:focus {
     margin-left: -12px;
 }
 
-.sidebar-wrapper .sidebar-brand > a:hover {
+.sidebar-wrapper .sidebar-brand>a:hover {
     color: #980303 !important;
 }
 
@@ -525,13 +525,31 @@ input:checked+.slider:before {
 
 .sidebar-btns {
     bottom: 10px;
+    width: calc(12% - 20px);
+    text-align: center;
     left: 20px;
     border-radius: 10px;
     position: fixed !important;
 }
 
+.sidebar-btns form {
+    display: inline;
+}
+
 .sidebar-btns button {
-    margin-right: 10px;
+    margin-right: 20px;
+}
+
+.sidebar-btns label {
+    margin: 0px;
+}
+
+.sidebar-btns .import {
+    background-color: #22943c !important;
+}
+
+.sidebar-btns .import i {
+    font-style: normal;
 }
 
 
@@ -721,7 +739,6 @@ input:checked+.slider:before {
     cursor: pointer;
     /* "hand" cursor */
 }
-
 
 
 /*****************************/
