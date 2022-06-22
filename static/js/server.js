@@ -313,7 +313,7 @@ $(document).ready(function() {
 });
 
 
-$('select').on('change', function(e) {
+$('.color-picker').on('change', function(e) {
     var serverId = this.id;
     var color = this.value;
     var colorId = $(this).children(":selected").attr("id");

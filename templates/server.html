@@ -18,7 +18,7 @@
             <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
         {% endfor %}
     </select>
-    <select name="colors" id="{{ server[0] }}">
+    <select class="color-picker" name="colors" id="{{ server[0] }}">
         {% for data in colors %}
             {% if data[2] == color %}
                 <option id="{{ data[0] }}" value="{{ data[2] }}" selected="selected">{{ data[1] }}</option>
