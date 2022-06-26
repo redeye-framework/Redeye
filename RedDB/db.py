@@ -13,6 +13,7 @@ PROJECT_DB = r""
 PROJECT_PATH = r"RedDB/Projects/"
 TABLES_SQL = r"RedDB/tables.sql"
 INIT_SQL = r"RedDB/init.sql"
+INIT_COLORS = r"RedDB/colors.init"
 REGEX = re.compile('|'.join(map(re.escape, ["..","OR","SELECT","FROM","WHERE","LIKE"])))
 
 """
@@ -24,7 +25,6 @@ def serialize_input(*user_input):
     for data in user_input:
         blacklist = REGEX.findall(str(data))
         if blacklist:
-            print("found not allowed chars, will not execute the query ==> ", blacklist)
             return False
     return True
 
@@ -81,6 +81,11 @@ def insert_manual_user(db, type, found_on, username, password, permissions, exec
     create_log(db, "User Added from file", "user_id",
                result, "New User Added", exec)
     return(result)
+
+@check_input
+def edit_user_by_id(db, userId, column, value):
+    query = 'UPDATE users SET "{}"="{}" WHERE id={}'.format(column, value,userId)
+    return get_db_with_actions(db, query)
 
 @check_input
 def update_user(db, id, type, server_id, username, password, permissions, exec):
@@ -240,6 +245,38 @@ def get_server_id_by_user_id(db, user_id):
     query = r'SELECT server_id FROM users WHERE id="{}"'.format(user_id)
     return db_get(db, query)
 
+
+"""
+=======================================================
+                UserTypes Functions
+=======================================================
+"""
+
+@check_input
+def insert_new_user_type(db, typeName):
+    """
+    Add new UserType.
+    """
+    query = ''' INSERT INTO userTypes(typeName)
+              VALUES("{}") '''.format(typeName)
+    result = get_db_with_actions(db, query)
+    return(result)
+
+@check_input
+def get_all_users_types(db):
+    query = r'SELECT typeName FROM userTypes'
+    return db_get(db, query)
+
+@check_input
+def get_user_type(db, typeName):
+    query = r'SELECT id FROM userTypes WHERE typeName="{}"'.format(typeName)
+    return db_get(db, query)
+
+@check_input
+def get_user_type_id(db, typeId):
+    query = r'SELECT typeName FROM userTypes WHERE id="{}"'.format(typeId)
+    return db_get(db, query)
+
 """
 =======================================================
                 Tasks Functions
@@ -307,7 +344,7 @@ def get_task(db, task_id):
 
 @check_input
 def get_all_tasks(db):
-    query = r'SELECT * FROM tasks WHERE relevent=1 and is_private=0'
+    query = r'SELECT * FROM tasks WHERE relevent=1 and is_private=0 order by is_task_done = "1";'
     return db_get(db, query)
 
 @check_input
@@ -403,6 +440,11 @@ def get_all_vullns(db):
     query = r'SELECT * FROM vulns WHERE relevent=1'
     return db_get(db, query)
 
+@check_input
+def edit_vuln_by_id(db, vulnId, column, value):
+    query = 'UPDATE vulns SET "{}"="{}" WHERE id={}'.format(column, value, vulnId)
+    return get_db_with_actions(db, query)
+
 """
 =======================================================
                 Devices Functions
@@ -471,12 +513,24 @@ def get_netdevices_by_id(db, id):
 """
 
 @check_input
-def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id):
+def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id, color_id):
     """
     Add new server to data base.
     """
-    query = ''' INSERT INTO servers(ip, name, vendor, is_access, attain, section_id)
-                  VALUES("{}","{}","{}","{}","{}","{}") '''.format(ip, name, vendor, is_access, attain, section_id)
+    query = ''' INSERT INTO servers(ip, name, vendor, is_access, attain, section_id, color_id)
+                  VALUES("{}","{}","{}","{}","{}","{}", "{}") '''.format(ip, name, vendor, is_access, attain, section_id, color_id)
+
+    result = get_db_with_actions(db, query)
+    create_log(db, "Server Created", "server_id", result, "New Server Added", exec)
+    return(result)
+
+@check_input
+def create_new_single_server(db, name, ip, section_id, colorId):
+    """
+    Add new server to data base.
+    """
+    query = ''' INSERT INTO servers(ip, name, section_id, color_id)
+                  VALUES("%s","%s","%s","%s") ''' % (ip, name, section_id, colorId)
 
     result = get_db_with_actions(db, query)
     create_log(db, "Server Created", "server_id", result, "New Server Added", exec)
@@ -525,6 +579,11 @@ def update_server_details(db, exec, id, ip=False, name=False, is_access=False, a
     return result
 
 @check_input
+def edit_server_by_id(db,serverId,column,value):
+    query = 'UPDATE servers SET "{}"="{}" WHERE id={}'.format(column, value,serverId)
+    return get_db_with_actions(db, query)
+
+@check_input
 def delete_server_by_id(db, server_id, exec):
     """
     Delete server by id of server.
@@ -546,6 +605,13 @@ def create_new_server_section(db,section_name):
     result = get_db_with_actions(db, query)
     return (result)
 
+
+@check_input
+def delete_section_by_id(db, section_id):
+    query = 'DELETE FROM sections WHERE id="{}"'.format(section_id)
+    return get_db_with_actions(db, query)
+
+
 @check_input
 def get_vendor_by_server_id(db, id):
     query = r'SELECT vendor FROM servers WHERE id="{}"'.format(id)
@@ -564,6 +630,10 @@ def get_sections(db):
 @check_input
 def get_section_id_by_server_id(db, server_id):
     query = r'SELECT section_id FROM servers WHERE id="{}"'.format(server_id)
+    return db_get(db, query)[0][0]
+
+def get_section_name_by_section_id(db, section_id):
+    query = r'SELECT name FROM sections WHERE id="{}"'.format(section_id)
     return db_get(db, query)[0][0]
 
 @check_input
@@ -607,13 +677,26 @@ def get_servers_by_section_id(db, section_id):
     return db_get(db, query)
 
 @check_input
+def get_color_by_server_id(db, server_id):
+    query = r'SELECT color_id FROM servers WHERE id="%s"' % (server_id)
+    return db_get(db, query)
+
+@check_input
 def change_section_id(db, id, newName):
     query = '''UPDATE sections
               SET name = "{}" 
               WHERE id = "{}" '''.format(newName,id)
 
     result = get_db_with_actions(db, query)
-    print(result)
+    return(result)
+
+@check_input
+def change_server_color(db, serverId, colorId):
+    query = '''UPDATE servers
+              SET color_id = "%s" 
+              WHERE id = "%s" ''' % (colorId, serverId)
+
+    result = get_db_with_actions(db, query)
     return(result)
 
 """
@@ -791,6 +874,11 @@ def insert_new_port(db, port, state, service, vuln, object_id, object_value):
     result = get_db_with_actions(db, query)
     return(result)
 
+@check_input
+def edit_port_by_id(db, portId, type, value):
+    query = 'UPDATE ports SET "{}"="{}" WHERE id={}'.format(type,value,portId)
+    return get_db_with_actions(db, query)
+
 """
 =======================================================
                 Comments Functions
@@ -803,9 +891,9 @@ def get_all_comments(db):
     return db_get(db, query)
 
 @check_input
-def create_comment(db, data, executor):
-    query = 'INSERT INTO comments(data, executor) VALUES("{}", "{}");'.format(
-        data, executor)
+def create_comment(db, data, executor, date):
+    query = 'INSERT INTO comments(data, executor, date) VALUES("{}", "{}", "{}");'.format(
+        data, executor, date)
     return(get_db_with_actions(db, query))
 
 @check_input
@@ -907,37 +995,25 @@ def update_exploit(db, id, name, data):
 """
 
 @check_input
-def get_redeye_users_names():
-    query = r'SELECT username FROM redeye_users'
-    return db_get(MANAGE_DB, query)
-
-
-@check_input
-def get_redeye_user_by_id(id):
-    query = r'SELECT id,username,profile_pic FROM redeye_users WHERE id="{}"'.format(id)
-    return db_get(MANAGE_DB, query)[0]
-
-
-@check_input
-def get_user_id(username):
-    query = r'SELECT id FROM redeye_users WHERE username="{}"'.format(username)
-    return db_get(MANAGE_DB, query)[0][0]
-
-@check_input
-def get_user_by_id(id):
-    query = r'SELECT username FROM redeye_users WHERE id="{}"'.format(id)
-    return db_get(MANAGE_DB, query)[0][0]
-
-@check_input
-def add_new_user(username, password):
-    query = 'INSERT INTO redeye_users(username, password) VALUES("{}", "{}");'.format(
-        username, password)
+def add_new_user(username, password, projectId):
+    query = 'INSERT INTO redeye_users(username, password, projectId) VALUES("{}", "{}","{}");'.format(
+        username, password,projectId)
     return get_db_with_actions(MANAGE_DB, query)
 
 @check_input
 def update_user_details(obj, data, user_id):
     query = 'UPDATE redeye_users SET "{}"="{}" WHERE id="{}"'.format(obj,data,user_id)
     return get_db_with_actions(MANAGE_DB, query)
+
+@check_input
+def delete_user_by_id(user_id):
+    query = 'DELETE FROM redeye_users WHERE id="{}"'.format(user_id)
+    return get_db_with_actions(MANAGE_DB, query)
+
+@check_input
+def get_profilePicture_by_id(picId):
+    query = r'SELECT profile_pic FROM redeye_users WHERE id="{}"'.format(picId)
+    return db_get(MANAGE_DB, query)
 
 
 """
@@ -954,6 +1030,52 @@ def get_all_notebooks(db, userId):
 def update_notebookName(db,name,id):
     query = 'UPDATE notebooks SET name="{}" WHERE id={}'.format(name, id)
     return get_db_with_actions(db, query)
+
+"""
+=======================================================
+                Colors Functions
+=======================================================
+"""
+
+@check_input
+def add_defult_colors(db):
+
+    with open(INIT_COLORS,'r') as data:
+        colors = data.readlines()
+
+    colors = list(map(str.strip, colors))
+
+    for color in colors:
+        name, hexColor = color.split(':')
+        query = f'INSERT INTO colors(name,hexColor) VALUES("%s","%s");' % (name, hexColor)
+        get_db_with_actions(db, query)
+
+    return
+
+
+@check_input
+def add_color(db, colorName, hexColor):
+    query = ''' INSERT INTO colors(name,hexColor)
+                  VALUES("%s","%s") ''' % (colorName, hexColor)
+
+    result = get_db_with_actions(db, query)
+    return(result)
+
+
+@check_input
+def change_color(db, column, value, colorId):
+    query = 'UPDATE colors SET "%s"="%s" WHERE id=%s' % (column, value, colorId)
+    return get_db_with_actions(db, query)
+
+@check_input
+def get_colors(db):
+    query = r'SELECT * FROM colors'
+    return db_get(db, query)
+
+@check_input
+def get_color_by_id(db, colorId):
+    query = r'SELECT hexColor FROM colors WHERE id="%s"' % (colorId)
+    return db_get(db, query)
 
 """
 =======================================================
@@ -1007,14 +1129,9 @@ def change_relevent_to_zero(db, table_name, object_id):
 """
 
 @check_input
-def get_redeye_users():
-    conn = create_connection(MANAGE_DB)
-    sql = "SELECT * FROM redeye_users"
-    cur = conn.cursor()
-    cur.execute(sql)
-    result = cur.fetchall()
-    conn.close()
-    return(result)
+def get_redeye_users(projectId):
+    query = r'SELECT * FROM redeye_users WHERE projectId="{}"'.format(projectId)
+    return db_get(MANAGE_DB, query)
 
 @check_input
 def get_redeye_user_by_id(id):
@@ -1022,8 +1139,17 @@ def get_redeye_user_by_id(id):
     return db_get(MANAGE_DB, query)[0]
 
 @check_input
-def get_redeye_users_names():
-    query = r'SELECT username FROM redeye_users'
+def change_user_profile_pic(userId,profilePicName):
+    query = '''UPDATE redeye_users
+              SET profile_pic = "{}" 
+              WHERE id = "{}" '''.format(profilePicName, userId)
+
+    result = get_db_with_actions(MANAGE_DB, query)
+    return(result)
+
+@check_input
+def get_redeye_users_names(projectId):
+    query = r'SELECT username FROM redeye_users WHERE projectId = "{}"'.format(projectId)
     return db_get(MANAGE_DB, query)
 
 def get_projects():
@@ -1035,6 +1161,17 @@ def insert_new_project(name, filename):
     result = get_db_with_actions(MANAGE_DB, query)
     return(result)
 
+def get_projectId_by_projectName(projectName):
+    query = r'SELECT id FROM projects WHERE name="{}"'.format(projectName)
+    return db_get(MANAGE_DB, query)[0][0]
+
+def get_projectId_by_DBName(dbName):
+    query = r'SELECT id FROM projects WHERE filename="{}"'.format(dbName)
+    return db_get(MANAGE_DB, query)[0][0]
+
+def get_project_by_id(projectId):
+    query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
+    return db_get(MANAGE_DB, query)[0][0]
 """
 =======================================================
                 DB Functions
@@ -1101,7 +1238,8 @@ def create_tables(db, tables, init):
     try:
         c = conn.cursor()
         c.executescript(tables)
-        c.executescript(init)
+        if db == PROJECT_PATH + "example.db":
+            c.executescript(init)
         print("Tables Created.")
     except Error as e:
         print(e)
@@ -1119,15 +1257,39 @@ def set_project_db(project):
         with open(INIT_SQL, "r") as initialize:
             init = initialize.read()
         create_tables(db, tables, init)
+        add_defult_colors(db)
     
     return db
+
+def merge_new_project_db(projectManager, newProjectId, dbFile):
+
+    # Connect to the imported DB
+    conn = create_connection(MANAGE_DB)
+
+    # Attach the new DB as pdb
+    conn.execute(f"ATTACH '{projectManager}' as pdb")
+    conn.execute("BEGIN")
+
+    # Get the id of the imported project
+    cur = conn.cursor()
+    cur.execute(f'SELECT id FROM pdb.projects WHERE filename="{dbFile}"')
+    pId = cur.fetchall()[0][0]
+
+    # Insert all users from this specific project to current DB
+    for user in conn.execute("SELECT * FROM pdb.redeye_users"):
+        if user[4] == pId:
+            query = f"""INSERT INTO redeye_users(username,password,profile_pic,projectID) VALUES("{user[1]}","{user[2]}","{user[3]}",{newProjectId}) """
+            conn.execute(query)
+    conn.commit()
+    conn.execute("detach database pdb")
+
 """
 =======================================================
                 Init Function
 =======================================================
 """
 
-def init():
+def init(add_init=False):
     if not isdir(PROJECT_PATH):
         makedirs(PROJECT_PATH, exist_ok=True)
 

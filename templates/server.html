@@ -1,210 +1,271 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/context-menu.css') }}">
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}"> {% include 'wrapper.html' %}
 <div class="server-page">
-  <h1 class="head">{{ server[2] }} - <span title="{% if vendor %} {{ vendor }} {% else %} {% endif %}" class="ip"
-      style="background-color: {% if server[4] %}#04a11e {% else %}#933{% endif %};">{{ server[1] }}</span>
-  </h1>
-  <div class="edit head">
-    <a href="{{ url_for('edit_server') }}?ip={{ server[1] }}"><i class="fas fa-edit fa-2x"></i></a>
-    <a style="margin-left: 10px;" href="{{ url_for('servers')}}"><i class="fas fa-arrow-right fa-2x"></i></a>
-  </div>
-  <div class="container-fluid server-content">
-    <div class="row">
-      <div class="col col-sm-4 users">
-        <table class="table table-dark">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Username</th>
-              <th scope="col">Password</th>
-              <th scope="col">Permisions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for user in users %}
-            <tr>
-              <td><a class="hover-user-details" style="padding: 5px 10px;" id="user-{{ user[0] }}"
-                  href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
-              </td>
-              <td>{{ user[3] }}</td>
-              <td>{{ user[4] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="col col-sm-6 vulns">
-        <table class="table table-dark">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Vulnerability</th>
-              <th scope="col">Description</th>
-              <th scope="col">Fix</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for vuln in vulns %}
-            <tr>
-              <td>{{ vuln[1] }}</td>
-              <td>{{ vuln[2] }}</td>
-              <td>{{ vuln[3] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-sm-6 free-text">
-        <h1>Attain</h1>
-        <p style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
-      </div>
-      
-      <div style="overflow:scroll !important;max-height: 400px !important;" class="col col-sm-auto">
-        <select value="None" style="top: -20px;left: 5px;height: 40px;width: 150px;position:absolute; " onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
+    <h1 class="head" style="border-bottom-color: {{ color }};">
+        <span class="editable">{{ server[2] }}</span>
+        <input class="editable-inp" style="display:none;" type="text" size="10" value="{{ server[2] }}" name="name" placeholder="Name">
+        <input class="editable-type" type="hidden" value="name">
+        <input class="editable-obj" type="hidden" value="servers">
+        <input class="editable-id" type="hidden" value="{{ server[0] }}"> - <span class="editable-2 ip" title="{% if vendor %} {{ vendor }} {% else %} {% endif %}">{{ server[1] }}</span>
+        <input class="editable-inp-2" style="display:none;" type="text" size="10" value="{{ server[1] }}" name="ip" placeholder="IP">
+        <input class="editable-type-2" type="hidden" value="ip">
+        <input class="editable-obj-2" type="hidden" value="servers">
+        <input class="editable-id-2" type="hidden" value="{{ server[0] }}">
+    </h1>
+    <select name="section" id="{{ server[0] }}">
+        {% for sec in sections %}
+            <option value="{{ sec[0] }}" {% if section==sec[1] %}selected="selected"{% endif %}>{{ sec[1] }}</option>
+        {% endfor %}
+    </select>
+    <select class="color-picker" name="colors" id="{{ server[0] }}">
+        {% for data in colors %}
+            {% if data[2] == color %}
+                <option id="{{ data[0] }}" value="{{ data[2] }}" selected="selected">{{ data[1] }}</option>
+            {% else %}
+                <option id="{{ data[0] }}" value="{{ data[2] }}">{{ data[1] }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <div class="container-fluid server-content">
+        <div class="row">
+            <div class="col col-sm-4 users">
+                <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr class="cols">
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Permisions</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td><a class="hover-user-details editable" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[2] }}">
+                                    <input class="editable-type" type="hidden" value="username">
+                                    <input class="editable-obj" type="hidden" value="user">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ user[3] }}</span>
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[3] }}">
+                                    <input class="editable-type" type="hidden" value="password">
+                                    <input class="editable-obj" type="hidden" value="user">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ user[1] }}</span>
+                                    <input class="editable-inp" size="5" type="text" value="{{ user[1] }}">
+                                    <input class="editable-type" type="hidden" value="type">
+                                    <input class="editable-obj" type="hidden" value="user">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ user[4] }}</span>
+                                    <input class="editable-inp" size="8" type="text" value="{{ user[4] }}">
+                                    <input class="editable-type" type="hidden" value="permissions">
+                                    <input class="editable-obj" type="hidden" value="user">
+                                    <input class="editable-id" type="hidden" value="{{ user[0] }}">
+                                </td>
+                                <td><a href="{{ url_for('delete_user') }}?id={{ user[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                  style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="item-add">
+                                <input type="hidden" name="server_ip" value="{{ server[1] }}">
+                                <input type="hidden" name="server_id" value="{{ server[0] }}">
+                                <input type="hidden" id="type" name="userType">
+                                <td><input type="text" size="5" name="username" placeholder="User"></td>
+                                <td><input type="text" size="5" name="password" placeholder="Pass"></td>
+                                <td><input type="text" size="5" id="UserTypeForm" name="userTypeForm" placeholder="Type"></td>
+                                <td><input type="text" size="8" name="permissions" placeholder="Perm"></td>
+                                <td><a onclick="submitUsersForm()" href="#"><i class="fas fa-plus"
+                            style="margin: 5px 15px; font-size: 18px;"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="col col-sm-6 vulns">
+                <form action="{{ url_for('create_vuln') }}" method="POST" id="vuln-form">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr class="cols">
+                                <th scope="col">Vulnerability</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Fix</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vuln in vulns %}
+                            <tr>
+                                <td>
+                                    <span class="editable">{{ vuln[1] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[1] }}">
+                                    <input class="editable-type" type="hidden" value="name">
+                                    <input class="editable-obj" type="hidden" value="vuln">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ vuln[2] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[2] }}">
+                                    <input class="editable-type" type="hidden" value="data">
+                                    <input class="editable-obj" type="hidden" value="vuln">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ vuln[3] }}</span>
+                                    <input class="editable-inp" type="text" value="{{ vuln[3] }}">
+                                    <input class="editable-type" type="hidden" value="fix">
+                                    <input class="editable-obj" type="hidden" value="vuln">
+                                    <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
+                                </td>
+                                <td><a href="{{ url_for('delete_vuln') }}?id={{ vuln[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                  style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="item-add">
+                                <input type="hidden" name="server_ip" value="{{ server[1] }}">
+                                <input type="hidden" name="server_id" value="{{ server[0] }}">
+                                <td><input type="text" name="name" placeholder="Name"></td>
+                                <td><input type="text" name="description" placeholder="Description"></td>
+                                <td><input type="text" name="fix" placeholder="Recommendation"></td>
+                                <td><a href="javascript:$('#vuln-form').submit();"><i class="fas fa-plus"
+                            style="margin-left: 15px;"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-sm-6 free-text">
+                <h1>Description</h1>
+                <!-- This was previously called Attain -->
+                <p class="editable" style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
+                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="Description" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Description..">{{ attain }}</textarea>
+                <input class="editable-obj" type="hidden" value="description">
+                <input class="editable-id" type="hidden" value="{{ server[0] }}">
+                <input class="editable-type" type="hidden" value="attain">
+            </div>
+
+            <div class="col col-sm-auto">
+                <select value="None" style="height: 40px;width: 150px; margin: 8px;" onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
           <option value="All" selected disabled hidden>All</option>
           <option>All</option>
           <option>Open</option>
           <option>Filtered</option>
           <option>Closed</option>
         </select>
-      </br>
-      </br>
-        <table id="ports_table" class="table table-dark ports">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Port</th>
-              <th scope="col">Service</th>
-              <th scope="col">State</th>
-              <th scope="col">Vulnerable</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for port in ports %}
-            <tr>
-              <td>{{ port[1] }}</td>
-              <td>{{ port[2] }}</td>
-              <td>{{ port[3] }}</td>
-              <td>{{ port[4] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                <form action="{{ url_for('create_server_port') }}" method="POST" id="port-form">
+                    <table id="ports_table" class="table table-dark ports">
+                        <thead>
+                            <tr class="cols">
+                                <th scope="col">Port</th>
+                                <th scope="col">Service</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Vulnerable</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for port in ports %}
+                            <tr>
+                                <td>
+                                    <span class="editable">{{ port[1] }}</span>
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[1] }}">
+                                    <input class="editable-type" type="hidden" value="port">
+                                    <input class="editable-obj" type="hidden" value="port">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[2] }}</span>
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[2] }}">
+                                    <input class="editable-type" type="hidden" value="service">
+                                    <input class="editable-obj" type="hidden" value="port">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[3] }}</span>
+                                    <input class="editable-inp" size="3" type="text" value="{{ port[3] }}">
+                                    <input class="editable-type" type="hidden" value="state">
+                                    <input class="editable-obj" type="hidden" value="port">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td>
+                                    <span class="editable">{{ port[4] }}</span>
+                                    <input class="editable-inp" size="10" type="text" value="{{ port[4] }}">
+                                    <input class="editable-type" type="hidden" value="vuln">
+                                    <input class="editable-obj" type="hidden" value="port">
+                                    <input class="editable-id" type="hidden" value="{{ port[0] }}">
+                                </td>
+                                <td><a href="{{ url_for('delete_port') }}?id={{ port[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="item-add">
+                                <input name="server_id" type="hidden" value="{{ server[0] }}">
+                                <td><input id="input_port1" name="port" type="text" size="3" placeholder="Port"></td>
+                                <td><input id="input_port2" name="service" type="text" size="3" placeholder="Service"></td>
+                                <td><input id="input_port3" name="state" type="text" size="3" placeholder="State"></td>
+                                <td><input id="input_port4" name="vuln" type="text" size="10" placeholder="Vuln"></td>
+                                <td><a href="javascript:$('#port-form').submit();"><i class="fas fa-plus"
+                      style="margin-left: 15px"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-sm-6">
+                <table style="overflow: scroll;max-height: 300px;" class="table table-dark files">
+                    <thead>
+                        <tr class="cols">
+                            <th scope="col">Filename</th>
+                            <th scope="col">Path</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                        <tr>
+                            <td><a id="{{ file[2] }}" name="{{ file[1] }}" href="{{ url_for('files',file_name=file[2]) }}" download="{{ file[1] }}">{{ file[1] }}</a></td>
+                            <td>{{ file[2] }}</td>
+                            <td>{{ file[3] }}</td>
+                            <td><a href="{{ url_for('delete_file') }}?id={{ file[0] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+                style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="item-add">
+                            <td>
+                                <form enctype="multipart/form-data" action="{{ url_for('upload_file') }}" method="POST">
+                                    <label class="file-upload-label">
+                                        <input type="file" id="file_upload" onchange="form.submit()" name="upload_file" multiple>
+                                        <i class="fas fa-file-upload" style="margin-right: 10px;"></i>Upload file
+                                    </label>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="row">
-      <div class="col col-sm-6">
-        <table style="overflow: scroll;max-height: 300px;" class="table table-dark files">
-          <thead>
-            <tr class="cols">
-              <th scope="col">Filename</th>
-              <th scope="col">Path</th>
-              <th scope="col">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for file in files %}
-            <tr>
-              <td><a id="{{ file[2] }}" name="{{ file[1] }}" href="{{ url_for('files',file_name=file[2]) }}"
-                  download="{{ file[1] }}">{{ file[1] }}</a></td>
-              <td>{{ file[2] }}</td>
-              <td>{{ file[3] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  {% include 'user.html' %}
+    <a class="delete-server floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
+        <i class="fas fa-trash"></i>
+    </a> {% include 'user.html' %}
 </div>
 </div>
 {% include 'wrapper_end.html' %}
-<script src="../static/js/context-menu.js"></script>
-<script src="../static/js/jquery.js"></script>
 <script>
-  $(document).ready(function() {
-    var dict = {};
-  var elms = document.querySelectorAll('[id*="files"]');
-  console.log(elms);
-  for (var i = 0; i < elms.length; i++) {
-    var el = elms[i];
-    dict[el.innerHTML] = el.href;
-    el.addEventListener('contextmenu', openContextMenu, false);
-
-  }
-
-  const menu = new ContextMenu(
-    {
-      'theme': 'default',
-      'items': [
-        { 'icon': 'file', 'name': 'View File', action: () => window.location = dict["1.txt"] },
-        //$(document.querySelectorAll('[id*="files"]'))
-        { 'icon': 'download', 'name': 'Download File', action: () => download(el.href, el.name) },
-      ]
-    }
-  );
-
-  function openContextMenu(evt) {
-    evt.preventDefault();
-    const time = menu.isOpen() ? 100 : 0;
-
-    menu.hide();
-    setTimeout(() => { menu.show(evt.pageX, evt.pageY) }, time);
-    document.addEventListener('click', hideContextMenu, false);
-  }
-
-  function hideContextMenu(evt) {
-    menu.hide();
-    document.removeEventListener('click', hideContextMenu);
-  }
-  
-    function start_context() {
-      console.log("here")
-      var el = window.event.srcElement;
-      location.href = el.href;
-      
-    }
-    //$(document.querySelectorAll('[id*="files"]')).click(start_context);
-    //$(document.querySelectorAll('[id*="files"]')).click(start_context);
-
-
-
-  function download(url, filename) {
-    fetch(url).then(function (t) {
-      return t.blob().then((b) => {
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(b);
-        a.setAttribute("download", filename);
-        a.click();
-      }
-      );
-    });
-  }
-});
+    key_sc($(".delete-server-btn"), 'd');
 </script>
-<script>
-  function sort_ports(){
-    var state = document.getElementById('state').value;
-    var table = document.getElementById('ports_table');
-    
-    for(var i=1;i <= table.rows.length; ++i){
-      if(table.rows[i].style.display == "none"){
-            table.rows[i].style.display = "";
-            
-      }
-      var port_state = table.rows[i].cells[2].innerHTML;
-      if(state.toLowerCase() != port_state.toLowerCase() && state != "All"){
-            table.rows[i].style.display = 'none';
-        }
-      else if(state == "All"){
-        for(var i=1;i <= table.rows.length; ++i){
-            table.rows[i].style.display = "";
-        }
-      }
-    }
-  }
-</script>
+<script src="{{ url_for('static', filename='js/server.js') }}"></script>
 {% include 'footer.html' %}

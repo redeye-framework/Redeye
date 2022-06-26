@@ -1,17 +1,16 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/files.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/dropzone/dropzone.css') }}">
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/dropzone/dropzone.css') }}"> {% include 'wrapper.html' %}
 <ul class='custom-menu'>
-    <li data-action = "Rename">Rename</li>
-    <li data-action = "Delete">Delete</li>
-    <li  data-action = "Download">Download</li>
+    <li data-action="Rename">Rename</li>
+    <li data-action="Delete">Delete</li>
+    <li data-action="Download">Download</li>
 </ul>
-<a href="{{ url_for('load_files')}}?dir_name={{ last_dir }}"><i style="float: left" class="fas fa-arrow-left fa-2x"></i></a>
+<a href="{{ url_for('load_files')}}?dir_name={{ last_dir }}" style="z-index: 999; float: left; padding: 15px;"><i class="fas fa-arrow-left fa-2x"></i></a>
 <div class="files">
     <form action="{{ url_for('load_files') }}" method="POST">
         <div class="container">
-            <input name="key_word" type="text" placeholder="Search...">
+            <input class="find-file-btn" name="key_word" type="text" placeholder="Search...">
             <div class="search"></div>
         </div>
     </form>
@@ -20,48 +19,46 @@
             <div class="col-lg-12">
                 <h1>{{ root }}</h1>
                 <p>
-                    <script>console.log("{{ files_found }}")</script>
                     {% if "None" != files_found %}
-                        <span style="font-weight: bold;font-size: 20px">Files Found: {{ files_found }}</span>
-                    {% endif %}
+                    <span style="font-weight: bold;font-size: 20px">Files Found: {{ files_found }}</span> {% endif %}
                     <form action="{{ url_for('load_files') }}" method="GET">
                         {% for key,val in dirs.items() %}
-                            <button name="dir_name" value="{{ val[0] }}" class="btn btn-squared-default btn-dark file">
+                        <button name="dir_name" value="{{ val[0] }}" class="btn btn-squared-default btn-dark file">
                                 <i class="folder-icons"></i>
                                 <br>
                                 <br>
                             <span> {{ key }} </span>
-                            </button>
-                        {% endfor %}
+                            </button> {% endfor %}
                     </form>
                     <form action="{{ url_for('files') }}" method="GET">
                         {% for key,val in files.items() %}
-                            <button name="file_name" value="{{ val[0] }}" class="btn btn-squared-default btn-dark file">
-                                {% if ".txt" in key %}
+                        <button name="file_name" value="{{ val[0] }}" class="btn btn-squared-default btn-dark file">
+                                {% if ".txt" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_txt.png);" class="file-icons"></i>
-                                {% elif ".exe" in key %}
+                                {% elif ".exe" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_exe.png);" class="file-icons"></i>
-                                {% elif ".ppt" in key %}
+                                {% elif ".ppt" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_ppt.png);" class="file-icons"></i>
-                                {% elif ".xls" in key %}
+                                {% elif ".xls" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_xls.png);" class="file-icons"></i>
-                                {% elif ".doc" in key %}
+                                {% elif ".doc" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_doc.png);" class="file-icons"></i>
-                                {% elif ".jpg" in key %}
+                                {% elif ".jpg" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_jpg.png);" class="file-icons"></i>
-                                {% elif ".png" in key %}
+                                {% elif ".png" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_png.png);" class="file-icons"></i>
+                                {% else %}
+                                <i style="background-image: url(/static/pics/file_default.png);" class="file-icons"></i>
                                 {% endif %}
                                 <br>
                             <span> {{ key }} </span>
-                            </button>
-                        {% endfor %}
+                            </button> {% endfor %}
                     </form>
                     <a id="new-folder" name="new-folder" class="btn btn-squared-default btn-dark file" disabled>
                         <i class="folder-icons"></i><br><br>
-                        <form action="{{ url_for('add_new_dir') }}" method="POST"> 
+                        <form action="{{ url_for('add_new_dir') }}" method="POST">
                             <div class="folder-name-input">
-                                <input type="text" name="dir_name" id="myInput" class="main-file-input">
+                                <input type="text" name="dir_name" id="myInput" class="main-file-input" required>
                                 <button><i class="fa fa-plus"></i></button>
                             </div>
                         </form>
@@ -88,6 +85,12 @@
     {% endif %}
 </div>
 
+{% include 'wrapper_end.html' %}
 <script src="{{ url_for('static', filename='js/lib/dropzone/dropzone.js') }}"></script>
-
+<script>
+    key_sc($(".main-file-input"), 'n');
+    key_sc($(".dropzone"), 'u');
+    key_sc($(".find-file-btn"), 'f');
+</script>
+<script src="{{ url_for('static', filename='js/files.js') }}"></script>
 {% include 'footer.html' %}

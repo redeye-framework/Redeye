@@ -1,78 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<title>Redeye login Page</title>
-	<link rel="icon" href="{{ url_for('static', filename='pics/redeye.png') }}" type="image/x-icon">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
-	<!--===============================================================================================-->
+    <title>Redeye login Page</title>
+    <link rel="icon" href="{{ url_for('static', filename='pics/redeye.png') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+    <!--===============================================================================================-->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}">
 </head>
+
 <body>
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100 p-t-50 p-b-90">
-				<form class="login100-form validate-form flex-sb flex-w" action="login" method="POST">
-					<span class="login100-form-title p-b-51">
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100 p-t-50 p-b-90">
+                <form class="login100-form validate-form flex-sb flex-w" action="login" method="POST">
+                    <span class="login100-form-title p-b-51">
 						Redeye Login
 					</span>
 
 
-					<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
-						<input class="input100" type="text" name="username" placeholder="Username">
-						<span class="focus-input100"></span>
-					</div>
-					<div style="top:-20px" class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-						<input class="input100" type="password" name="password" placeholder="Password">
-						<span class="focus-input100"></span>
-					</div>
-					<div style="top:-30px" class="wrap-input100 validate-input m-b-16">
-						<select class="input100" name="project" id="#">
+                    <div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
+                        <input class="input100" type="text" name="username" placeholder="Username">
+                        <span class="focus-input100"></span>
+                    </div>
+                    <div style="top:-20px" class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
+                        <input class="input100" type="password" name="password" placeholder="Password">
+                        <span class="focus-input100"></span>
+                    </div>
+                    <div style="top:-30px" class="wrap-input100 validate-input m-b-16">
+                        <select class="input100" name="project" id="#">
 							{% for project in projects %}
 							<option value="{{ project[1] }}">{{ project[2] }}</option>
 							{% endfor %}
 						</select>
-						<span class="focus-input100"></span>
-					</div>
+                        <span class="focus-input100"></span>
+                    </div>
 
-					<div class="container-login100-form-btn m-t-17">
-						<button class="login100-form-btn">
+                    <div class="container-login100-form-btn m-t-17">
+                        <button class="login100-form-btn">
 							Login
 						</button>
-					</div>
+                    </div>
 
-				</form>
-			</div>
-		</div>
-		{% if show_create_project %}
-		<a href="javascript:newProject()" class="new-project-btn"><i class="fas fa-plus"></i></a>
-		<form id="new-project-form" action="{{ url_for('new_project') }}" method="POST" style="display:none">
-			<input type="text" value="" name="name" id="project-name">
-			<input type="text" value="" name="dbname" id="project-dbname">
-		</form>
-		{% endif %}
-	</div>
-	<script>
-	{% if show_create_project %}
-		function newProject() {
-			if (window.confirm("Would you like to create a new project?")) {
-				var name = prompt("Enter project/network name: "); 
-				var dbname = prompt("Enter db name (name.db): ");
-				if (window.confirm("Would you like to create a new project - " + name + " with the db - " + dbname)) {
-					document.getElementById("project-name").value = name;
-					document.getElementById("project-dbname").value = dbname;
-					document.getElementById("new-project-form").submit();
-				}
-			}
-		}
-	{% endif %}
-	{% if msg %}
-	alert("{{ msg }}")
-	{% endif %}
-	</script>
+                </form>
+            </div>
+        </div>
+        {% if show_create_project %}
+        <a href="javascript:newProject()" class="new-project-btn"><i class="fas fa-plus"></i></a>
+        <form id="new-project-form" action="{{ url_for('new_project') }}" method="POST" style="display:none">
+            <input type="text" value="" name="name" id="project-name">
+            <input type="text" value="" name="dbname" id="project-dbname">
+            <input type="text" value="" name="username" id="project-user">
+            <input type="text" value="" name="password" id="project-password">
+        </form>
+        {% endif %}
+    </div>
+
+    {% if show_create_project %}
+    <script>
+        function newProject() {
+            if (window.confirm("Would you like to create a new project?")) {
+                var name = prompt("Enter project/network name: ");
+                var dbname = prompt("Enter db name (name.db): ");
+                var adminUser = prompt("Enter Admin username: ");
+                var adminPassword = prompt("Enter Admin password: ");
+                if (window.confirm("Would you like to create a new project - " + name + " with the db - " + dbname)) {
+                    document.getElementById("project-name").value = name;
+                    document.getElementById("project-dbname").value = dbname;
+                    document.getElementById("project-user").value = adminUser;
+                    document.getElementById("project-password").value = adminPassword;
+                    document.getElementById("new-project-form").submit();
+                }
+            }
+        }
+    </script>
+    {% endif %} {% if msg %}
+    <script>
+        alert("{{ msg }}")
+    </script>
+    {% endif %}
+
 </body>
+
 </html>

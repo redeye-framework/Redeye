@@ -1,206 +1,202 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/attack.css') }}">
-{% include 'wrapper.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/attack.css') }}"> {% include 'wrapper.html' %}
 <div class="vectors-box">
-	<div class="tabs">
-		{% for i in range(attacks_len) %}
-		<button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}"
-			onclick="changeCurrentTab(this)">{{ attacks[i] }}</button>
-		{% endfor %}
-		<form action="{{ url_for('new_attack') }}">
-			<button class="tablinks"><i class="fas fa-plus"></i></button>
-		</form>
-	</div>
+    <div class="tabs">
+        {% for i in range(attacks_len) %}
+        <button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}" onclick="changeCurrentTab(this)">{{ attacks[i] }}</button> {% endfor %}
+        <form action="{{ url_for('new_attack') }}">
+            <button class="tablinks"><i class="fas fa-plus"></i></button>
+        </form>
+    </div>
 
-	<div id="chart_container">
-		<div class="flowchart-example-container" id="flowchartworkspace">
+    <div id="chart_container">
+        <div class="flowchart-example-container" id="flowchartworkspace">
 
-		</div>
-	</div>
-	<div class="edit">
-		<div class="edit-operator">
-			<form action="{{ url_for('attack') }}" method="POST" id="attack-form">
-				<input type="hidden" value="" name="tab" id="tab-input">
-				<input type="hidden" value="" name="json" id="json-input">
-				<div id="attack_properties">
-					<input id="attack-current-name" type="hidden" name="current-attack-name" value="">
-					<input id="last-attack-name-input" type="hidden" value="" name="last-attack-name">
-					<input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value="">
-				</div>
-				<div id="operator_properties" style="display: none;">
-					<input class="input title-input" id="operator_title" type="text" placeholder="Title">
-					<a href="javascript:deleteOperator()" class="delete_selected_button trash-object">
-						<i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
-					</a>
-					<input class="input" id="operator_input0" type="text" placeholder="Input 1">
-					<input class="input" id="operator_output0" type="text" placeholder="Output 1"><br>
-					<input class="input" id="operator_input1" type="text" placeholder="Input 2">
-					<input class="input" id="operator_output1" type="text" placeholder="Output 2">
-				</div>
-				<div id="link_properties" style="display: none;">
-					<label for="link_color">Link's color: </label><input id="link_color" type="color" style="margin-left: 10px;width: 80px;">
-					<a href="javascript:deleteLink()" class="delete_selected_button trash-object">
-						<i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
-					</a>
-				</div>
-			</form>
-			<a class="save floating-btn" id="save_local" title="Save Attack"><i class="fas fa-save"></i></a>
-			<a class="redo floating-btn" id="clear_screen" title="Clean Page"><i class="fas fa-redo"></i></a>
-		</div>
-		<div class="operators">
-			<div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator"
-				data-nb-inputs="0" data-nb-outputs="1">
-				<div class="flowchart-operator-title ui-draggable-handle">1 Output</div>
-				<div class="flowchart-operator-inputs-outputs">
-					<div class="flowchart-operator-inputs"></div>
-					<div class="flowchart-operator-outputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Output 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator"
-				data-nb-inputs="1" data-nb-outputs="0">
-				<div class="flowchart-operator-title ui-draggable-handle">1 input</div>
-				<div class="flowchart-operator-inputs-outputs">
-					<div class="flowchart-operator-inputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Input 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-					<div class="flowchart-operator-outputs"></div>
-				</div>
-			</div>
-			<div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator"
-				data-nb-inputs="1" data-nb-outputs="1">
-				<div class="flowchart-operator-title ui-draggable-handle">1 input &amp; 1 output</div>
-				<div class="flowchart-operator-inputs-outputs">
-					<div class="flowchart-operator-inputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Input 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-					<div class="flowchart-operator-outputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Output 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator"
-				data-nb-inputs="2" data-nb-outputs="2">
-				<div class="flowchart-operator-title ui-draggable-handle">2 in &amp; 2 out</div>
-				<div class="flowchart-operator-inputs-outputs">
-					<div class="flowchart-operator-inputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Input 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Input 2</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-					<div class="flowchart-operator-outputs">
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Output 1</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-						<div class="flowchart-operator-connector-set">
-							<div class="flowchart-operator-connector">
-								<div class="flowchart-operator-connector-label">Output 2</div>
-								<div class="flowchart-operator-connector-arrow"></div>
-								<div class="flowchart-operator-connector-small-arrow"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<form action="{{ url_for('delete_attack')}}" id="delete-attack-form">
-				<input type="hidden" name="name" id="name-delete-attack">
-			</form>
-			<a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
+        </div>
+    </div>
+    <div class="edit">
+        <div class="edit-operator">
+            <form action="{{ url_for('attack') }}" method="POST" id="attack-form">
+                <input type="hidden" value="" name="tab" id="tab-input">
+                <input type="hidden" value="" name="json" id="json-input">
+                <div id="attack_properties">
+                    <input id="attack-current-name" type="hidden" name="current-attack-name" value="">
+                    <input id="last-attack-name-input" type="hidden" value="" name="last-attack-name">
+                    <input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value="">
+                </div>
+                <div id="operator_properties" style="display: none;">
+                    <input class="input title-input" id="operator_title" type="text" placeholder="Title">
+                    <a href="javascript:deleteOperator()" class="delete_selected_button trash-object">
+                        <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+                    </a>
+                    <input class="input" id="operator_input0" type="text" placeholder="Input 1">
+                    <input class="input" id="operator_output0" type="text" placeholder="Output 1"><br>
+                    <input class="input" id="operator_input1" type="text" placeholder="Input 2">
+                    <input class="input" id="operator_output1" type="text" placeholder="Output 2">
+                </div>
+                <div id="link_properties" style="display: none;">
+                    <label for="link_color">Link's color: </label><input id="link_color" type="color" style="margin-left: 10px;width: 80px;">
+                    <a href="javascript:deleteLink()" class="delete_selected_button trash-object">
+                        <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+                    </a>
+                </div>
+            </form>
+            <a class="save floating-btn" id="save_local" title="Save Attack"><i class="fas fa-save"></i></a>
+            <a class="redo floating-btn" id="clear_screen" title="Clean Page"><i class="fas fa-redo"></i></a>
+        </div>
+        <div class="operators">
+            <div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
+                <div class="flowchart-operator-title ui-draggable-handle">1 Output</div>
+                <div class="flowchart-operator-inputs-outputs">
+                    <div class="flowchart-operator-inputs"></div>
+                    <div class="flowchart-operator-outputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Output 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
+                <div class="flowchart-operator-title ui-draggable-handle">1 input</div>
+                <div class="flowchart-operator-inputs-outputs">
+                    <div class="flowchart-operator-inputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Input 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flowchart-operator-outputs"></div>
+                </div>
+            </div>
+            <div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator" data-nb-inputs="1" data-nb-outputs="1">
+                <div class="flowchart-operator-title ui-draggable-handle">1 input &amp; 1 output</div>
+                <div class="flowchart-operator-inputs-outputs">
+                    <div class="flowchart-operator-inputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Input 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flowchart-operator-outputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Output 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator" data-nb-inputs="2" data-nb-outputs="2">
+                <div class="flowchart-operator-title ui-draggable-handle">2 in &amp; 2 out</div>
+                <div class="flowchart-operator-inputs-outputs">
+                    <div class="flowchart-operator-inputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Input 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Input 2</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flowchart-operator-outputs">
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Output 1</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                        <div class="flowchart-operator-connector-set">
+                            <div class="flowchart-operator-connector">
+                                <div class="flowchart-operator-connector-label">Output 2</div>
+                                <div class="flowchart-operator-connector-arrow"></div>
+                                <div class="flowchart-operator-connector-small-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form action="{{ url_for('delete_attack')}}" id="delete-attack-form">
+                <input type="hidden" name="name" id="name-delete-attack">
+            </form>
+            <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
 					class="fas fa-trash"></i></a>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 <div class="stats-box">
-	<div class="section severity">
-		<h6>Severity</h6>
-		<div class="onetoten">
-			<input type="hidden" value="0">
-			<div id="d1" class="dot"></div>
-			<div id="d2" class="dot"></div>
-			<div id="d3" class="dot"></div>
-			<div id="d4" class="dot"></div>
-			<div id="d5" class="dot"></div>
-			<div id="d6" class="dot"></div>
-			<div id="d7" class="dot"></div>
-			<div id="d8" class="dot"></div>
-			<div id="d9" class="dot"></div>
-			<div id="d10" class="dot"></div>
-		</div>
-	</div>
-	<div class="section plausibility">
-		<h6>plausibility</h6>
-		<div class="onetoten">
-			<input type="hidden" value="0">
-			<div id="d1" class="dot"></div>
-			<div id="d2" class="dot"></div>
-			<div id="d3" class="dot"></div>
-			<div id="d4" class="dot"></div>
-			<div id="d5" class="dot"></div>
-			<div id="d6" class="dot"></div>
-			<div id="d7" class="dot"></div>
-			<div id="d8" class="dot"></div>
-			<div id="d9" class="dot"></div>
-			<div id="d10" class="dot"></div>
-		</div>
-	</div>
-	<div class="section risk">
-		<h6>Risk</h6>
-		<div class="onetoten">
-			<input type="hidden" value="0">
-			<div id="d1" class="dot"></div>
-			<div id="d2" class="dot"></div>
-			<div id="d3" class="dot"></div>
-			<div id="d4" class="dot"></div>
-			<div id="d5" class="dot"></div>
-			<div id="d6" class="dot"></div>
-			<div id="d7" class="dot"></div>
-			<div id="d8" class="dot"></div>
-			<div id="d9" class="dot"></div>
-			<div id="d10" class="dot"></div>
-		</div>
-	</div>
+    <div class="section severity">
+        <h6>Severity</h6>
+        <div class="onetoten">
+            <input type="hidden" value="0">
+            <div id="d1" class="dot"></div>
+            <div id="d2" class="dot"></div>
+            <div id="d3" class="dot"></div>
+            <div id="d4" class="dot"></div>
+            <div id="d5" class="dot"></div>
+            <div id="d6" class="dot"></div>
+            <div id="d7" class="dot"></div>
+            <div id="d8" class="dot"></div>
+            <div id="d9" class="dot"></div>
+            <div id="d10" class="dot"></div>
+        </div>
+    </div>
+    <div class="section plausibility">
+        <h6>plausibility</h6>
+        <div class="onetoten">
+            <input type="hidden" value="0">
+            <div id="d1" class="dot"></div>
+            <div id="d2" class="dot"></div>
+            <div id="d3" class="dot"></div>
+            <div id="d4" class="dot"></div>
+            <div id="d5" class="dot"></div>
+            <div id="d6" class="dot"></div>
+            <div id="d7" class="dot"></div>
+            <div id="d8" class="dot"></div>
+            <div id="d9" class="dot"></div>
+            <div id="d10" class="dot"></div>
+        </div>
+    </div>
+    <div class="section risk">
+        <h6>Risk</h6>
+        <div class="onetoten">
+            <input type="hidden" value="0">
+            <div id="d1" class="dot"></div>
+            <div id="d2" class="dot"></div>
+            <div id="d3" class="dot"></div>
+            <div id="d4" class="dot"></div>
+            <div id="d5" class="dot"></div>
+            <div id="d6" class="dot"></div>
+            <div id="d7" class="dot"></div>
+            <div id="d8" class="dot"></div>
+            <div id="d9" class="dot"></div>
+            <div id="d10" class="dot"></div>
+        </div>
+    </div>
 </div>
 {% include 'wrapper_end.html' %}
-	<script>var currentTab = "{{tab}}"; var changed = false;</script>
-    <script src="{{ url_for('static', filename='js/attack.js') }}"></script>
+<script>
+    var currentTab = "{{tab}}";
+    var changed = false;
+</script>
+<script src="{{ url_for('static', filename='js/attack.js') }}"></script>
 {% include 'footer.html' %}

@@ -1,54 +1,156 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}"> {% include 'wrapper.html' %}
-{% for section in data %}
-<div class="container-fluid section">
-    <h4 class="section-name">{{ data[section]['name'] }}</h4>
-    <input class="section-name-input" type="text" value="{{ section }}">
-    <div class="row">
-        {% for server in data[section]['info'] %}
-        <a href="{{ url_for('server') }}?ip={{ data[section]['info'][server]['srvDetails'][1] }}">
-            <div class="server-box {% if not data[section]['info'][server]['srvDetails'][4] %}server-box-no-access{% endif %}">
-                <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
-                <div class="content">
-                    <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
-                        <script>
-                            var ports = "{{ data[section]['info'][server]['ports'][0][2] if data[section]['info'][server]['ports'][0] }}";
+<div class="section-hide-all-btn"><i class="fas fa-angle-down"></i></div>
+<div class="sections">
+    {% for section in data %}
+    <div class="container-fluid section">
+        <h4 class="section-name">
+            {% if not data[section]['info'] %}
+            <a href="#" id="{{ section }}" class="section-delete-btn">
+                <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+            </a>
+            {% endif %}{{ data[section]['name'] }}</h4>
+        <input class="section-name-input" type="text" value="{{ section }}">
+        <div class="section-hide-btn"><i class="fas fa-angle-down"></i></div>
+        <div class="row">
+            {% for server in data[section]['info'] %}
+            <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}" tabindex="1">
+                <div class="server-box" style="border-top: 4px solid {{ data[section]['info'][server]['color'] }}">
+                    <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
+                    <div class="content">
+                        <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
+                            <script>
+                                var ports = "{{ data[section]['info'][server]['ports'][0][2] if data[section]['info'][server]['ports'][0] }}";
 
-                            if (ports.length > 0) {
-                                document.write(ports);
-                            } else {
-                                document.write("None");
-                            }
-                        </script>
+                                if (ports.length > 0) {
+                                    document.write(ports);
+                                } else {
+                                    document.write("None");
+                                }
+                            </script>
+                        </div>
+                        <div class="user"><i class="fas fa-user"></i> {{ data[section]['info'][server]['users'][0][2] if data[section]['info'][server]['users'][0] }}</div>
+                        <div class="vulnerability"><i class="fas fa-bullseye"></i> {% if (data[section]['info'][server]['srvDetails'][4] and data[section]['info'][server]['ports'][0]) %}Yes{% else %}No{% endif %}</div>
                     </div>
-                    <div class="user"><i class="fas fa-user"></i> {{ data[section]['info'][server]['users'][0][2] if data[section]['info'][server]['users'][0] }}</div>
-                    <div class="vulnerability"><i class="fas fa-bullseye"></i> {% if (data[section]['info'][server]['srvDetails'][4] and data[section]['info'][server]['ports'][0]) %}Yes{% else %}No{% endif %}</div>
+                    <div class="ip"><i class="fas fa-globe-americas"></i> {{ data[section]['info'][server]['srvDetails'][1] }}</div>
                 </div>
-                <div class="ip"><i class="fas fa-globe-americas"></i> {{ data[section]['info'][server]['srvDetails'][1] }}</div>
-            </div>
-        </a>
-        {% endfor %}
-        <a href="{{ url_for('edit_server') }}?section={{ data[section]['name'] }}">
-            <div class="server-box" style="border-top: 4px solid #ccc;">
-                <div class="new">
-                    <i class="fas fa-plus"></i>
+            </a>
+            {% endfor %}
+            <a href="javascript:createNewServer('{{ section }}');" tabindex="-1">
+                <div class="server-box" style="border-top: 4px solid #ccc;">
+                    <div class="new">
+                        <i class="fas fa-plus add-server-btn"></i>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+
+        </div>
+        <hr><br>
     </div>
-</div>
-<br><br>
-<hr><br> 
-{% endfor %}
-<div class="section">
-    <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
-        <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
+    {% endfor %}
+    <div class="section">
+        <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
+            <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
+        </form>
+    </div>
+    <form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
+        <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
+        <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
     </form>
 </div>
-<form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
-    <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
-    <label class="btn btn-primary" for="file"><i class="fa fa-upload"></i></label>
-</form>
+<a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status" tabindex="-1">
+    <i class="fas fa-edit"></i> Edit Labels
+</a>
+<div class="create-server-box">
+    <h2>Create New Server</h2><br>
+    <form action="{{ url_for('add_new_server')}}" method="post" id="add_server_form">
+        <table style="width: 100%;" id="server-table" class="table table-dark table-striped">
+            <tr>
+                <td>
+                    <span>Server Name</span>
+
+                </td>
+                <td>
+                    <input id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name"></input>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Server IP</span>
+                </td>
+                <td>
+                    <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Section</span>
+                </td>
+                <td>
+                    <select id="newServerSection" class="server-selector" name="section-id">
+                        <option selected disabled hidden>Select an Option</option>
+                        {% for sec in sections %}
+                            <option value="{{ sec[0] }}">{{ sec[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Label</span>
+                </td>
+                <td>
+                    <select id="newServerLabel" class="server-selector" name="color-id">
+                        <option selected disabled hidden>Select an Option</option>
+                        {% for data in colors %}
+                            <option value="{{ data[0] }}">{{ data[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <a class="create-server floating-btn" href="#" onclick="document.getElementById('add_server_form').submit();" title="Create New Server">
+        <i class="fas fa-edit"></i><span> Create </span>
+    </a>
+</div>
+<div class="edit-server-status-box">
+    <h2>Edit server status</h2><br>
+    <table style="width: 100%;" id="labels-table" class="table table-dark table-striped">
+        {% for color in colors %}
+        <tr>
+            <td class="status">
+                <span class="editable">{{ color[1] }}</span>
+                <input class="editable-inp" type="text" size="4" value="name" style="display: none;">
+            </td>
+            <td class="status-color">
+                <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:50px; height:30px;">
+            </td>
+            <td>
+                <a href="#" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <form id="color_form" action="{{ url_for('add_color') }}" method="POST">
+            <tr>
+                <td class="status-add"><input name="colorName" type="text" size="4"></td>
+                <td class="status-color-add"><input name="hexColor" type="color" value="#cccccc" style="width:50px; height:30px;" </td>
+                    <td onclick="document.getElementById('color_form').submit();" class="add"><i class="fas fa-plus"></i></td>
+            </tr>
+        </form>
+    </table>
+
+</div>
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".section-hide-all-btn"), 'm');
+    key_sc($(".new-section"), 'N');
+    key_sc($(".add-server-btn")[0], 'n');
+    key_sc($(".edit-server-status"), 'e');
+    key_sc($(".import-btn"), 'u');
+</script>
 <script src="{{ url_for('static', filename='js/servers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/server.js') }}"></script>
 {% include 'footer.html' %}

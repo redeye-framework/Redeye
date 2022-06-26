@@ -1,0 +1,182 @@
+
+
+.up {
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    padding-top: 40px;
+    z-index: 500;
+}
+
+.right {
+    position: absolute;
+    right: 0;
+    bottom: 70px;
+    z-index: 200;
+}
+
+.left {
+    position: absolute;
+    z-index: 200;
+    padding-left: 25px;
+    left: 0px;
+    top: 25px;
+}
+
+.down {
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    z-index: 200;
+}
+
+.hidden {
+    display: none;
+}
+
+.darken {
+    filter: brightness(60%);
+}
+
+.modern-input {
+    border-radius: 20px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    text-align: left;
+    width: 500px;
+    height: 50px;
+    transform: translateX(-50%);
+    font-size: 24px;
+    padding: 15px;
+    box-shadow: 0 0 10px black;
+    transition-duration: 0.3s;
+}
+
+.modern-input:focus {
+    border: 0.5px solid #ccc;
+    width: 600px;
+}
+
+.submit-graph {
+    background-color: #3f6ad8;
+}
+
+.stabilize-btn {
+    background-color: #3f6ad8;
+}
+
+.floating-btns {
+    padding: 20px;
+    display: grid;
+}
+
+.floating-btn {
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+.floating-btn:hover {
+    filter: brightness(110%);
+    text-decoration: none;
+}
+
+.floating-btn>.fa-trash {
+    color: #eef;
+}
+
+#Graph {
+    height: 100vh;
+    width: 100%;
+    z-index: 100;
+}
+
+#Graph:focus {
+    border: none;
+}
+
+.notifications {
+    display: none;
+}
+
+.left-section {
+    width: 500px;
+    height: auto;
+    background-color: #31353D;
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px black;
+}
+
+.left-section .title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #ccd;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.left-section .commands {
+    display: grid;
+}
+
+.left-section .command {
+    color: #ccd;
+    padding: 5px 15px;
+    font-size: 20px;
+    text-align: center;
+    background-color: rgb(63 69 79);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+}
+
+.left-section .command:hover {
+    filter: brightness(110%);
+}
+
+.left-section .options .opt {
+    display: inline-block;
+    color: #ccd;
+    padding: 5px 10px;
+    font-size: 20px;
+    background-color: rgb(63 69 79);
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+    transition-duration: 0.2s;
+}
+
+.left-section .options .opt:hover {
+    filter: brightness(110%);
+}
+
+.left-section .options .active {
+    border: 1px solid #a8adb9;
+    background-color: #3f6ad8;
+}
+
+.loader {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    font-size: 32px;
+    text-align: center;
+    display: none;
+    color: rgb(222, 222, 233);
+}
+
+.loader .gif {
+    font-size: 62px;
+}

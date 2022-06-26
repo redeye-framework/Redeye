@@ -1,29 +1,33 @@
 from re import M
 import eventlet
 eventlet.monkey_patch()
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, flash, jsonify, Markup
+from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory
 from flask_jsglue import JSGlue
 import jwt
-import sqlite3
-from os import walk, path, listdir, sep, makedirs, remove
+import sys
+from os import  path, listdir, makedirs
 import os
 from RedDB import db
 from Parse import Parse as parse
 from Report import report_gen as report
 import Redhelper as helper
 import collections
-from werkzeug.utils import secure_filename
 import csv
 from datetime import datetime, timedelta
 from uuid import uuid4
-import base64
-import json
 from collections import defaultdict
 import urllib.parse
 from flask_socketio import SocketIO, emit
 import socketio as client_socket
-from threading import Thread, Lock
-from urllib.parse import unquote
+from threading import Lock
+from shutil import copy as copyFile
+from shutil import copytree as copyDir
+from shutil import rmtree as rmDir
+import hashlib
+from fire import Fire
+from glob import glob
+import zipfile
+import graph
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -46,18 +50,28 @@ projects = []
 
 # CONSTS
 IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less permissive) set this to False.
+IS_DOCKER_ENV = False
 PROFILE_PICS = r"static/pics/profiles"
-PRIVATE_MESSAGE = 1
-GROUP_MESSAGE = 2
-GLOBAL_MESSAGE = 3
-APP = "red"
+DEFAULT_JSONS = r"static/jsons"
+DEFAULT_DB = r"ExampleDB"
+MANAGEMENT_DB = r"RedDB/managementDB.db"
+ZIP_FOLDER = r"zip"
+FILES_FOLDER = r"files/"
+PROJECTS = r"RedDB/Projects/{}"
+SERVER_URL = "http://redeye.local/server?id={}"
+
+
 #Init
 def init(app):
     global projects
     projects = db.get_projects()
-    print(projects)
+    projects.reverse()
+
+    if IS_DOCKER_ENV:
+        graph.init()
+
     for project in projects:
-        d1,d2,d3,d4,d5,d6,d7,d8,d9 = helper.setFilesFolder(project[2])
+        d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -66,7 +80,7 @@ def init(app):
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
-        makedirs(d9, exist_ok=True)
+        makedirs(FILES_FOLDER, exist_ok=True)
 
 """
 =======================================================
@@ -90,6 +104,14 @@ def server():
         server_id = request.values.get('id')
         server = db.get_server_by_id(session["db"], server_id)
 
+    section = ""
+    sections = db.get_sections(session["db"])
+    colors = db.get_colors(session["db"])
+    
+    for sec in sections:
+        if sec[0] == server[0][7]:
+            section = sec[1]
+
     if server:
         server = server[0]
     else:
@@ -101,7 +123,14 @@ def server():
     ports = db.get_ports_by_server_id(session["db"], server[0])
     attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
     vendor = db.get_vendor_by_server_id(session["db"], server[0])[0][0]
-    return render_template('server.html', project=session["project"], username=session["username"], server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor)
+    colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
+    color = db.get_color_by_id(session["db"], colorId)[0][0]
+    users_with_type = []
+    for user in users:
+        type = db.get_user_type_id(session["db"],user[1])[0][0]
+        tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
+        users_with_type.append(tuser)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
 def edit_server():
@@ -124,8 +153,8 @@ def edit_server():
             files = db.get_files_by_server_id(session["db"], server[0])
             ports = db.get_ports_by_server_id(session["db"], server[0])
             attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
-            return render_template('edit_server.html', project=session["project"], username=session["username"], sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
-    return render_template('edit_server.html', project=session["project"], username=session["username"], sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
+            return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
+    return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
 
 @app.route('/servers')
 def servers():
@@ -133,6 +162,7 @@ def servers():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dbsections = db.get_sections(session["db"])
+    colors = db.get_colors(session["db"])
     allData = {}
     for section in dbsections:
         sectionId = section[0]
@@ -142,13 +172,16 @@ def servers():
         for server in servers:
             ports = db.get_ports_by_server_id(session["db"], server[0])
             users = db.get_users_by_server_id(session["db"], server[0])
-            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users }
+            colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
+            colorHex = db.get_color_by_id(session["db"], colorId)[0][0]
+
+            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users, 'color': colorHex }
         allData[sectionId] = {'name': name,'info': serverData} 
 
     # {'SectionId': {
     #   servers : {id:{'server':(tuple),'ports':[ports],'users':[users]},..,}
     # , "SectionName2"...}
-    return render_template('servers.html', project=session["project"], username=session["username"], data=allData)
+    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
 def update_server_attain():
@@ -167,8 +200,16 @@ def delete_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        id = request.form.get('id')
+        if request.form.get('id'):
+            id = request.form.get('id')
+        else:
+            id = request.args.to_dict()["id"]
+
         db.delete_server_by_id(session["db"], id, session["username"])
+
+        if IS_DOCKER_ENV:
+            graph.deleteServerNode(id)
+
         return redirect('servers')
 
 @app.route('/change_server', methods=['POST'])
@@ -177,19 +218,59 @@ def change_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        name = request.form.get('name')
-        ip = request.form.get('ip')
-        id = request.form.get('id')
-        attain = request.form.get('attain')
-        section_id = request.form.get('section')
-        access = 1 if request.form.get('access') else 0
-        if id:
-            db.update_server_details(
-                session["db"], session["username"], id, ip=ip, name=name, is_access=access, attain=attain, section_id=section_id)
+
+        dict = request.args.to_dict()
+
+        # If id is specified, we need to update the existing row
+        if "id" in dict:
+            id = dict["id"]
+            type = dict["type"]
+            obj = dict["obj"]
+            value = dict["value"]
+
+            if "port" == obj:
+                db.edit_port_by_id(session["db"], id, type, value)
+               
+            elif "vuln" == obj:
+                db.edit_vuln_by_id(session["db"], id, type, value)
+
+            elif "user" == obj:
+                if type == "type":
+                    # Check if the user type is already exists
+                    typeId = db.get_user_type(session["db"],value)
+                    if typeId:
+                        db.edit_user_by_id(session["db"], id, type, typeId[0][0])
+                    else:
+                        typeId = db.insert_new_user_type(session["db"],value)
+                        db.edit_user_by_id(session["db"], id, type, typeId)
+                else:
+                    db.edit_user_by_id(session["db"], id, type, value)
+
+            elif "servers" == obj:
+                db.edit_server_by_id(session["db"], id, type, value)
+                if type == "name":
+                    graph.changeServerNode(id,name=value)
+                elif type == "ip":
+                    graph.changeServerNode(id,ip=value)
+    
+            elif "description" == obj:
+                db.edit_server_by_id(session["db"], id, type, value)
+
         else:
-            db.create_new_server(session["db"], session["username"],
+            name = request.form.get('name')
+            ip = request.form.get('ip')
+            attain = request.form.get('attain')
+            section_id = request.form.get('section')
+            access = 1 if request.form.get('access') else 0
+
+            server_id = db.create_new_server(session["db"], session["username"],
                                  ip, name, "", access, attain, section_id)
-        return redirect(url_for('server') + '?ip=' + ip)
+            if IS_DOCKER_ENV:
+                graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
+            
+            return redirect(url_for("server", ip=ip))
+
+        return redirect(request.referrer)
     
 @app.route('/add_server_from_file', methods=['POST'])
 def add_server_from_file():
@@ -210,6 +291,7 @@ def change_section_name():
 
     dict = request.args.to_dict()
     db.change_section_id(session["db"], dict['id'], dict['newName'])
+
     return redirect('servers')
 
 
@@ -219,7 +301,64 @@ def add_new_section():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     db.create_new_server_section(session["db"],"NewSection")
+
     return redirect('servers')
+
+@app.route('/delete_section', methods=['POST'])
+def delete_section():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+
+    # Get id from request
+    section_id = dict["id"]
+
+    # Get all server under this section
+    servers = db.get_servers_by_section_id(session["db"], section_id)
+
+    # If the section is empty, delete it.
+    if not servers:
+        db.delete_section_by_id(session["db"], section_id)
+
+    return redirect('servers')
+
+
+@app.route('/change_server_section', methods=['POST'])
+def change_server_section():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
+    sectionName = db.get_section_name_by_section_id(session["db"],dict["sectionId"])
+    graph.changeServerNode(id,sectionName=sectionName)
+
+    return redirect(request.referrer)
+
+
+@app.route('/change_server_color', methods=['POST'])
+def change_server_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.change_server_color(session["db"],dict["serverId"], dict["colorId"])
+
+    return redirect(request.referrer)
+
+@app.route('/add_new_server', methods=['POST'])
+def add_new_server():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.form.to_dict()
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+
+    if IS_DOCKER_ENV:
+        graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
+        
+    return redirect(request.referrer)
 
 """
 =======================================================
@@ -242,7 +381,7 @@ def logs():
 
     else:
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-    return render_template('logs.html', project=session["project"], username=session["username"], objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
+    return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
 @app.route('/logs2',methods=['GET','POST'])
 def logs2():
@@ -260,7 +399,7 @@ def logs2():
     else:
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
 
-    return render_template('logs2.html', project=session["project"], username=session["username"], objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
+    return render_template('logs2.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
 @app.route('/export_logs', methods=['POST'])
 def export_logs():
@@ -310,8 +449,9 @@ def tasks():
                 t[5] = t[5].replace('\r\n', " ")
         my_tasks_lst.append(t)
 
-    team_members = db.get_redeye_users_names()
-    return render_template('tasks.html', project=session["project"], username=session["username"], all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
+    projectId = db.get_projectId_by_projectName(session["project"])
+    team_members = db.get_redeye_users_names(projectId)
+    return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
 def edit_note():
@@ -391,7 +531,7 @@ def create_user():
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
         user_perm = request.form.get('permissions')
-        user_type = request.form.get('type')
+        user_type = request.form.get("userType")
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
         
@@ -399,14 +539,22 @@ def create_user():
             return redirect(request.referrer)
         if not user_pass:
             user_pass = "Unknown"
+
         if not user_perm:
-            user_perm = "READ | WRITE"
-        if not user_type or int(user_type) == 6:
-            manual_type = request.form.get('select_type')
-            if manual_type:
-                user_type = helper.user_name_to_type(manual_type)
+            user_perm = "READ|WRITE"
+
+        if user_type:
+            userTypeId = db.get_user_type(session["db"],user_type)
+            
+            if not userTypeId:
+                userTypeId = db.insert_new_user_type(session["db"],user_type)
             else:
-                user_type = 5
+                userTypeId = userTypeId[0][0]
+
+        else:
+            # Will not Add the user, for now
+            return redirect(request.referrer)
+
         found = "NULL"
         if not server_id:
             found = request.form.get('found')
@@ -419,8 +567,11 @@ def create_user():
             else:
                 server_id = "NULL"
 
-        db.insert_new_user(session["db"], user_type,server_id, found, user_name, user_pass,
+        user_id = db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
+        if IS_DOCKER_ENV:
+            graph.addUserNode(user_id, user_name, user_pass, user_perm, server_id)
+
         return redirect(request.referrer)
 
 @app.route('/edit_user', methods=['POST'])
@@ -439,17 +590,29 @@ def edit_user():
         user_type = request.form.get('type')
         user_found_on = request.form.get('found')
         user_attain = request.form.get('attain')
+
+        """ User can be found on one server but be relevant to another.
         if db.get_server_id_by_name(session["db"], user_found_on) or db.get_server_id_by_ip(session["db"], user_found_on):
             if db.get_server_id_by_name(session["db"], user_found_on):
                 server_id = db.get_server_id_by_name(session["db"], user_found_on)[0][0]
             else:
                 server_id = db.get_server_id_by_ip(session["db"], user_found_on)[0][0]
-            user_found_on = "Null"
         else:
-            server_id = "Null"
-
+            server_id = ""
+        """
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=server_id, attain=user_attain)
+                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
+
+        if IS_DOCKER_ENV:
+            if db.get_server_id_by_name(session["db"], user_found_on):
+                server_id = db.get_server_id_by_name(session["db"], user_found_on)[0][0]
+            elif db.get_server_id_by_ip(session["db"], user_found_on):
+                server_id = db.get_server_id_by_ip(session["db"], user_found_on)[0][0]
+            else:
+                server_id = 0
+
+            graph.changeUserNode(user_id, username=user_name, password=user_pass, permissions=user_perm, server_id=server_id)
+
         if 'userid' in url:
             url = url.split('userid=')
             url = url[0] + 'userid=' + user_id
@@ -466,74 +629,11 @@ def delete_user():
     if request.method == 'GET':
         user_id = request.values.get('id')
         db.delete_user(session["db"], user_id, session["username"])
+
+        if IS_DOCKER_ENV:
+            graph.deleteUserNode(user_id)
+
         return ('', 204)
-
-@app.route('/domain_users', methods=['GET'])
-def domain_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_domain_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=1)
-
-@app.route('/localhost_users', methods=['GET'])
-def localhost_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_localhost_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=2)
-
-@app.route('/application_users', methods=['GET'])
-def application_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_application_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        server_name = helper.set_user_server_name(session["db"], user[7],user[8])
-
-        data[username].append(
-            [password, perm, server_name, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=3)
-
-@app.route('/netdevice_users', methods=['GET'])
-def netdevice_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_netdevices_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid = user[
-            1], user[2], user[3], user[4], user[5], user[0]
-        device_ip = helper.set_user_device_name(session["db"], user[7],user[9])
-
-        data[username].append([password, perm, device_ip, u_type, attain, uid])
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=4)
-
-@app.route('/other_users', methods=['GET'])
-def other_users():
-    data = collections.defaultdict(list)
-    users = db.get_all_other_users(session["db"])
-    for user in users:
-        u_type, username, password, perm, attain, uid, info = user[
-            1], user[2], user[3], user[4], user[5], user[0], user[10]
-        
-        info = helper.set_user_other_user(session["db"], user[7],info)
-        data[username].append([password, perm, info, u_type, attain, uid])
-
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=5)
 
 @app.route('/all_users', methods=['GET'])
 def all_users():
@@ -542,23 +642,34 @@ def all_users():
 
     data = collections.defaultdict(list)
     users = db.get_all_users(session["db"])
+
+    
     for user in users:
         u_type, username, password, perm, attain, uid = user[
             1], user[2], user[3], user[4], user[5], user[0]
+
         if user[8] is not None:
+            
             info = helper.set_user_server_name(session["db"], user[7],user[8])
+
         elif user[9] is not None:
             info = helper.set_user_device_name(session["db"], user[7],user[9])
-        elif user[10] is not None:
-            info = helper.set_user_other_user(session["db"], user[7],info)
+
         elif user[7] is not None:
             info = user[7]
         else:
             info = "Unknown"
-        u_type = helper.user_type_to_name(u_type)
+
+        u_type = db.get_user_type_id(session["db"],u_type)[0][0]
+
         data[username].append([password, perm, info, u_type, attain, uid])
 
-    return render_template('users.html', project=session["project"], username=session["username"], data=data, type=6)
+    allUserTypes = db.get_all_users_types(session["db"])
+
+    for index,typeName in enumerate(allUserTypes):
+        allUserTypes[index] = typeName[0]
+
+    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, type=6, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
 def export_users():
@@ -574,7 +685,7 @@ def export_users():
         writer.writeheader()
         for user in users:
             user_name, password, perm, user_type, attain = user[2], user[3], user[4], user[1], user[5]
-            user_type = helper.user_type_to_name(user_type)
+            user_type = db.get_user_type_id(session["db"],user_type)[0][0]
             writer.writerow({'Username': user_name, 'Password': password,
                              'Permission': perm, 'Type': user_type, 'Attain': attain})
     return send_from_directory(helper.FILES_FOLDER.format(session["project"]), "users.csv", as_attachment=True)
@@ -584,14 +695,20 @@ def add_users_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+    dic = {}
     if request.method == 'POST':
+        
+        for key,val in request.form.items():
+            dic[key] = val
+        
         files = request.files.getlist("upload_file")
 
         for file in files:
             full_path, file_name = helper.save_file(file, helper.PASS_FOLDER.format(session["project"]))
+            
             if file_name:
-                parse.parse_users_passwords(
-                    session["username"], file_name, full_path)
+                parse.parse_users_passwords(session["db"],
+                    session["username"], file_name, full_path, IS_DOCKER_ENV)
 
     return redirect(request.referrer)
 
@@ -620,7 +737,7 @@ def create_vuln():
             fix = '-'
         db.insert_new_vuln(session["db"], name, desc, fix, server_id,
                            session["username"])
-        return redirect(url_for('edit_server') + '?ip=' + server_ip)
+        return redirect(request.referrer)
 
 @app.route('/delete_vuln')
 def delete_vuln():
@@ -644,9 +761,10 @@ def delete_comment():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
-        comment_id = request.form.get('id')
+        dict = request.args.to_dict()
+        comment_id = dict["id"]
         db.delete_comment_by_id(session["db"], comment_id)
-        return redirect(url_for('index'))
+        return ('', 204)
 
 
 @app.route('/create_comment', methods=['POST'])
@@ -656,7 +774,7 @@ def create_comment():
 
     if request.method == 'POST':
         data = request.form.get('data')
-        db.create_comment(session["db"], data, session["username"])
+        db.create_comment(session["db"], data, session["username"], datetime.now().strftime("%H:%M:%S - %d/%m/%Y "))
         return redirect(url_for('index'))
 
 """
@@ -691,6 +809,7 @@ def create_server_port():
     if port_dict["state"]== "":
         port_dict["state"] = "open"
 
+    
     db.insert_new_port(session["db"], port_dict["port"], port_dict["state"], port_dict["service"],
                        port_dict["vuln"], "server_id", port_dict["server_id"])
 
@@ -728,16 +847,17 @@ def upload_file():
         files = request.files.getlist("upload_file")
         try:
             current_dir = request.referrer.split('dir_name=')[1]
-            # url decoding the string.
-            current_dir = urllib.parse.unquote(current_dir)
+
+            # Url decoding the string and replace + with space.
+            current_dir = urllib.parse.unquote_plus(current_dir)
             if helper.secure_file_name(current_dir):
                 return render_template('404.html'), 404
+
         except Exception:
             current_dir = helper.FILES_FOLDER.format(session["project"])
 
-        if "edit_server" in request.referrer:
-            server_id = db.get_server_id_by_ip(session["db"], 
-                (request.referrer).split(r"=")[-1])[0][0]
+        if "server" in request.referrer:
+            server_id = request.referrer.split("=")[1]
 
         for file in files:
             # Problem with secure_filename - not supporting hebrew
@@ -747,6 +867,7 @@ def upload_file():
                 try:
                     db.insert_new_file(session["db"], full_path, file_name, "Added from {} file".format(
                         file_name), server_id, session["username"])
+                        
                 except Exception:
                     db.insert_new_standalone_file(session["db"], full_path, file_name, "Added from {} file".format(
                         file_name), session["username"])
@@ -760,6 +881,7 @@ def upload_file():
 def files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
     if request.method == 'GET':
         file_path = request.args.get('file_name')
         if not file_path:
@@ -817,17 +939,17 @@ def load_files():
                     keyword_files[key].append(val)
     
             if keyword_files:
-                return render_template('load_files.html', project=session["project"], username=session["username"],root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
 
             else:
                 root, dirs, files,last_dir = helper.share_files(full_path)
-                return render_template('load_files.html', project=session["project"], username=session["username"], root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
         else:
             root, dirs, files,last_dir = helper.share_files(full_path)
-            return render_template('load_files.html', project=session["project"], username=session["username"], root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
+            return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
     else:
         root, dirs, files,last_dir = helper.share_files(full_path)
-        return render_template('load_files.html', project=session["project"], username=session["username"], root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
+        return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
 
 @app.route('/add_new_dir', methods=['POST'])
 def add_new_dir():
@@ -835,8 +957,9 @@ def add_new_dir():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     current_dir = request.referrer.split('dir_name=')[1]
-    # url decoding the string.
-    full_path = urllib.parse.unquote(current_dir)
+
+    # Url decoding the string and replace + with space.
+    full_path = urllib.parse.unquote_plus(current_dir)
     dir_name = request.form.get('dir_name')
     if helper.secure_file_name(full_path) or helper.secure_file_name(dir_name):
         return render_template('404.html'), 404
@@ -864,7 +987,7 @@ def stats():
     achievements = db.get_achievements(session["db"])
     days, time = helper.time_left()
 
-    return render_template('stats.html', project=session["project"], username=session["username"], servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vullns_len=len(vullns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
+    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vullns_len=len(vullns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
 
 """
 =======================================================
@@ -897,7 +1020,7 @@ def new_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()
     
-    return render_template('attack.html', project=session["project"], username=session["username"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
 
 
 @app.route('/attack', methods=['GET', 'POST'])
@@ -925,15 +1048,19 @@ def attack():
                 os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
     
     dic_data = {}
+    if session["project"] == DEFAULT_DB:
+        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(session["project"]))
+
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
     if "New" in attacks:
         attacks.remove("New")
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
-            dic_data[attack] = data.read()    
+            dic_data[attack] = data.read()
+        
 
-    return render_template('attack.html', project=session["project"], username=session["username"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
 
 @app.route('/delete_attack')
@@ -955,7 +1082,7 @@ def delete_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()    
 
-    return render_template('attack.html', project=session["project"], username=session["username"], attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
 
 """
 =======================================================
@@ -968,7 +1095,7 @@ def build_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    return render_template('build_report.html', project=session["project"], username=session["username"])
+    return render_template('build_report.html', project=session["project"], username=session["username"], profile=session["profile"])
 
 
 @app.route('/pre_report')
@@ -980,7 +1107,7 @@ def pre_report():
     data = db.get_all_report_data(session["db"])
     for image in data:
         images.append(helper.get_image(image[4]))
-    return render_template('pre_report.html', project=session["project"], username=session["username"], data=data, len=len(data), images=images)
+    return render_template('pre_report.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, len=len(data), images=images)
 
 
 @app.route('/add_report', methods=['POST'])
@@ -1092,7 +1219,7 @@ def search():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'GET':
-        return render_template('results.html', project=session["project"], username=session["username"])
+        return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"])
 
     if request.method == 'POST':
         keyword = request.form.get('keyword')
@@ -1109,11 +1236,10 @@ def search():
                         matches.append(data[i])
                     break
 
-        print(matches)
         for match in matches:
             info[match[4]].append(db.get_data_by_table(session["db"], match[4],match[1]))
-            print(info)
-    return render_template('results.html', project=session["project"], username=session["username"],keyword=keyword,data_len=len(matches),data=info)
+
+    return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,keyword=keyword,data_len=len(matches),data=info)
 
 """
 =======================================================
@@ -1128,7 +1254,7 @@ def exploits():
     
     exploits = db.get_all_exploits(session["db"])
 
-    return render_template('exploits.html', project=session["project"], username=session["username"], exploits=exploits, exploits_len=len(exploits))
+    return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, exploits=exploits, exploits_len=len(exploits))
 
 @app.route('/add_exploit',methods=['POST'])
 def add_exploit():
@@ -1185,17 +1311,19 @@ def delete_exploit():
 =======================================================
 """
 
-@app.route("/serverusers",methods=['GET'])
-def serverusers():
+@app.route("/management",methods=['GET'])
+def management():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    users = db.get_redeye_users()
+    projectId = db.get_projectId_by_projectName(session["project"])
+    users = db.get_redeye_users(projectId)
     
     for i,user in enumerate(users):
         users[i] = users[i][:2] + ("*********************",) + users[i][3:] + ("RedTeam",)
         
-    return render_template("serverusers.html", project=session["project"], username=session["username"], users=users)
+    return render_template("management.html", project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, users=users)
+
 
 @app.route('/add_user',methods=['POST'])
 def add_user():
@@ -1204,32 +1332,137 @@ def add_user():
 
     username = request.form.get("username")
     password = request.form.get("password")
-    user_id = db.add_new_user(username, password)
+    projectId = db.get_projectId_by_projectName(session["project"])
+    db.add_new_user(username, hashlib.sha256(password.encode()).hexdigest(), projectId)
 
     return redirect(request.referrer)
 
-@socketio.on('update_user_name')
-def update_user_name(json):
+
+@app.route('/update_user_name',methods=['POST'])
+def update_user_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    username = json["username"]
-    user_id = json["user_id"]
-    db.update_user_details("username", username, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_user_name")
+    dict = request.args.to_dict()
+    db.update_user_details("username", dict["username"], dict["user_id"])
 
-@socketio.on('update_password')
-def update_password(json):
+    return redirect(request.referrer)
+
+@app.route('/update_password',methods=['POST'])
+def update_password():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    password = json["password"]
-    user_id = json["user_id"]
-    db.update_user_details("password", password, user_id)
-    details = {"user_id":user_id}
-    emit_to_all_users(details, "update_password")
+    dict = request.args.to_dict()
+    db.update_user_details("password", hashlib.sha256(dict["password"].encode()).hexdigest(), dict["user_id"])
 
+    return redirect(request.referrer)
+
+
+@app.route('/delete_managment_user',methods=['POST'])
+def delete_managment_user():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+
+    if int(dict["user_id"]) != session["uid"]:
+        db.delete_user_by_id(dict["user_id"])
+        return ('', 204)
+    else:
+        # Todo return flash msg
+        return
+
+
+@app.route('/uploadManagmentUserPicture',methods=['POST'])
+def uploadManagmentUserPicture():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Example: 
+    # {'profilePicture-2': <FileStorage: 'adwaita-day.png' ('image/png')>}
+    # {'profilePicture-IdOfTheUser' : FileObject}
+    newProfilePicture = request.files.to_dict()
+    for key, value in newProfilePicture.items():
+        userId = key.split("-")[1]
+        newPicture = value
+
+        _, fileName = helper.save_file(newPicture, PROFILE_PICS)
+        db.change_user_profile_pic(userId,fileName)
+
+        # If a user changed is own profile pic
+        if int(userId) == session["uid"]:
+            # Update session profile pic
+            session["profile"] = fileName
+
+    return redirect(request.referrer)
+
+    
+@app.route('/exportAll',methods=['GET'])
+def exportAll():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Create zip folder to export if not already exists
+    makedirs(ZIP_FOLDER, exist_ok=True)
+
+    # Create new zip file contains:
+    # 1) The DB of the env
+    # 2) All files from that env
+    with zipfile.ZipFile(f'zip/RedEye-{session["project"]}.zip', 'w', zipfile.ZIP_DEFLATED) as exported:
+        helper.zipdir(f'files/{session["project"]}/',exported)
+        exported.write(session["db"])
+        exported.write(MANAGEMENT_DB)
+    
+    # Send user the zip file
+    return send_from_directory(ZIP_FOLDER, f'RedEye-{session["project"]}.zip')
+
+
+@app.route('/importAll',methods=['POST'])
+def importAll():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    # Make sure zip folder is present
+    makedirs(ZIP_FOLDER, exist_ok=True)
+    
+    importFile = request.files.get("import-file")
+    filePath, filename = helper.save_file(importFile, ZIP_FOLDER)
+
+    projectName = filename.split('-')[1].split('.')[0]
+
+    # Extract all files to the zip folder
+    with zipfile.ZipFile(filePath, 'r') as imported:
+        imported.extractall(ZIP_FOLDER)
+    
+    # Get the db file name
+    dbFile = listdir(path.join(ZIP_FOLDER,"RedDB/Projects"))
+    projectFiles = listdir(ZIP_FOLDER)
+    managementFile = path.join(ZIP_FOLDER,MANAGEMENT_DB)
+
+    # Only if the user uploaded any files
+    if dbFile:
+        dbFilePath = path.join(ZIP_FOLDER,"RedDB/Projects",dbFile[0])
+        # Copy the DB file to the Projects DB folder
+        copyFile(dbFilePath, "RedDB/Projects")
+
+    # Copy files dir to Redeye files dir
+    if projectName in projectFiles:
+        copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
+
+    # Create new Project in managment DB
+    newProjectId = db.insert_new_project(projectName,dbFile[0])
+
+    # Insert new Project into management DB
+    db.merge_new_project_db(managementFile,newProjectId,dbFile[0])
+
+    # init new project
+    init(app)
+
+    # Delete zip folder - It will be created again with new Import/Export
+    rmDir(ZIP_FOLDER)
+
+    return ('', 204)
 
 """
 =======================================================
@@ -1244,7 +1477,7 @@ def notebook():
 
     # get all notebooks
     notebooks = db.get_all_notebooks(session["db"],session["uid"])
-    return render_template('notebook.html', project=session["project"], username=session["username"],notebooks=notebooks)
+    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,notebooks=notebooks)
 
 
 @socketio.on('updateNoteName')
@@ -1252,10 +1485,48 @@ def updateNoteName(json):
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    print(json)
     db.update_notebookName(session["db"],json["noteId"], json["data"])
-    print(session)
 
+"""
+=======================================================
+                Colors Functions
+=======================================================
+"""
+
+@app.route('/add_color',methods=['POST'])
+def add_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.form.to_dict()
+    db.add_color(session["db"], dict["colorName"], dict["hexColor"])
+    
+    return redirect(request.referrer)
+
+
+@app.route('/change_color',methods=['POST'])
+def change_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    
+    db.change_color(session["db"], dict["obj"], "#%s" % (dict["value"]), dict["id"])    
+
+    return redirect(request.referrer)
+
+"""
+=======================================================
+                Graph Functions
+=======================================================
+"""
+
+@app.route('/load_graph',methods=['GET'])
+def load_graph():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV)
 
 """
 =======================================================
@@ -1270,17 +1541,26 @@ def add_scan(file):
         if parse.check_nmap_file(full_path):
             if file_name:
                 nmap_dic = parse.get_nmap_data(full_path)
+
                 for ip_addr, data in nmap_dic.items():
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
-                    print(ip_addr)
+
                     if not db.check_if_server_exsist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
-                            , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id)
+                            , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id, 1)
+
+                            if IS_DOCKER_ENV:
+                                graph.addServerNode(server_id,ip_addr,hostname,0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
+
                         else:
                             server_id = db.create_new_server(session["db"], session["username"]
-                            , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id)
+                            , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id, 1)
+
+                            if IS_DOCKER_ENV:
+                                graph.addServerNode(server_id,ip_addr,"Unknown",0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
+
                         for data in lst_ports:
                             port_num, state, service = data["port"], data["state"], data["service"]
                             db.insert_new_port(session["db"], 
@@ -1297,7 +1577,6 @@ def add_scan(file):
                                     port_num, state, service, "", "server_id", server_id)
 
     except Exception as e:
-        print("ERROR: Exception adding nmap scan: ", e)
         return 0
     return 1
 
@@ -1310,25 +1589,37 @@ def add_scan(file):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    creds = request.form.to_dict()
-    check_id = helper.check_login(creds)
-    if creds and check_id:
-        session["username"] = creds["username"]
-        session["uid"] = check_id
-        session["project"] = creds["project"] # TODO: Validate project existance.
-        session["db"] = db.set_project_db(session["project"])
-        session["project"] = helper.get_project_name(projects, session["project"])
-        clients[session["uid"]] = socketio
-        token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
-        ) + timedelta(hours=2)}, app.secret_key)
-        resp = make_response(index(token.decode('UTF-8')))
-        resp.set_cookie('reduser', token.decode('UTF-8'))
-        return resp
 
-    else:
+    if request.method == 'GET':
         resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
         resp.set_cookie('reduser', "")
         return resp
+
+    else:
+        creds = request.form.to_dict()
+        if creds:
+            projectId = db.get_projectId_by_DBName(creds["project"])
+            check_id = helper.check_login(creds,projectId)
+
+            if check_id:
+                session["username"] = creds["username"]
+                session["uid"] = check_id
+                session["project"] = creds["project"] # TODO: Validate project existance.
+                session["db"] = db.set_project_db(session["project"])
+                session["profile"] = db.get_profilePicture_by_id(check_id)[0][0]
+                session["project"] = helper.get_project_name(projects, session["project"])           
+                clients[session["uid"]] = socketio
+                token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
+                ) + timedelta(hours=2)}, app.secret_key)
+                resp = make_response(index(token.decode('UTF-8')))
+                resp.set_cookie('reduser', token.decode('UTF-8'))
+                return resp
+        
+        # If the user is not authenticated
+        resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
+        resp.set_cookie('reduser', "")
+        return resp
+
 
 @app.route('/new_project', methods=['POST'])
 def new_project():
@@ -1349,11 +1640,15 @@ def new_project():
         elif data["name"] == project[2]:
             return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE, msg="Network name is taken.")
 
-    db.insert_new_project(data["name"], data["dbname"])
-    refresh_projects()
+    projectId = db.insert_new_project(data["name"], data["dbname"])
+
+    db.add_new_user(data["username"], hashlib.sha256(data["password"].encode()).hexdigest(), projectId)
+
+    init(app)
+    
     resp = make_response(render_template("login.html", projects=projects, show_create_project=IS_ENV_SAFE))
     resp.set_cookie('reduser', "")
-    init(app)
+
     return resp
 
 def refresh_projects():
@@ -1381,11 +1676,10 @@ def is_logged(logged=False):
 """
 
 def emit_to_all_users(details, function_name):
-    for uid in db.get_redeye_users():
+    projectId = db.get_projectId_by_projectName(session["project"])
+    for uid in db.get_redeye_users(projectId):
         uid = uid[0]
         if str(uid) in clients.keys():
-            print("uid: " + str(uid))
-            print("room: " + clients[str(uid)])
             emit(function_name,details ,room=clients[str(uid)])
 
 @socketio.on('socket_connection')
@@ -1405,21 +1699,101 @@ def add_header(response):
 @app.route('/')
 def index(logged=False):
     if not is_logged(logged):
-        print("dsa")
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     comments = db.get_all_comments(session["db"])
-    #print("logged: " + logged)
-    return render_template('index.html', project=session["project"], username=session["username"], display_name=session["username"], comments=comments)
+
+    if len(projects) > 1:
+        for index, project in enumerate(projects):
+            if project[2] == session["project"]:
+                lastProject = projects.pop(index)
+
+        projects.insert(0,lastProject)
+
+    return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, display_name=session["username"], comments=comments)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
 
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+
+def showHelpMenu():
+    description = """usage: python3 redeye.py [--help] [OPTIONS]
+    
+    Redeye is a tool intended to help you manage your data during a pentest operation
+    in the most efficient and organized way.
+
+    optional arguments:
+    --reset     Resets the DB and deletes all files [Default: False].
+    --debug     Debugging mode [Default: False].
+    --port      Select listening port [Default: 5000].
+    --safe      Set state to "safe" - Allows to create new projects [Default: False].
+    --docker    Should be set only when running from a docker container [Default: False].
+    --help      Display this help message.
+    """
+    print(description)
+    
+
+def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=False):
+    if help:
+        showHelpMenu()
+        sys.exit(0)
+
+    if reset:
+        projectsFiles = glob("RedDB/Projects/*")
+        allFiles = glob("files/**", recursive=True)
+
+        # Remove management DB
+        if path.exists(MANAGEMENT_DB):
+            os.remove(MANAGEMENT_DB)
+
+        # Remove all project files
+        if projectsFiles:
+            for project in projectsFiles:
+                    os.remove(project)
+
+        # Remove all files
+        if allFiles:
+            for file in allFiles:
+                if path.isfile(file):
+                    os.remove(file)
+
+        # List all Dirs under files
+        allFolders = glob("files/**", recursive=True)
+        # Delete Subdirs to Root dirs
+        allFolders.reverse()
+
+        # Remove all dirs
+        if len(allFolders) > 1:
+            for folder in allFolders:
+                os.rmdir(folder)
+
+        # Init DB
+        db.init()
+
+    init(app)
+
+    global IS_ENV_SAFE
+    IS_ENV_SAFE = safe
+
+    if docker:
+        global IS_DOCKER_ENV
+        IS_DOCKER_ENV = True
+
+    if debug:
+        socketio.run(app, debug=True, host='0.0.0.0', port=port)
+    else:
+        socketio.run(app, debug=False, host='0.0.0.0', port=port)
+
+
 if __name__ == "__main__":
     # Run app.
     # only app run goes here
     helper.setGlobals()
-    init(app)
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    Fire(startRedeye)

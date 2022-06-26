@@ -8,7 +8,7 @@
   </form>
   <form action="{{ url_for('logs') }}" method="POST">
     <div class="container" id="search-btn">
-        <input name="key_word" type="text" placeholder="Search...">
+        <input name="key_word" class="find-log-btn" type="text" placeholder="Search...">
         <div class="search"></div>
     </div>
   </form>
@@ -104,6 +104,10 @@
   </div>
 </div>
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".find-log-btn"), 'f');
+    key_sc($("#csv-export-btn"), 'e');
+</script>
     <script src="{{ url_for('static', filename='js/jquery.timelineMe.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logs.js') }}"></script>
 {% include 'footer.html' %}

@@ -2,6 +2,8 @@ import re
 from RedDB import db
 import xml.etree.ElementTree as ET
 from collections import defaultdict
+from werkzeug.utils import secure_filename
+import graph
 
 """
 Gets path to nmap.xml and returns data
@@ -111,16 +113,38 @@ def get_all_data(path):
 #    pass
 
 
-def parse_users_passwords(exec,file_name,path):
+def parse_users_passwords(dbName,exec,file_name,path, isDockerEnv):
     with open(path,'r') as users_passwords:
         data = users_passwords.readlines()
+
+    importedTypeName = "Imported from " + secure_filename(file_name)
+
+    # Add new user Type
+    typeNameExsist = 0
+    for typeName in db.get_all_users_types(dbName):
+        if typeName[0] == importedTypeName:
+            typeNameExsist = 1
+            break
+
+    # Add new type only if its not already exsists
+    if not typeNameExsist:
+        userTypeId = db.insert_new_user_type(dbName, importedTypeName)
+    
+    else:
+        userTypeId = db.get_user_type(dbName, importedTypeName)[0][0]
+
     for line in data:
         try:
             user,password = line.split(":")
+            password.rstrip("\n")
         except:
             continue
-            
-        db.insert_new_other_user(5,file_name,user,password,"-",exec)
+
+        user_id = db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
+        
+        if isDockerEnv:
+            graph.addUserNode(user_id,user,password,"None")
+
 
 def check_nmap_file(file_path):
     """
@@ -132,16 +156,3 @@ def check_nmap_file(file_path):
         return True
     else:
         return False
-
-
-def init():
-    #get_ip_hostname_vendor(r"C:\Users\Elad\total.xml")
-    #d = get_nmap_data(r"C:\Users\Elad\total.xml")
-    lst_ports = []
-    d = get_nmap_data(r"C:\Users\Elad\total.xml")
-    for ip,data in d.items():
-        print(ip,data[0]["vendor"],data[0]["hostname"],data[1]["ports"])
-
-    
-if __name__ == "__main__":
-    init()

@@ -49,7 +49,7 @@ function toggleDark() {
         $(".server-box").css("color", "#666");
         dark = 0;
     }
-    
+
 }
 
 function deleteServer() {
@@ -59,10 +59,11 @@ function deleteServer() {
 }
 
 var useredit = 0;
+
 function showUser(username, password, type, perm, attain, uid, found) {
     $(".user-edit").hide()
-    if (type == 1){
-        type = "Domain user";  
+    if (type == 1) {
+        type = "Domain user";
     } else if (type == 2) {
         type = "Localhost user";
     } else if (type == 3) {
@@ -78,7 +79,7 @@ function showUser(username, password, type, perm, attain, uid, found) {
     $(".user-info > .password").text(password);
     $(".user-info > p > .type").text(type);
     $(".user-info > p > .perm").text(perm);
-    if (found == "None"){
+    if (found == "None") {
         found = "Server not mentioned";
     }
     $(".user-info > .found").text(found);
@@ -106,7 +107,7 @@ function editUser() {
     $("#input-username").val(username);
     $("#input-password").val(password);
     /* Type doesn't work for some reason */
-    if (type == "Domain user"){
+    if (type == "Domain user") {
         $("#input-type").val(1);
     } else if (type == "Localhost user") {
         $("#input-type").val(2);
@@ -125,7 +126,7 @@ function editUser() {
     $(".user-info").hide()
 
     useredit = 1;
-    
+
 }
 
 function removeUser() {
@@ -136,18 +137,13 @@ function removeUser() {
     hideUser();
 }
 
-function editServerSubmit() {
-    var attain = $("#attain-input").val();
-    $("#attain-hidden-input").val(attain);
-    $('#name-form').submit()
-}
 
-function showNote(tasknmae,data,task_id,attain,exec){
+function showNote(tasknmae, data, task_id, attain, exec) {
     $(".taskbox-info > .taskname").text(tasknmae);
-    
-    
+
+
     $(".taskbox-info > .data").text(data);
-    if(attain == "None"){
+    if (attain == "None") {
         attain = "No notes Yet";
     }
     exec = "@" + exec
@@ -158,18 +154,18 @@ function showNote(tasknmae,data,task_id,attain,exec){
     $("#input-id").val(task_id);
 }
 
-function hideNote(){
+function hideNote() {
     $('.taskbox-info').hide();
     $('.taskbox-edit').hide();
 }
 
-function editNote(){
+function editNote() {
     $(".taskbox-info").css("display", "none");
     taskname = $(".taskbox-info > .taskname").text();
     data = $(".taskbox-info > .data").text();
     attain = $(".taskbox-info > .attain").text();
     exec = $(".taskbox-info > .exec").text();
-    exec = exec.slice(1,);
+    exec = exec.slice(1, );
     $("#input-taskname").val(taskname);
     $("#input-data").val(data);
     $("#input-attain").val(attain);
@@ -179,43 +175,65 @@ function editNote(){
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text);
-    tempAlert(text, 3000);
-  }
+    tempAlert(text, 1000);
+}
 
-function tempAlert(msg, duration)
-{
+function tempAlert(msg, duration) {
     var el = document.createElement("div");
-    el.setAttribute("class","popup");
+    el.setAttribute("class", "popup");
     el.innerHTML = "Copied to clipboard: " + msg;
-    setTimeout(function(){
+    setTimeout(function() {
         el.setAttribute("style", "opacity: 0;");
-    },duration);
+    }, duration);
     document.body.appendChild(el);
 }
 
-$(".hover-user-details").mouseover(function (e) {
+$(".hover-user-details").mouseover(function(e) {
     $(".user-details").show();
     $(".user-details").css({
         top: e.pageY,
-        left: e.pageX
+        left: e.pageX - 260 // Size of sidebar.
     });
-}).mouseout(function () {
+}).mouseout(function() {
     $(".user-details").hide();
 });
-$(".user-details").mouseover(function (e) {
+$(".user-details").mouseover(function(e) {
     $(".user-details").show();
-}).mouseout(function () {
-    if (useredit == 0){
+}).mouseout(function() {
+    if (useredit == 0) {
         $(".user-details").hide();
     }
 });
 
-// SocketIO
-var socket = io();
-//    socket.on('connect', function() {
-//       socket.emit('my event', {data: 'I\'m connected!'});
-//    });
-socket.on('connect', function() {
-    socket.emit('socket_connection', 'client socket connected!');
-    console.log('connected to socket.');
-});
+
+function key_sc(obj, key) {
+    console.log()
+    document.addEventListener("keyup", function(event) {
+        if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
+            $(obj).focus();
+            $(obj).click();
+        }
+    })
+}
+
+$("input").focus(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(this).blur();
+        }
+    })
+})
+
+$("textarea").focus(function() {
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(this).blur();
+        }
+    })
+})
+
+$(".export").click(function() {
+    console.log("export")
+})
+
+$(".import").click(function() {})

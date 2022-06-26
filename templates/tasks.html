@@ -53,7 +53,7 @@
     </div>
     <div style="top: +10px;" class="d-block text-right card-footer">
         <form action="{{ url_for('add_task') }}" method="POST">
-            <input dir="auto" name="task_name" type="text" class="main-todo-input" id="todo-label" placeholder="Task Name">
+            <input dir="auto" name="task_name" type="text" class="main-todo-input main-alltodo-input" id="todo-label" placeholder="Task Name">
             <textarea dir="auto" name="task_data" type="text" class="data-todo-input" cols="65" rows="5" id="todo-text" placeholder="Task content"></textarea>
             <select name="task_executer" class="exec-todo-input inline">
                 <option value="" selected disabled hidden>Executer</option>
@@ -118,7 +118,7 @@
     </div>
     <div style="top: +10px;" class="d-block text-right card-footer">
         <form action="{{ url_for('add_task') }}" method="POST">
-            <input dir="auto" name="task_name" type="text" class="main-todo-input" id="todo-label" placeholder="Task Name">
+            <input dir="auto" name="task_name" type="text" class="main-todo-input main-mytodo-input" id="todo-label" placeholder="Task Name">
             <textarea dir="auto" name="task_data" type="text" class="data-todo-input" cols="65" rows="5" id="todo-text" placeholder="Task content"></textarea>
             <input type="hidden" value="{{ username }}" name="task_executer">
             <input type="hidden" value="1" name="private">
@@ -128,5 +128,10 @@
 </div>
 
 {% include 'notes.html' %} {% include 'wrapper_end.html' %}
+
+<script>
+    key_sc($(".main-alltodo-input"), 'n');
+    key_sc($(".main-mytodo-input"), 'N');
+</script>
 <!---<script src="{{ url_for('static', filename='js/todo.js') }}"></script> --->
 {% include 'footer.html' %}

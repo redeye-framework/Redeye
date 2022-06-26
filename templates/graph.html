@@ -1,0 +1,37 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">{% include 'wrapper.html' %}
+
+<div class="query">
+    <div class="up">
+        <input class="modern-input" id="query" name="query">
+    </div>
+    <div class="right">
+        <div class="floating-btns">
+            <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                <i class="fas fa-stop"></i> Stabilize
+            </a>
+        </div>
+    </div>
+    <div class="left">
+        <div class="table left-section">
+            <div class="title">Commands</div>
+            <div class="commands">
+                <a href="#" class="command" title="MATCH (user:users) RETURN user">
+                        Show all Users
+                    </a>
+                <a href="#" class="command" title="MATCH (server:servers) RETURN server">
+                        Show all Servers
+                    </a>
+                <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
+                        Show all relationships
+                    </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Graph"></div>
+
+
+{% include 'wrapper_end.html' %} {% include 'footer.html' %}
+<script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>

@@ -49,6 +49,14 @@
 }
 
 .page .tweets .tweet .uploader {
-    float: right;
+    text-align: right;
+    width: 100%;
     color: #88a;
+    position: relative;
+}
+
+.page .tweets .tweet .delete-tweet {
+    position: absolute;
+    left: -15px;
+    bottom: -10px;
 }

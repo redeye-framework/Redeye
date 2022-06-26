@@ -1,16 +1,14 @@
 #Imports
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, flash, jsonify
-from os import walk, path, sep
+from flask import session
+from os import path
 import os
 from redeye import *
 from RedDB import db
-from Parse import Parse as parse
-from Report import report_gen as report
-from datetime import datetime, timedelta
 import base64
 from mimetypes import guess_extension
 from collections import defaultdict
 import shutil
+import hashlib
 
 
 # Consts
@@ -19,44 +17,25 @@ PROJECT_END = "May 20 2020" # Need to change this to be in the database
 SERVICES_FILE = "Tools/services"
 
 def setGlobals():
-    print("Setting globals")
     global MAIN_FILES
     global FILES_FOLDER
-    global PASS_FOLDER
     global SCAN_FOLDER
     global JSON_FOLDER
     global PAYLOAD_FILES
     global SCREENSHOTS_FILES
-    global ADMIN_FILES
     global REPORT_IMAGES
+    global PASS_FOLDER
     MAIN_FILES = "files/{}"
     FILES_FOLDER = "files/{}/data"
-    PASS_FOLDER = "files/{}/passwords"
     SCAN_FOLDER = "files/{}/scans"
     JSON_FOLDER = "files/{}/jsons"
     PAYLOAD_FILES = "files/{}/payloads"
     SCREENSHOTS_FILES = "files/{}/screenshots"
-    ADMIN_FILES = "files/{}/admin"
     REPORT_IMAGES = "files/{}/report_images"
+    PASS_FOLDER = "files/{}/passwords"
 
 def setFilesFolder(folderName):
-    print(folderName)
-    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), PASS_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), ADMIN_FILES.format(folderName), REPORT_IMAGES.format(folderName)
-     
-
-def dir_option(dirname):
-    if dirname == "All":
-        return MAIN_FILES.format(session["project"])
-    elif dirname == "Payloads":
-        return PAYLOAD_FILES.format(session["project"])
-    elif dirname == "Screenshots":
-        return PAYLOAD_FILES.format(session["project"])
-    elif dirname == "Recon":
-        return PASS_FOLDER.format(session["project"])
-    elif dirname == "Admin":
-        return ADMIN_FILES.format(session["project"])
-    else:
-        return None
+    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), REPORT_IMAGES.format(folderName), PASS_FOLDER.format(folderName)
 
 def save_image(name, data):
     """
@@ -96,22 +75,22 @@ def user_type_to_name(user_type):
     elif user_type == 3:
         return "Application"
     elif user_type == 4:
-        return "NetDevice"
+        return "Net-Device"
     elif user_type == 5:
         return "Other"
     else:
         return "Unknown"
 
 def user_name_to_type(user_type_name):
-    if user_type_name == "Domain":
+    if user_type_name.lower() == "domain":
         return 1
-    elif user_type_name == "Localhost":
+    elif user_type_name.lower() == "localhost":
         return 2
-    elif user_type_name == "Application":
+    elif user_type_name.lower() == "application":
         return 3
-    elif user_type_name == "NetDevice":
+    elif user_type_name.lower() == "net-device":
         return 4
-    elif user_type_name == "Other":
+    elif user_type_name.lower() == "other":
         return 5
     else:
         return "Unknown"
@@ -131,10 +110,10 @@ def share_files(walk_dir):
         dic_files = defaultdict(list)
         dic_folders = defaultdict(list)
         for subdir in subdirs:
-            #print('\t- subdirectory ' + subdir)
+
             dic_folders[subdir].append(os.path.join(root, subdir))
         for filename in files:
-            #file_path = os.path.join(root, filename)
+
             dic_files[filename].append(os.path.join(root, filename))
         dic[root].append([dic_folders,dic_files])
         break
@@ -154,7 +133,7 @@ def get_all_files(walk_dir):
     for root, subdirs, files in os.walk(walk_dir):
         for filename in files:
             lst_files[filename].append(os.path.join(root, filename))
-    print(lst_files)
+
     return lst_files
 
 def convert_path_to_name(full_name_list):
@@ -180,11 +159,11 @@ def save_file_in_dir(path, file_data, name):
         data.write(file_data)
     return
 
-def check_login(creds):
-    approve = db.get_redeye_users()
+def check_login(creds,project):
+    approve = db.get_redeye_users(project)
     try:
         for a in approve:
-            if a[1] == creds["username"] and a[2] == creds["password"]:
+            if a[1] == creds["username"] and a[2] == hashlib.sha256(creds["password"].encode()).hexdigest():
                 return(a[0])
     except Exception:
         pass
@@ -215,15 +194,6 @@ def set_user_device_name(userdb, found_on,device_id):
             device_ip = "Unknown"
     return device_ip
 
-def set_user_other_user(found_on,user_found):
-    if user_found:
-        return user_found
-    else:
-        if found_on:
-            return found_on
-        else:
-            return "Unknown"
-
 def serve_file_by_os():
     if os.name == 'nt':
         return 1
@@ -231,7 +201,7 @@ def serve_file_by_os():
         return 2
 
 def set_task(task):
-    print(task)
+
     if 'task_executer' not in task:
         task['task_executer'] = "All"
     if task['task_name'] == '':
@@ -297,7 +267,7 @@ def get_logs(userdb, logs, keyword=None):
         key_word_objs,days,month_years,sorted_logs =[],[],[],[]
         for i,obj in enumerate(all_objects):
             item = obj[0]
-            print(item[2:])
+
             if keyword.lower() in str(item[2:]).lower():
                 key_word_objs.append(obj)
                 log = db.get_log_by_id(userdb, obj[0][0])[0]
@@ -351,10 +321,18 @@ def get_project_name(projects, dbname):
 def get_service_name_by_port(port):
     f = open(SERVICES_FILE, "r")
     lines = f.read().split("\n")
-    print(" " + port + "/")
     port = "\t" + port + "/"
     for line in lines:
         if port in line:
             word = line.split("\t")[0]
             return word
     return "unknown"
+
+
+def zipdir(filesPath, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(filesPath):
+        for file in files:
+            ziph.write(path.join(root, file), 
+                       path.relpath(path.join(root, file), 
+                                       path.join(filesPath, '..')))

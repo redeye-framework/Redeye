@@ -9,119 +9,91 @@
 {% include 'wrapper.html' %}
 <div style="margin-right: 20px;" class="row">
     <div class="col-md-3">
-        <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-bag f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ servers_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Servers</p>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-left"><span class="number">{{ servers_len }}</span></div>
+            <div class="card-right"><span class="name">Servers</span></div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-comment f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ users_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Users</p>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-left"><span class="number">{{ users_len }}</span></div>
+            <div class="card-right"><span class="name">Users</span></div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-vector f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ netdevices_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">NetDevices</p>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-left"><span class="number">{{ netdevices_len }}</span></div>
+            <div class="card-right"><span class="name">NetDevices</span></div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-primary p-20">
-            <div class="media widget-ten">
-                <div class="media-left meida media-middle">
-                    <span><i class="ti-location-pin f-s-40"></i></span>
-                </div>
-                <div class="media-body media-text-right">
-                    <h2 class="color-white">{{ vullns_len }}</h2>
-                    <p style="font-weight: bolder;font-size: 24px;" class="m-b-0">Vullnerabilites</p>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-left"><span class="number">{{ vullns_len }}</span></div>
+            <div class="card-right"><span class="name">Vullnerabilites</span></div>
         </div>
     </div>
 </div>
-
-<div class="col-sm-6 col-md-4">
-    <div class="panel">
-    </br>
-    </br>
-        <div class="panel-heading">
-        </div>
-        <div class="panel-body">
-            <input type="hidden" value="{{ users_len }}" id="users_info">
-            <input type="hidden" value="{{ servers_len }}" id="servers_info">
-            <input type="hidden" value="{{ no_access_len }}" id="no_access_servers_info">
-            <input type="hidden" value="{{ vullns_len }}" id="vullns_info">
-            <input type="hidden" value="{{ netdevices_len }}" id="netdevices_info">
-            <input type="hidden" value="{{ cracked_users_len }}" id="cracked_users_info">
-            <canvas id="pieChart"></canvas>
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <div class="panel">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <input type="hidden" value="{{ users_len }}" id="users_info">
+                <input type="hidden" value="{{ servers_len }}" id="servers_info">
+                <input type="hidden" value="{{ no_access_len }}" id="no_access_servers_info">
+                <input type="hidden" value="{{ vullns_len }}" id="vullns_info">
+                <input type="hidden" value="{{ netdevices_len }}" id="netdevices_info">
+                <input type="hidden" value="{{ cracked_users_len }}" id="cracked_users_info">
+                <canvas id="pieChart"></canvas>
+            </div>
         </div>
     </div>
-</div>
-<div style="position: absolute;right: 27%;top:30%;" class="col-lg-4">
-    <div style="z-index: 999 !important;background-color: inherit;border: none;top: -80px;right: -100px;" class="card">
-        <div style="overflow:scroll;max-height: 600px;" class="card-body">
-            <h2 class="card-title" style="margin-bottom: 20px;">Achievements</h2>
-            <div class="card-content">
-                <div class="todo-list">
-                    <div class="tdl-holder">
-                        <div class="tdl-content">
-                            <form action="{{ url_for('edit_achievement') }}" method="POST" id="achievement-update-form">
-                                <input type="hidden" name="check" id="checkbox-id-input">
+    <div class="col-sm-6 col-md-4">
+        <div class="panel" style="padding-left: 20%;">
+            <div style="overflow:scroll;max-height: 580px;">
+                <h2 class="card-title" style="margin-top: 20px; margin-bottom: 30px;">Achievements</h2>
+                <div class="card-content" style="padding: 10px;">
+                    <div class="todo-list">
+                        <div class="tdl-holder">
+                            <div class="tdl-content">
+                                <form action="{{ url_for('edit_achievement') }}" method="POST" id="achievement-update-form">
+                                    <input type="hidden" name="check" id="checkbox-id-input">
+                                </form>
+                                <ul style="list-style-type: none;">                                
+                                    {% for i in range(achievements_len) %}
+                                    <li class="achievements-list">
+                                        <label>
+                                            {% if achievements[i][2] == 1  %}
+                                                <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" checked style="display: none"/>
+                                                <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
+                                                    <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                    </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
+                                            {% else %}
+                                                <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" style="display: none"/>
+                                                <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
+                                                    <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                    </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
+                                            {% endif %}
+                                        </label>
+                                        <a href="{{ url_for('delete_achievement') }}?id={{ achievements[i][0] }}" id="em" onclick="this.parentElement.remove()"><i class="fas fa-trash icon-set" style="font-size: 20px;float: right; color: rgb(212, 71, 71);"></i></a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <form action="{{ url_for('create_achievement') }}" method="POST" id="achievement-form">
+                                <input style="margin-bottom: 20px;" type="text" class="main-achiv-input" name="achievement" placeholder="Type achievement">
                             </form>
-                            <ul style="list-style-type: none;">                                
-                                {% for i in range(achievements_len) %}
-                                <li class="achievements-list">
-                                    <label>
-                                        {% if achievements[i][2] == 1  %}
-                                            <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" checked style="display: none"/>
-                                            <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
-                                                <svg width="12px" height="10px" viewbox="0 0 12 10">
-                                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                                                </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
-                                        {% else %}
-                                            <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" style="display: none"/>
-                                            <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
-                                                <svg width="12px" height="10px" viewbox="0 0 12 10">
-                                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                                                </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
-                                        {% endif %}
-                                    </label>
-                                    <a href="{{ url_for('delete_achievement') }}?id={{ achievements[i][0] }}" id="em" onclick="this.parentElement.remove()"><i class="fas fa-trash icon-set" style="font-size: 20px;float: right; color: rgb(212, 71, 71);"></i></a>
-                                </li>
-                                {% endfor %}
-                            </ul>
                         </div>
-                        <form action="{{ url_for('create_achievement') }}" method="POST" id="achievement-form">
-                            <input type="text" class="main-achiv-input" name="achievement" placeholder="Type achievement">
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!--
 <div style="float: right;margin-top: -30%;margin-right: -10%;" class="col-lg-6">
     <div style="box-shadow:none !important;border: none !important;" class="card">
         <div style="background:linear-gradient(315deg, #1E2229 10%, #242a38 70%);background-attachment: fixed;" class="card-content">
@@ -130,7 +102,7 @@
             <div id="gauge" style="height: 450%;"></div>
         </div>
     </div>
-</div>
+</div>-->
 {% include 'wrapper_end.html' %}
     <script>
         function parseJwt () {
