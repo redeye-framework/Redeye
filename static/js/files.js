@@ -6,7 +6,7 @@ $(document.getElementsByTagName("button")).bind("contextmenu", function (event) 
     $(".custom-menu").finish().toggle(100).
     css({
         top: event.pageY + "px",
-        left: event.pageX + "px"
+        left: event.pageX - 260 + "px" 
     });
 });
 
