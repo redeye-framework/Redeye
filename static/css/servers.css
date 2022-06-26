@@ -177,12 +177,17 @@ hr {
 
 .server-page input {
     display: inline-block;
-    padding: 0px 5px;
+    padding: 2px 8px;
     border-radius: 8px;
     background-color: #343a40;
     color: white;
     border: 1px solid rgb(86, 92, 104);
     outline: none;
+    transition-duration: 0.3s;
+}
+
+.server-page input:focus {
+    border: 1px solid rgb(198, 206, 221);
 }
 
 td .editable-inp {
