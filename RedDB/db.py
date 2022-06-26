@@ -605,6 +605,13 @@ def create_new_server_section(db,section_name):
     result = get_db_with_actions(db, query)
     return (result)
 
+
+@check_input
+def delete_section_by_id(db, section_id):
+    query = 'DELETE FROM sections WHERE id="{}"'.format(section_id)
+    return get_db_with_actions(db, query)
+
+
 @check_input
 def get_vendor_by_server_id(db, id):
     query = r'SELECT vendor FROM servers WHERE id="{}"'.format(id)

@@ -208,7 +208,7 @@ def delete_server():
         db.delete_server_by_id(session["db"], id, session["username"])
 
         if IS_DOCKER_ENV:
-            graph.delete_server(id)
+            graph.deleteServerNode(id)
 
         return redirect('servers')
 
@@ -301,6 +301,25 @@ def add_new_section():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     db.create_new_server_section(session["db"],"NewSection")
+
+    return redirect('servers')
+
+@app.route('/delete_section', methods=['POST'])
+def delete_section():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+
+    # Get id from request
+    section_id = dict["id"]
+
+    # Get all server under this section
+    servers = db.get_servers_by_section_id(session["db"], section_id)
+
+    # If the section is empty, delete it.
+    if not servers:
+        db.delete_section_by_id(session["db"], section_id)
 
     return redirect('servers')
 

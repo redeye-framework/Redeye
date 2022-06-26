@@ -99,3 +99,12 @@ $(".status-color").change(function() {
     }));
     location.reload();
 })
+
+
+$(".section-delete-btn").click(function() {
+    var sectionId = $(this).attr("id");
+    $.post(Flask.url_for('delete_section', {
+        id: sectionId
+    }));
+    $(this).parent().parent().remove();
+})
