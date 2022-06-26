@@ -117,3 +117,9 @@ $(".tablinks").click(function(){
     $(".plausibility .dot").toArray()[val["plausibility"] - 1].click()
     $(".risk .dot").toArray()[val["risk"] - 1].click()
 });
+
+/*
+$(window).bind('beforeunload', function(){
+    return 'Are you sure you want to leave?';
+  });
+*/
