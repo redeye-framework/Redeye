@@ -145,6 +145,7 @@
 .modern-input {
     border-radius: 3px;
     padding: 5px;
+    transition-duration: 0.3s;
     background-color: rgb(67, 72, 82);
     border-color: transparent;
     color: #ccd;
