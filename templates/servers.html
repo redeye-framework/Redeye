@@ -6,7 +6,7 @@
     <div class="container-fluid section">
         <h4 class="section-name">
             {% if not data[section]['info'] %}
-            <a href="#" onclick="this.parentElement.parentElement.remove();" class="section-delete-btn">
+            <a href="#" id="{{ section }}" class="section-delete-btn">
                 <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
             </a>
             {% endif %}{{ data[section]['name'] }}</h4>
