@@ -93,9 +93,7 @@ function sort_ports() {
 }
 
 function submitUsersForm() {
-    document.getElementById("type").value = document.getElementById("UserTypeForm").value;
     $('#user-form').submit();
-
 }
 
 $("table").mouseover(function() {
