@@ -747,3 +747,7 @@ input:checked+.slider:before {
 .fa-plus {
     cursor: pointer;
 }
+
+.fa-plus:hover {
+    filter:brightness(120%);
+}
