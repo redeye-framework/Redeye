@@ -193,6 +193,7 @@ table {
     font-weight: bold;
     font-size: 16px;
     transition-duration: 1s;
+    font-weight: normal;
 }
 
 .select-type {

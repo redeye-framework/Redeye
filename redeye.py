@@ -1012,7 +1012,7 @@ def new_attack():
     
     dic_data = {}
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    attacks.remove("New")
+    
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
