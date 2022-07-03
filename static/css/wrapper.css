@@ -164,7 +164,7 @@ input:focus {
 /*--------------------sidebar-brand----------------------*/
 
 .sidebar-wrapper .sidebar-brand {
-    padding: 20px 10px;
+    padding: 20px 20px;
     display: flex;
     align-items: center;
 }
@@ -746,4 +746,8 @@ input:checked+.slider:before {
 
 .fa-plus {
     cursor: pointer;
+}
+
+.fa-plus:hover {
+    filter:brightness(120%);
 }

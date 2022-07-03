@@ -531,29 +531,27 @@ def create_user():
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
         user_perm = request.form.get('permissions')
-        user_type = request.form.get("userType")
+        user_type = request.form.get('user_type')
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
-        
+
         if not user_name:
             return redirect(request.referrer)
         if not user_pass:
-            user_pass = "Unknown"
+            user_pass="-"
 
         if not user_perm:
-            user_perm = "READ|WRITE"
+            user_perm="READ|WRITE"
 
-        if user_type:
-            userTypeId = db.get_user_type(session["db"],user_type)
+        if not user_type:
+            user_type="-"
+
+        userTypeId = db.get_user_type(session["db"],user_type)
             
-            if not userTypeId:
-                userTypeId = db.insert_new_user_type(session["db"],user_type)
-            else:
-                userTypeId = userTypeId[0][0]
-
+        if not userTypeId:
+            userTypeId = db.insert_new_user_type(session["db"],user_type)
         else:
-            # Will not Add the user, for now
-            return redirect(request.referrer)
+            userTypeId = userTypeId[0][0]
 
         found = "NULL"
         if not server_id:
@@ -1014,7 +1012,7 @@ def new_attack():
     
     dic_data = {}
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    attacks.remove("New")
+    
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:

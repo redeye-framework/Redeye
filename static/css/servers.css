@@ -3,17 +3,21 @@
     padding-top: 70px;
 }
 
-.section-name {
+.section-title {
     position: absolute;
     left: 48%;
     transform: translateX(-50%);
     margin-top: -60px;
+}
+
+.section-name {
+    display: inline-block;
     color: rgb(204, 204, 207);
 }
 
 .section-delete-btn {
-    font-size: 18px;
-    margin-right: 20px;
+    font-size: 22px;
+    margin-right: 15px;
     padding: 5px;
 }
 
@@ -39,10 +43,6 @@
 }
 
 .section-name-input {
-    position: absolute;
-    left: 45%;
-    margin-top: -60px;
-    transform: translateX(-30%);
     display: none;
     padding: 5px;
     border-radius: 8px;
@@ -177,12 +177,17 @@ hr {
 
 .server-page input {
     display: inline-block;
-    padding: 0px 5px;
+    padding: 2px 8px;
     border-radius: 8px;
     background-color: #343a40;
     color: white;
     border: 1px solid rgb(86, 92, 104);
     outline: none;
+    transition-duration: 0.3s;
+}
+
+.server-page input:focus {
+    border: 1px solid rgb(198, 206, 221);
 }
 
 td .editable-inp {
@@ -412,6 +417,7 @@ input[type="file"] {
 .modern-input {
     border-radius: 3px;
     padding: 5px;
+    transition-duration: 0.3s;
     background-color: rgb(67, 72, 82);
     border-color: transparent;
     color: #ccd;

@@ -78,12 +78,12 @@
                             <tr class="item-add">
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
-                                <input type="hidden" id="type" name="userType">
+                                <!--input type="hidden" id="user-type-input" name="user_type" value="Unknown"-->
                                 <td><input type="text" size="5" name="username" placeholder="User"></td>
                                 <td><input type="text" size="5" name="password" placeholder="Pass"></td>
-                                <td><input type="text" size="5" id="UserTypeForm" name="userTypeForm" placeholder="Type"></td>
+                                <td><input type="text" size="5" name="user_type" placeholder="Type"></td>
                                 <td><input type="text" size="8" name="permissions" placeholder="Perm"></td>
-                                <td><a onclick="submitUsersForm()" href="#"><i class="fas fa-plus"
+                                <td><a onclick="getElementById('user-form').submit()" href="#"><i class="fas fa-plus"
                             style="margin: 5px 15px; font-size: 18px;"></i></a></td>
                             </tr>
                         </tbody>
