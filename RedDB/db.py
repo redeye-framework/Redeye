@@ -7,6 +7,7 @@ from functools import wraps
 import re
 
 MANAGE_DB = r"RedDB/managementDB.db"
+EXAMPLE_DB = r"RedDB/ExampleDB.db"
 MANAGE_TABLES_SQL = r"RedDB/manaTables.sql"
 MANAGE_INIT_SQL = r"RedDB/manaInit.sql"
 PROJECT_DB = r""
@@ -1216,21 +1217,21 @@ def create_connection(db):
 # Creates tables in management DB
 def create_management_tables(tables, init):
     """
-    Create new db tables.
+    Create new management db tables.
     """
     conn = create_connection(MANAGE_DB)
     try:
         c = conn.cursor()
         c.executescript(tables)
         c.executescript(init)
-        print("Tables Created.")
+        print("Management Tables Created.")
     except Error as e:
         print(e)
     conn.close()
 
 
 # Creates tables in DB
-def create_tables(db, tables, init):
+def create_tables(db, tables, init=False):
     """
     Create new db tables.
     """
@@ -1238,7 +1239,7 @@ def create_tables(db, tables, init):
     try:
         c = conn.cursor()
         c.executescript(tables)
-        if db == PROJECT_PATH + "example.db":
+        if init:
             c.executescript(init)
         print("Tables Created.")
     except Error as e:
@@ -1254,12 +1255,24 @@ def set_project_db(project):
     if not isfile(db):
         with open(TABLES_SQL, "r") as table:
             tables = table.read()
-        with open(INIT_SQL, "r") as initialize:
-            init = initialize.read()
-        create_tables(db, tables, init)
+        create_tables(db, tables)
         add_defult_colors(db)
     
     return db
+
+def init_demo_db():
+    """
+    Create example database.
+    """
+
+    with open(TABLES_SQL, "r") as table:
+            tables = table.read()
+            
+    with open(INIT_SQL, "r") as initialize:
+        init = initialize.read()
+    
+    create_tables(PROJECT_PATH + "example.db", tables, init)
+    add_defult_colors(PROJECT_PATH + "example.db")
 
 def merge_new_project_db(projectManager, newProjectId, dbFile):
 

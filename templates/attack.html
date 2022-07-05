@@ -3,9 +3,10 @@
 <div class="vectors-box">
     <div class="tabs">
         {% for i in range(attacks_len) %}
-        <button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}" onclick="changeCurrentTab(this)">{{ attacks[i] }}</button> {% endfor %}
+        <button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}" onclick="changeCurrentTab(this)">{{ attacks[i] }}</button>
+        {% endfor %}
         <form action="{{ url_for('new_attack') }}">
-            <button class="tablinks"><i class="fas fa-plus"></i></button>
+            <button id="add-new-attack"><i class="fas fa-plus"></i></button>
         </form>
     </div>
 
@@ -15,6 +16,7 @@
         </div>
     </div>
     <div class="edit">
+        {% if attacks_len %}
         <div class="edit-operator">
             <form action="{{ url_for('attack') }}" method="POST" id="attack-form">
                 <input type="hidden" value="" name="tab" id="tab-input">
@@ -141,10 +143,12 @@
             <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
 					class="fas fa-trash"></i></a>
         </div>
+        {% endif %}
     </div>
 </div>
 <div class="stats-box">
     <div class="section severity">
+        {% if attacks_len %}
         <h6>Severity</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -159,8 +163,10 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
     <div class="section plausibility">
+        {% if attacks_len %}
         <h6>plausibility</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -175,8 +181,10 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
     <div class="section risk">
+        {% if attacks_len %}
         <h6>Risk</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -191,11 +199,13 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% include 'wrapper_end.html' %}
 <script>
-    var currentTab = "{{tab}}";
+    var currentTab = "{{ tab }}";
+    var attacks_len = {{ attacks_len }};
     var changed = false;
 </script>
 <script src="{{ url_for('static', filename='js/attack.js') }}"></script>

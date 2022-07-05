@@ -1,9 +1,6 @@
 
 $(document).ready(function () {
-    console.log(currentTab);
-    if (currentTab != "") {
-        document.getElementById(currentTab).click();
-    } else {
+    if (attacks_len) {
         $(".tablinks")[0].click();
     }
 });

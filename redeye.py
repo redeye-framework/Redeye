@@ -72,6 +72,7 @@ def init(app):
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
+        makedirs(FILES_FOLDER, exist_ok=True)
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -80,7 +81,6 @@ def init(app):
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
-        makedirs(FILES_FOLDER, exist_ok=True)
 
 """
 =======================================================
@@ -1001,7 +1001,7 @@ def new_attack():
     name = "New"
     jfiles = os.listdir(helper.JSON_FOLDER.format(session["project"]))
 
-    for i in range(1, len(jfiles) + 1):
+    for i in range(1, len(jfiles) + 2):
         if f"{name}{str(i)}.json" not in jfiles:
             name += str(i)
             name += ".json"
@@ -1026,6 +1026,7 @@ def attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+        
     tab = ""
 
     if request.method == 'POST':
@@ -1046,18 +1047,15 @@ def attack():
                 os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
     
     dic_data = {}
-    if session["project"] == DEFAULT_DB:
-        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(session["project"]))
 
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    if "New" in attacks:
-        attacks.remove("New")
-    for i, attack in enumerate(attacks):
-        attacks[i] = attack[:-5]
-        with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
-            dic_data[attack] = data.read()
-        
 
+    if attacks:
+        for i, attack in enumerate(attacks):
+            attacks[i] = attack[:-5]
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
+                dic_data[attack] = data.read()
+        
     return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
 
@@ -1074,7 +1072,6 @@ def delete_attack():
     
     dic_data = {}
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    attacks.remove("New")
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
@@ -1728,17 +1725,18 @@ def showHelpMenu():
     in the most efficient and organized way.
 
     optional arguments:
+    --port      Select listening port [Default: 5000].
+    --docker    Should be set only when running from a docker container [Default: False].
+    --safe      Set state to "safe" - Allows to create new projects [Default: False].
     --reset     Resets the DB and deletes all files [Default: False].
     --debug     Debugging mode [Default: False].
-    --port      Select listening port [Default: 5000].
-    --safe      Set state to "safe" - Allows to create new projects [Default: False].
-    --docker    Should be set only when running from a docker container [Default: False].
+    --demo      Load demo DB for demonstration purposes [Default: False].
     --help      Display this help message.
     """
     print(description)
     
 
-def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=False):
+def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, demo=False, help=False):
     if help:
         showHelpMenu()
         sys.exit(0)
@@ -1756,6 +1754,8 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
             for project in projectsFiles:
                     os.remove(project)
 
+        allFiles.reverse()
+
         # Remove all files
         if allFiles:
             for file in allFiles:
@@ -1764,6 +1764,7 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
 
         # List all Dirs under files
         allFolders = glob("files/**", recursive=True)
+
         # Delete Subdirs to Root dirs
         allFolders.reverse()
 
@@ -1780,9 +1781,15 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
     global IS_ENV_SAFE
     IS_ENV_SAFE = safe
 
-    if docker:
-        global IS_DOCKER_ENV
-        IS_DOCKER_ENV = True
+    global IS_DOCKER_ENV
+    IS_DOCKER_ENV = docker
+    
+    if demo:
+        #init exampleDB.
+        # Load default json file.
+        db.init_demo_db()
+        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(DEFAULT_DB))
+
 
     if debug:
         socketio.run(app, debug=True, host='0.0.0.0', port=port)
