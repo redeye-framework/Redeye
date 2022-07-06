@@ -150,8 +150,7 @@ input:focus {
 /*----------------sidebar-content----------------*/
 
 .sidebar-content {
-    max-height: calc(100% - 30px);
-    height: calc(100% - 30px);
+    height: 100vh;
     overflow-y: auto;
     position: relative;
 }
@@ -524,20 +523,19 @@ input:checked+.slider:before {
 }
 
 .sidebar-btns {
-    bottom: 10px;
-    width: 220px;
+    bottom: 15px;
+    width: 100%;
     text-align: center;
-    left: 20px;
     border-radius: 10px;
-    position: fixed !important;
+    position: absolute !important;
 }
 
 .sidebar-btns form {
-    display: inline;
+    display: inline-block;
 }
 
 .sidebar-btns button {
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .sidebar-btns label {
@@ -552,6 +550,28 @@ input:checked+.slider:before {
     font-style: normal;
 }
 
+.modern-btn {
+    padding: 5px 13px;
+    border: 1px solid rgba(187, 187, 204, 0.473);
+    font-size: 18px;
+    color: #bbc;
+    border-radius: 7px;
+    background-color: #3a3f48;
+    transition-duration: 0.2s;
+    text-decoration: none;
+}
+
+.modern-btn:hover {
+    color: #bbc;
+    filter: brightness(120%);
+}
+
+#key-desc {
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
+    top: 3px;
+}
 
 /*--------------------------page-content-----------------------------*/
 
