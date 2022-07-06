@@ -531,9 +531,13 @@ def create_user():
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
         user_perm = request.form.get('permissions')
-        user_type = request.form.get('user_type')
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
+        user_type = request.form.get('user_type')
+        user_type_select = request.form.get('user_type_select')
+
+        helper.debug(user_type)
+        helper.debug(user_type_select)
 
         if not user_name:
             return redirect(request.referrer)
@@ -544,7 +548,10 @@ def create_user():
             user_perm="READ|WRITE"
 
         if not user_type:
-            user_type="-"
+            if user_type_select:
+                user_type = user_type_select
+            else:
+                user_type="-"
 
         userTypeId = db.get_user_type(session["db"],user_type)
             
@@ -670,7 +677,7 @@ def all_users():
     for index,typeName in enumerate(allUserTypes):
         allUserTypes[index] = typeName[0]
 
-    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, type=6, allUserTypes=allUserTypes)
+    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
 def export_users():
