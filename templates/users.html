@@ -30,20 +30,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for name in data %} 
-                {% for info in data[name] %}
-                <tr style="overflow:scroll">
-                    <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a>
-                    </td>
-                    <td onclick="copyToClipboard(this.innerHTML)" style="cursor:pointer;">{{ info[0] }}</td>
-                    <td>{{ info[1] }}</td>
-                    <td>{{ info[2] }}</td>
-                    <td>{{ info[3] }}</td>
-                    <td><a href="{{ url_for('delete_user') }}?id={{ info[5] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
+            {% for name in data %} {% for info in data[name] %}
+            <tr style="overflow:scroll">
+                <td><a class="hover-user-details" onclick="copyToClipboard(this.innerHTML)" style="padding: 5px 10px;" id="user-{{ info[5] }}" href="#" onmouseover="showUser('{{ name }}', '{{ info[0] }}', '{{ info[3] }}', '{{ info[1] }}', '{{ info[4] }}', '{{ info[5] }}', '{{ info[2] }}')">{{ name }}</a>
+                </td>
+                <td onclick="copyToClipboard(this.innerHTML)" style="cursor:pointer;">{{ info[0] }}</td>
+                <td>{{ info[1] }}</td>
+                <td>{{ info[2] }}</td>
+                <td>{{ info[3] }}</td>
+                <td><a href="{{ url_for('delete_user') }}?id={{ info[5] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
                 style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
-                </tr>
-                {% endfor %} 
-            {% endfor %}
+            </tr>
+            {% endfor %} {% endfor %}
             <tr style="overflow:scroll">
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
                     <td><input class="username-create-input modern-input" type="text" name="username" placeholder="Username"></td>
@@ -51,17 +49,17 @@
                     <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
                     <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
                     <td id="type_selector">
-                        {% if allUserTypes %}
-                        <input class="modern-input" type="text" name="user_type" style="display: none;" id="userType" placeholder="User Type">
-                        {% else %}
-                        <input class="modern-input" style="display: none;" type="text" name="user_type" style="display: none;" id="userType" placeholder="User Type">
-                        {% endif %}
-                        <select id="userType" name="user_type_select" class="exec-users-input inline" id="select_type" onchange="addNewUserType(this)">
+                        {% if allUserTypes|length %}
+                        <select id="userTypeSelector" name="user_type_select" class="exec-users-input inline" id="select_type" onchange="addNewUserType(this)">
                             {% for userType in allUserTypes %}
                                 <option>{{ userType }}</option>
                             {% endfor %}
                             <option>Other</option>
                         </select>
+                        <input class="modern-input" type="text" name="user_type" style="display: none;" id="userType" placeholder="User Type"> {% else %}
+                        <input class="modern-input" type="text" name="user_type" id="userType" placeholder="User Type"> {% endif %}
+
+
                     </td>
                     <td><a onclick="submitUserForm()" href="#"><i class="fas fa-plus" style="margin: 5px 15px;"></i></a>
                     </td>
@@ -105,8 +103,9 @@
             obj.remove();
         }
     }
+
     function submitUserForm() {
-        $('#user-form').submit(); 
+        $('#user-form').submit();
     }
 </script>
 {% include 'user.html' %} {% include 'wrapper_end.html' %}
