@@ -727,6 +727,9 @@ input:checked+.slider:before {
     font-family: 'Times New Roman', Times, serif;
 }
 
+.input-group-text:hover {
+    cursor: pointer;
+}
 
 /****** Import button *******/
 
