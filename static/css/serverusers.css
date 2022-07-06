@@ -22,6 +22,11 @@
     background-color: #31353D;
     border-radius: 10px;
     box-shadow: 1px 1px 4px black;
+    transition-duration: 0.2s;
+}
+
+.user-box:hover {
+    box-shadow: 3px 3px 10px black;
 }
 
 .user-box .icon {
@@ -112,8 +117,8 @@
 
 .user-box .prop > .delete {
     position: absolute;
-    bottom: -5px;
-    right: 18px;
+    bottom: -18px;
+    right: 15px;
     font-size: 18px;
     color: rgb(201, 84, 84);
     filter: brightness(90%)

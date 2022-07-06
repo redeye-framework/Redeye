@@ -3,6 +3,13 @@ var el = null;
 $(document.getElementsByTagName("button")).bind("contextmenu", function (event) {
     el = this;
     event.preventDefault();
+
+    $("#menu-pre-report").hide()
+    if($(el).val().endsWith(".png") || $(el).val().endsWith(".jpg") || $(el).val().endsWith(".jpeg"))
+    {
+        $("#menu-pre-report").show()
+    }
+
     $(".custom-menu").finish().toggle(100).
     css({
         top: event.pageY + "px",
@@ -22,6 +29,7 @@ $(".custom-menu li").click(function(){
         case "Rename": replaceChildName(el); break;
         case "Delete": delete_file(el.value);el.remove(); break;
         case "Download": download_file(el.value); break;
+        case "pre-report": add_to_pre_report(el.value); break;
     }
     $(".custom-menu").hide(100);
 });
@@ -46,4 +54,8 @@ function download_file(path){
     xmlHttp.open( "GET", "files" + "?" +"file_name=" + path);
     xmlHttp.send(null);
     return xmlHttp.responseText;
+}
+
+function add_to_pre_report(path){
+    alert(path + "\n@elad_pt search: add_to_pre_report");
 }

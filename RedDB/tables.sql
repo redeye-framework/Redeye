@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
                                       username text NOT NULL,
                                       password text,
                                       permissions text NOT NULL DEFAULT '-',
-                                      attain text DEFAULT "No attain...",
+                                      attain text DEFAULT "-",
                                       relevent INTEGER NOT NULL DEFAULT 1,
                                       found_on text,
                                       server_id INTEGER,

@@ -74,44 +74,11 @@
     <label class="btn btn-primary" for="file"><i class="fas fa-upload"></i></label>
 </form>
 
-<script>
-    function sortUsers() {
-        var type = document.getElementById('type').value;
-        var table = document.getElementById('users-table');
-
-        for (var i = 1; i <= table.rows.length - 1; ++i) {
-            // Show All  
-            if (table.rows[i].style.display == "none") {
-                table.rows[i].style.display = "";
-            }
-
-            // Hide none relevant
-            var user_type = table.rows[i].cells[4].innerHTML;
-            if (type.toLowerCase() != user_type.toLowerCase() && type != "All") {
-                table.rows[i].style.display = 'none';
-            } else if (type == "All") {
-                for (var i = 1; i <= table.rows.length; ++i) {
-                    table.rows[i].style.display = "";
-                }
-            }
-        }
-    }
-
-    function addNewUserType(obj) {
-        if (obj.value == "Other") {
-            $("#userType").show()
-            obj.remove();
-        }
-    }
-
-    function submitUserForm() {
-        $('#user-form').submit();
-    }
-</script>
 {% include 'user.html' %} {% include 'wrapper_end.html' %}
 <script>
     key_sc($(".export-users-btn"), 'e');
     key_sc($(".username-create-input"), 'n');
     key_sc($(".import-btn"), 'u');
 </script>
+<script src="{{ url_for('static', filename='js/users.js') }}"></script>
 {% include 'footer.html' %}

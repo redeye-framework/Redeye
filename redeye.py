@@ -543,7 +543,7 @@ def create_user():
             user_pass="-"
 
         if not user_perm:
-            user_perm="READ|WRITE"
+            user_perm="-"
 
         if not user_type:
             if user_type_select:
