@@ -598,8 +598,11 @@ def edit_user():
         else:
             server_id = ""
         """
+
+        typeName = db.get_user_type(session["db"], user_type)[0][0]
+
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
+                     passwd=user_pass, perm=user_perm, type=typeName, found_on=user_found_on, found_on_server=False, attain=user_attain)
 
         if IS_DOCKER_ENV:
             if db.get_server_id_by_name(session["db"], user_found_on):
