@@ -328,6 +328,10 @@ def get_service_name_by_port(port):
             return word
     return "unknown"
 
+def debug(text):
+    print("------------------------\n")
+    print(text)
+    print("-------------")
 
 def zipdir(filesPath, ziph):
     # ziph is zipfile handle
