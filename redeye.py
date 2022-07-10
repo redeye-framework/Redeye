@@ -56,7 +56,6 @@ DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
 MANAGEMENT_DB = r"RedDB/managementDB.db"
 ZIP_FOLDER = r"zip"
-FILES_FOLDER = r"files/"
 PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
 
@@ -72,7 +71,6 @@ def init(app):
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
-        makedirs(FILES_FOLDER, exist_ok=True)
         makedirs(d1, exist_ok=True)
         makedirs(d2, exist_ok=True)
         makedirs(d3, exist_ok=True)
@@ -605,8 +603,13 @@ def edit_user():
         else:
             server_id = ""
         """
+        if user_type:
+            typeName = db.get_user_type(session["db"], user_type)[0][0]
+        else:
+            typeName = None
+
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
+                     passwd=user_pass, perm=user_perm, type=typeName, found_on=user_found_on, found_on_server=False, attain=user_attain)
 
         if IS_DOCKER_ENV:
             if db.get_server_id_by_name(session["db"], user_found_on):
@@ -920,10 +923,16 @@ def delete_files():
 def load_files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
     current_dir = request.args.get("dir_name")
+    mainFolder = helper.MAIN_FILES.format(session["project"])
+
+    if not current_dir.startswith(mainFolder):
+        return redirect(request.referrer)
+
 
     if not current_dir:
-        full_path = helper.MAIN_FILES.format(session["project"])
+        full_path = mainFolder
 
     else:
         if helper.secure_file_name(current_dir):
@@ -942,7 +951,7 @@ def load_files():
             for key,val in helper.get_all_files(helper.MAIN_FILES.format(session["project"])).items():
                 if key_word['key_word'].lower() in key.lower():
                     keyword_files[key].append(val)
-    
+
             if keyword_files:
                 return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
 
@@ -1751,6 +1760,7 @@ def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, d
     if reset:
         projectsFiles = glob("RedDB/Projects/*")
         allFiles = glob("files/**", recursive=True)
+        profilePics = glob("static/pics/profiles/*")
 
         # Remove management DB
         if path.exists(MANAGEMENT_DB):
@@ -1759,7 +1769,12 @@ def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, d
         # Remove all project files
         if projectsFiles:
             for project in projectsFiles:
-                    os.remove(project)
+                os.remove(project)
+
+        if profilePics:
+            for profile in profilePics:
+                if "user.png" not in profile:
+                    os.remove(profile)
 
         allFiles.reverse()
 

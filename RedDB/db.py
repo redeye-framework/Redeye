@@ -184,30 +184,6 @@ def set_user_password(db, user_id, password, exec):
     create_log(db, "User password Added", "id", result, "Password added", exec)
     return(result)
 
-@check_input
-def get_all_domain_users(db):
-    query = r'SELECT * FROM users WHERE type=1 and relevent=1'
-    return db_get(db, query)
-
-@check_input
-def get_all_localhost_users(db):
-    query = r'SELECT * FROM users WHERE type=2 and relevent=1'
-    return db_get(db, query)
-
-@check_input
-def get_all_application_users(db):
-    query = r'SELECT * FROM users WHERE type=3 and relevent=1'
-    return db_get(db, query)
-
-@check_input
-def get_all_netdevices_users(db):
-    query = r'SELECT * FROM users WHERE type=4 and relevent=1'
-    return db_get(db, query)
-
-@check_input
-def get_all_other_users(db):
-    query = r'SELECT * FROM users WHERE type=5 and relevent=1'
-    return db_get(db, query)
 
 @check_input
 def get_all_users(db):
