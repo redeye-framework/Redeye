@@ -796,7 +796,7 @@ input:checked+.slider:before {
     top: 100px;
     left: 40%;
     width: 900px;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: scroll;
     transform: translateX(-30%);
     background-color: #31353D;
