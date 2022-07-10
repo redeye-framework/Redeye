@@ -179,19 +179,16 @@ function toggleKeyMap() {
     if (!keyMap) {
         keyMap = 1;
         $(".page-content").css("filter", "brightness(40%)");
-        /*this.addEventListener("keyup", function(event) {
+        this.addEventListener("keyup", function(event) {
             if (event.keyCode === 27) {
-                toggleKeyMap();
+                keyMap = 0;
+                $("#keybinding-map").hide();
+                $(".page-content").css("filter", "brightness(100%)");
             }
-        });*/
+        });
     } else {
         keyMap = 0;
         $(".page-content").css("filter", "brightness(100%)");
-        /*this.removeEventListener("keyup", function(event) {
-            if (event.keyCode === 27) {
-                toggleKeyMap();
-            }
-        });*/
     }
 }
 

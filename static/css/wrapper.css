@@ -795,7 +795,7 @@ input:checked+.slider:before {
     position: fixed;
     top: 100px;
     left: 40%;
-    width: 900px;
+    width: 1000px;
     max-height: 85vh;
     overflow-y: scroll;
     transform: translateX(-30%);
@@ -838,7 +838,7 @@ input:checked+.slider:before {
     border: none;
     padding: 8px;
     color: rgb(196, 196, 212);
-    width: 250px;
+    width: 300px;
 }
 
 #keybinding-map table tr:nth-child(even) {
