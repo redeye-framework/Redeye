@@ -550,6 +550,16 @@ input:checked+.slider:before {
     font-style: normal;
 }
 
+
+.floating-btn {
+    color: #eef !important;
+    border-radius: 30px;
+    box-shadow: 0px 0px 4px black;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
 .modern-btn {
     padding: 5px 13px;
     border: 1px solid rgba(187, 187, 204, 0.473);
@@ -570,7 +580,7 @@ input:checked+.slider:before {
     display: inline-block;
     margin-left: 10px;
     position: relative;
-    top: 3px;
+    top: 2px;
 }
 
 /*--------------------------page-content-----------------------------*/
@@ -747,7 +757,7 @@ input:checked+.slider:before {
     user-select: none;
     position: fixed;
     right: 30px;
-    bottom: 35px;
+    bottom: 25px;
     padding: 15px 20px;
     border-radius: 50%;
     transition: transform .5s ease-in-out;
@@ -774,3 +784,72 @@ input:checked+.slider:before {
 .fa-plus:hover {
     filter:brightness(120%);
 }
+
+/******** Floating Box ********/
+
+.hidden-floating-box {
+    display: none;
+}
+
+#keybinding-map {
+    position: fixed;
+    top: 100px;
+    left: 40%;
+    width: 1000px;
+    max-height: 85vh;
+    overflow-y: scroll;
+    transform: translateX(-30%);
+    background-color: #31353D;
+    border-radius: 10px;
+    box-shadow: 0 0 15px black;
+    color: #bbc;
+    padding: 20px;
+    z-index: 1000;
+
+}
+
+#keybinding-map .panel {
+    display: inline;
+}
+
+#keybinding-map .left-panel {
+    float: left;
+}
+
+#keybinding-map .right-panel {
+    float: right;
+}
+
+#keybinding-map .page-head {
+    font-size: 20px;
+    margin: 5px;
+    padding-top: 10px;
+    width: 100%;
+    border-bottom: 1px solid #bbc;
+}
+
+
+#keybinding-map table {
+    background-color: #31353D;
+    margin-bottom: 20px;
+}
+
+#keybinding-map table tr td {
+    border: none;
+    padding: 8px;
+    color: rgb(196, 196, 212);
+    width: 300px;
+}
+
+#keybinding-map table tr:nth-child(even) {
+    background-color: #353941;
+}
+
+#keybinding-map table td:first-child {
+    font-weight: bold;
+    color: white;
+    padding-right: 30px;
+    width: 150px;
+}
+
+/******************************/

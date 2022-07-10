@@ -24,7 +24,7 @@
                 <div id="attack_properties">
                     <input id="attack-current-name" type="hidden" name="current-attack-name" value="">
                     <input id="last-attack-name-input" type="hidden" value="" name="last-attack-name">
-                    <input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value="">
+                    <input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value=""  maxlength="22">
                 </div>
                 <div id="operator_properties" style="display: none;">
                     <input class="input title-input" id="operator_title" type="text" placeholder="Title">
@@ -206,6 +206,9 @@
     var currentTab = "{{ tab }}";
     var attacks_len = {{ attacks_len }};
     var changed = false;
+    key_sc($("#add-new-attack"), 'n');
+    key_sc($(".save"), 's');
+    key_sc($(".delete"), 'd');
 </script>
 <script src="{{ url_for('static', filename='js/attack.js') }}"></script>
 {% include 'footer.html' %}

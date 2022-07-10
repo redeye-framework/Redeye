@@ -1106,16 +1106,18 @@ def attack():
         tab = request.form.get('tab')
         jdata = request.form.get('json')
 
-        if name != last_name:
-            if last_name + ".json" in os.listdir(helper.JSON_FOLDER.format(session["project"])):
-                os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]),last_name + ".json"))
+        if not name:
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(last_name)), 'w', newline='') as data:
+                data.write(jdata)
 
-        with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(name)), 'w', newline='') as data:
-            data.write(jdata)
-        if original_name != name:
-            if original_name in os.listdir(helper.JSON_FOLDER.format(session["project"])):
-                os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
-    
+        else:
+            if name != last_name:
+                if last_name + ".json" in os.listdir(helper.JSON_FOLDER.format(session["project"])):
+                    os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]),last_name + ".json"))
+
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(name)), 'w', newline='') as data:
+                data.write(jdata)
+
     dic_data = {}
 
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))

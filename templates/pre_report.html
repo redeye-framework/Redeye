@@ -5,21 +5,21 @@
         <div class="file-upload-content">
             <form enctype="multipart/form-data" id="report_form" action="{{ url_for('add_report') }}" method="POST">
                 <div class="head">
-                    <input dir="auto" name="section_name" type="text" class="section-name-input" id="section-name-input" placeholder="Section Name" required>
+                    <input dir="auto" name="section_name" type="text" class="section-name-input" id="section-name-input" placeholder="Image Name" required>
                     <a onclick="get_image_id();this.parentElement.parentElement.remove()" class="section-options" id="delete-button"><i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i></a>
                     <a onclick="download_image();" class="section-options" id="download-button"><i class="fas fa-download" style="color: #007bff;"></i></a>
                 </div>
                 </br>
                 <div class="image_fit">
                     <div class="image-block" id="image-block">
-                        <input id="section-image-link" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                        <input id="section-image-link" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" required/>
                         <div class="drag-text" id="image-upload-icon">
                             <h3><i class="fas fa-upload upload-icon"></i></h3>
                         </div>
                         <img id="section-image" onclick="javascript:$('#section-image-link').click()" class="file-upload-image image-wrap" src="#" alt="your image" style="display: none;" required>
                     </div>
                     <div class="image-upload-wrap">
-                        <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                        <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" required/>
                         <div class="drag-text">
                             <h3><i class="fas fa-upload upload-icon"></i></h3>
                         </div>
@@ -28,7 +28,7 @@
                 <div class="image-title-wrap">
                     <textarea id="section-text-input" dir="auto" name="data" style="max-height: 300px;font-size: 18px; width: 80%;" class="data-report-input" placeholder="Place here comment about this image" required></textarea><br>
                     <input type="hidden" id="pic_data" name="image_data">
-                    <input type="hidden" id="image_name" name="image_name" value="">
+                    <input type="hidden" id="image_name" name="image_name" value="" required>
                     <input type="hidden" id="image_id" name="image_id">
                     <button style="bottom: -10px;" type="button" id="section-submit-btn" onclick="get_image_name();get_image_data();document.getElementById('report_form').submit();" class="btn btn-primary inline">Insert to Report - <span class="image-title">Uploaded Image</span></button>
                 </div>
@@ -122,6 +122,7 @@
     key_sc($(".section-name-input"), 'n');
     key_sc($(".file-upload-input"), 'u');
     key_sc($("#section-submit-btn"), 's');
+    key_sc($("#section-text-input"), 'd');
 </script>
 <script src="{{ url_for('static', filename='js/pre_report.js') }}"></script>
 <script src="{{ url_for('static', filename='js/download.js') }}"></script>

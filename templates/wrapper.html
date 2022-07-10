@@ -179,14 +179,178 @@
                             <i>Import</i>
                         </label>
                     </form>
-                    <a href="#" style="display: none;" id="key-desc" class="modern-btn"><i class="fas fa-keyboard"></i></a>
+                    <a href="#" onclick="toggleKeyMap()" style="display: inline-block;" id="key-desc" class="modern-btn"><i class="fas fa-keyboard"></i></a>
                 </div>
             </div>
             <!-- sidebar-menu  -->
         </nav>
 
         <div class="hidden-floating-box" id="keybinding-map">
-
+            <div class="panel left-panel">
+                <div class="keybindings-page">
+                    <div class="page-head">Global</div>
+                    <table >
+                        <tr>
+                            <td>First-char</td>
+                            <td>Go to page from sidebar (use upper case).</td>
+                        </tr>
+                        <tr>
+                            <td>K/H</td>
+                            <td>Toggle keybindings help map.</td>
+                        </tr>
+                        <tr>
+                            <td>R</td>
+                            <td>Refresh page.</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td>Back to last page.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Servers</div>
+                    <table>
+                        <tr>
+                            <td>m/f</td>
+                            <td>Fold all sections.</td>
+                        </tr>
+                        <tr>
+                            <td>n</td>
+                            <td>New server.</td>
+                        </tr>
+                        <tr>
+                            <td>N</td>
+                            <td>New section.</td>
+                        </tr>
+                        <tr>
+                            <td>e</td>
+                            <td>Edit servers status.</td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Upload scan file.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Users</div>
+                    <table>
+                        <tr>
+                            <td>e</td>
+                            <td>Export users to csv.</td>
+                        </tr>
+                        <tr>
+                            <td>n</td>
+                            <td>New username (focus username).</td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Upload users file.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Files</div>
+                    <table>
+                        <tr>
+                            <td>n</td>
+                            <td>New folder.</td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Upload files.</td>
+                        </tr>
+                        <tr>
+                            <td>f</td>
+                            <td>Find file.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="panel right-panel">
+                <div class="keybindings-page">
+                    <div class="page-head">Attack Vectors</div>
+                    <table>
+                        <tr>
+                            <td>n</td>
+                            <td>Create new attack vector.</td>
+                        </tr>
+                        <tr>
+                            <td>s</td>
+                            <td>Save changes.</td>
+                        </tr>
+                        <tr>
+                            <td>d</td>
+                            <td>Delete attack.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Exploits</div>
+                    <table>
+                        <tr>
+                            <td>n</td>
+                            <td>New exploit.</td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Upload payload.</td>
+                        </tr>
+                        <tr>
+                            <td>s</td>
+                            <td>Submit new exploit.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Tasks</div>
+                    <table>
+                        <tr>
+                            <td>n</td>
+                            <td>New private task.</td>
+                        </tr>
+                        <tr>
+                            <td>N</td>
+                            <td>New team task.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Logs</div>
+                    <table>
+                        <tr>
+                            <td>f</td>
+                            <td>Find log.</td>
+                        </tr>
+                        <tr>
+                            <td>e</td>
+                            <td>Export to csv.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="keybindings-page">
+                    <div class="page-head">Pre-report</div>
+                    <table>
+                        <tr>
+                            <td>n</td>
+                            <td>New report (focus name).</td>
+                        </tr>
+                        <tr>
+                            <td>u</td>
+                            <td>Upload image.</td>
+                        </tr>
+                        <tr>
+                            <td>d</td>
+                            <td>Description (focus description input).</td>
+                        </tr>
+                        <tr>
+                            <td>s</td>
+                            <td>Save.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
         <!-- /Side Navbar -->
         <div class="page-content">
