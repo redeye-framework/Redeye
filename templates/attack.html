@@ -206,6 +206,9 @@
     var currentTab = "{{ tab }}";
     var attacks_len = {{ attacks_len }};
     var changed = false;
+    key_sc($("#add-new-attack"), 'n');
+    key_sc($(".save"), 's');
+    key_sc($(".delete"), 'd');
 </script>
 <script src="{{ url_for('static', filename='js/attack.js') }}"></script>
 {% include 'footer.html' %}

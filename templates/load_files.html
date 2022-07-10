@@ -44,7 +44,7 @@
                                     <i style="background-image: url(/static/pics/file_xls.png);" class="file-icons"></i>
                                 {% elif ".doc" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_doc.png);" class="file-icons"></i>
-                                {% elif ".jpg" in key|lower %}
+                                {% elif ".jpg" in key|lower or ".jpeg" in key|lower%}
                                     <i style="background-image: url(/static/pics/file_jpg.png);" class="file-icons"></i>
                                 {% elif ".png" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_png.png);" class="file-icons"></i>

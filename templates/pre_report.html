@@ -5,7 +5,7 @@
         <div class="file-upload-content">
             <form enctype="multipart/form-data" id="report_form" action="{{ url_for('add_report') }}" method="POST">
                 <div class="head">
-                    <input dir="auto" name="section_name" type="text" class="section-name-input" id="section-name-input" placeholder="Section Name" required>
+                    <input dir="auto" name="section_name" type="text" class="section-name-input" id="section-name-input" placeholder="Image Name" required>
                     <a onclick="get_image_id();this.parentElement.parentElement.remove()" class="section-options" id="delete-button"><i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i></a>
                     <a onclick="download_image();" class="section-options" id="download-button"><i class="fas fa-download" style="color: #007bff;"></i></a>
                 </div>
@@ -122,6 +122,7 @@
     key_sc($(".section-name-input"), 'n');
     key_sc($(".file-upload-input"), 'u');
     key_sc($("#section-submit-btn"), 's');
+    key_sc($("#section-text-input"), 'd');
 </script>
 <script src="{{ url_for('static', filename='js/pre_report.js') }}"></script>
 <script src="{{ url_for('static', filename='js/download.js') }}"></script>

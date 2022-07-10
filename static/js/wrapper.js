@@ -28,10 +28,10 @@ jQuery(function($) {
     $("#show-sidebar").click(function() {
         $(".page-wrapper").addClass("toggled");
     });
-
+    
 });
 
-var dark = 1;
+var dark = 0;
 
 function toggleDark() {
     if (!dark) {
@@ -171,6 +171,28 @@ function editNote() {
     $("#input-attain").val(attain);
     $("#input-exec").val(exec);
     $(".taskbox-edit").css("display", "inline-block");
+}
+
+var keyMap = 0;
+function toggleKeyMap() {
+    $("#keybinding-map").toggle();
+    if (!keyMap) {
+        keyMap = 1;
+        $(".page-content").css("filter", "brightness(40%)");
+        /*this.addEventListener("keyup", function(event) {
+            if (event.keyCode === 27) {
+                toggleKeyMap();
+            }
+        });*/
+    } else {
+        keyMap = 0;
+        $(".page-content").css("filter", "brightness(100%)");
+        /*this.removeEventListener("keyup", function(event) {
+            if (event.keyCode === 27) {
+                toggleKeyMap();
+            }
+        });*/
+    }
 }
 
 function copyToClipboard(text) {
