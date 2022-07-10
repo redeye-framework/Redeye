@@ -28,6 +28,7 @@ from fire import Fire
 from glob import glob
 import zipfile
 import graph
+from functools import wraps
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -58,6 +59,7 @@ MANAGEMENT_DB = r"RedDB/managementDB.db"
 ZIP_FOLDER = r"zip"
 PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
+MAX_INPUT = 100
 
 
 #Init
@@ -80,6 +82,35 @@ def init(app):
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
 
+
+def serialize_input(user_input):
+    #for data in user_input:
+    #    if len(user_input[data]) > MAX_INPUT:
+    #        return False
+    # For future use
+    return True
+        
+
+def validate_input(func):
+    @wraps(func)
+    def wrapper(*args, **kw):
+        
+        output = True
+        if request.args.to_dict():
+            data = request.args.to_dict()
+            output = serialize_input(data)
+        elif request.form.to_dict():
+            data = request.form.to_dict()
+            output = serialize_input(data)
+    
+        if output:
+            return func(*args, **kw)
+
+        else:
+            return '', 204
+
+    return wrapper
+
 """
 =======================================================
                 Servers Functions
@@ -87,6 +118,7 @@ def init(app):
 """
 
 @app.route('/server', methods=['GET'])
+@validate_input
 def server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -131,6 +163,7 @@ def server():
     return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
+@validate_input
 def edit_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -155,6 +188,7 @@ def edit_server():
     return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
 
 @app.route('/servers')
+@validate_input
 def servers():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -182,6 +216,7 @@ def servers():
     return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
+@validate_input
 def update_server_attain():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -193,6 +228,7 @@ def update_server_attain():
         return ('', 204)
 
 @app.route('/delete_server', methods=['POST'])
+@validate_input
 def delete_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -211,6 +247,7 @@ def delete_server():
         return redirect('servers')
 
 @app.route('/change_server', methods=['POST'])
+@validate_input
 def change_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -271,6 +308,7 @@ def change_server():
         return redirect(request.referrer)
     
 @app.route('/add_server_from_file', methods=['POST'])
+@validate_input
 def add_server_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -283,6 +321,7 @@ def add_server_from_file():
 
 
 @app.route('/change_section_name', methods=['POST'])
+@validate_input
 def change_section_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -294,6 +333,7 @@ def change_section_name():
 
 
 @app.route('/add_new_section', methods=['POST'])
+@validate_input
 def add_new_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -303,6 +343,7 @@ def add_new_section():
     return redirect('servers')
 
 @app.route('/delete_section', methods=['POST'])
+@validate_input
 def delete_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -323,6 +364,7 @@ def delete_section():
 
 
 @app.route('/change_server_section', methods=['POST'])
+@validate_input
 def change_server_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -336,6 +378,7 @@ def change_server_section():
 
 
 @app.route('/change_server_color', methods=['POST'])
+@validate_input
 def change_server_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -346,6 +389,7 @@ def change_server_color():
     return redirect(request.referrer)
 
 @app.route('/add_new_server', methods=['POST'])
+@validate_input
 def add_new_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -365,6 +409,7 @@ def add_new_server():
 """
 
 @app.route('/logs',methods=['GET','POST'])
+@validate_input
 def logs():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -381,25 +426,8 @@ def logs():
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
     return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
-@app.route('/logs2',methods=['GET','POST'])
-def logs2():
-    if not is_logged():
-        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-
-    logs = db.get_all_log(session["db"])
-    if request.method == 'POST':
-        keyword = request.form.get('key_word')
-        if keyword != '' and keyword is not None:
-            all_objects,logs,days,month_years = helper.get_logs(session["db"], logs,keyword)
-        else:
-            all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-
-    else:
-        all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-
-    return render_template('logs2.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
-
 @app.route('/export_logs', methods=['POST'])
+@validate_input
 def export_logs():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -432,6 +460,7 @@ def export_logs():
 """
 
 @app.route('/tasks')
+@validate_input
 def tasks():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -452,6 +481,7 @@ def tasks():
     return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
+@validate_input
 def edit_note():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -476,6 +506,7 @@ def edit_note():
     return redirect(url_for('tasks'))
 
 @app.route('/add_task', methods=['POST'])
+@validate_input
 def add_task():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -498,6 +529,7 @@ def add_task():
             return redirect(url_for('tasks'))
 
 @app.route('/update_task', methods=['POST'])
+@validate_input
 def update_task():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -521,6 +553,7 @@ def update_task():
 """
 
 @app.route('/create_user', methods=['POST'])
+@validate_input
 def create_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -578,6 +611,7 @@ def create_user():
         return redirect(request.referrer)
 
 @app.route('/edit_user', methods=['POST'])
+@validate_input
 def edit_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -630,6 +664,7 @@ def edit_user():
         return redirect(url)
 
 @app.route('/delete_user')
+@validate_input
 def delete_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -644,6 +679,7 @@ def delete_user():
         return ('', 204)
 
 @app.route('/all_users', methods=['GET'])
+@validate_input
 def all_users():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -680,6 +716,7 @@ def all_users():
     return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
+@validate_input
 def export_users():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -699,6 +736,7 @@ def export_users():
     return send_from_directory(helper.FILES_FOLDER.format(session["project"]), "users.csv", as_attachment=True)
 
 @app.route('/add_users_from_file', methods=['POST'])
+@validate_input
 def add_users_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -727,6 +765,7 @@ def add_users_from_file():
 """
 
 @app.route('/create_vuln', methods=['POST'])
+@validate_input
 def create_vuln():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -748,6 +787,7 @@ def create_vuln():
         return redirect(request.referrer)
 
 @app.route('/delete_vuln')
+@validate_input
 def delete_vuln():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -764,6 +804,7 @@ def delete_vuln():
 """
 
 @app.route('/delete_comment', methods=['POST'])
+@validate_input
 def delete_comment():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -776,6 +817,7 @@ def delete_comment():
 
 
 @app.route('/create_comment', methods=['POST'])
+@validate_input
 def create_comment():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -791,6 +833,7 @@ def create_comment():
 =======================================================
 """
 @app.route('/delete_port')
+@validate_input
 def delete_port():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -803,6 +846,7 @@ def delete_port():
 
 
 @app.route('/create_server_port', methods=['POST'])
+@validate_input
 def create_server_port():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -829,6 +873,7 @@ def create_server_port():
 =======================================================
 """
 @app.route('/delete_file')
+@validate_input
 def delete_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -839,6 +884,7 @@ def delete_file():
         return ('', 204)
 
 @app.route('/delete_file_from_dir')
+@validate_input
 def delete_file_from_dir():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -847,6 +893,7 @@ def delete_file_from_dir():
     return redirect(request.referrer)
 
 @app.route('/upload_file', methods=['POST'])
+@validate_input
 def upload_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -886,6 +933,7 @@ def upload_file():
 
 
 @app.route('/files/', methods=['GET', 'POST'])
+@validate_input
 def files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -910,6 +958,7 @@ def files():
         return render_template('404.html'), 404
 
 @app.route('/delete_files', methods=['GET'])
+@validate_input
 def delete_files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -920,6 +969,7 @@ def delete_files():
     return redirect(request.referrer)
 
 @app.route('/load_files', methods=['GET', 'POST'])
+@validate_input
 def load_files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -966,6 +1016,7 @@ def load_files():
         return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
 
 @app.route('/add_new_dir', methods=['POST'])
+@validate_input
 def add_new_dir():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -988,6 +1039,7 @@ def add_new_dir():
 """
 
 @app.route('/stats', methods=['GET'])
+@validate_input
 def stats():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1010,6 +1062,7 @@ def stats():
 """
 
 @app.route('/new_attack')
+@validate_input
 def new_attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1038,6 +1091,7 @@ def new_attack():
 
 
 @app.route('/attack', methods=['GET', 'POST'])
+@validate_input
 def attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1076,6 +1130,7 @@ def attack():
 
 
 @app.route('/delete_attack')
+@validate_input
 def delete_attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1102,6 +1157,7 @@ def delete_attack():
 """
 
 @app.route('/build_report')
+@validate_input
 def build_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1110,6 +1166,7 @@ def build_report():
 
 
 @app.route('/pre_report')
+@validate_input
 def pre_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1122,6 +1179,7 @@ def pre_report():
 
 
 @app.route('/add_report', methods=['POST'])
+@validate_input
 def add_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1137,6 +1195,7 @@ def add_report():
     return redirect(request.referrer)
 
 @app.route('/delete_from_report', methods=['GET'])
+@validate_input
 def delete_from_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1147,6 +1206,7 @@ def delete_from_report():
     return redirect(request.referrer)
 
 @app.route('/update_report', methods=['POST'])
+@validate_input
 def update_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1162,6 +1222,7 @@ def update_report():
     return redirect(request.referrer)
 
 @app.route('/generate_report', methods=['POST'])
+@validate_input
 def generate_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1184,6 +1245,7 @@ def generate_report():
 """
 
 @app.route('/create_achievement', methods=['POST'])
+@validate_input
 def create_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1196,6 +1258,7 @@ def create_achievement():
     return redirect(request.referrer)
 
 @app.route('/edit_achievement', methods=['POST'])
+@validate_input
 def edit_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1206,6 +1269,7 @@ def edit_achievement():
         return ('', 204) 
 
 @app.route('/delete_achievement', methods=['GET'])
+@validate_input
 def delete_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1222,6 +1286,7 @@ def delete_achievement():
 """
 
 @app.route('/search', methods=['GET','POST'])
+@validate_input
 def search():
     '''
     match[0] ==> data | match[1] ==> id_of_item | match[2] ==> table_name
@@ -1259,6 +1324,7 @@ def search():
 """
 
 @app.route('/exploits')
+@validate_input
 def exploits():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1268,6 +1334,7 @@ def exploits():
     return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, exploits=exploits, exploits_len=len(exploits))
 
 @app.route('/add_exploit',methods=['POST'])
+@validate_input
 def add_exploit():
     """
     Save new exploit to DB - if File has uploded ==> saves it to payloads dir
@@ -1291,6 +1358,7 @@ def add_exploit():
     return redirect(request.referrer)
 
 @app.route('/update_exploit',methods=['POST'])
+@validate_input
 def update_exploit():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1304,6 +1372,7 @@ def update_exploit():
     return redirect(request.referrer)
 
 @app.route('/delete_exploit',methods=['GET'])
+@validate_input
 def delete_exploit():
     """
     Changes exploit relevent to 0
@@ -1323,6 +1392,7 @@ def delete_exploit():
 """
 
 @app.route("/management",methods=['GET'])
+@validate_input
 def management():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1337,6 +1407,7 @@ def management():
 
 
 @app.route('/add_user',methods=['POST'])
+@validate_input
 def add_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1350,6 +1421,7 @@ def add_user():
 
 
 @app.route('/update_user_name',methods=['POST'])
+@validate_input
 def update_user_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1360,6 +1432,7 @@ def update_user_name():
     return redirect(request.referrer)
 
 @app.route('/update_password',methods=['POST'])
+@validate_input
 def update_password():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1371,6 +1444,7 @@ def update_password():
 
 
 @app.route('/delete_managment_user',methods=['POST'])
+@validate_input
 def delete_managment_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1386,6 +1460,7 @@ def delete_managment_user():
 
 
 @app.route('/uploadManagmentUserPicture',methods=['POST'])
+@validate_input
 def uploadManagmentUserPicture():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1410,6 +1485,7 @@ def uploadManagmentUserPicture():
 
     
 @app.route('/exportAll',methods=['GET'])
+@validate_input
 def exportAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1430,6 +1506,7 @@ def exportAll():
 
 
 @app.route('/importAll',methods=['POST'])
+@validate_input
 def importAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1505,6 +1582,7 @@ def updateNoteName(json):
 """
 
 @app.route('/add_color',methods=['POST'])
+@validate_input
 def add_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1516,6 +1594,7 @@ def add_color():
 
 
 @app.route('/change_color',methods=['POST'])
+@validate_input
 def change_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1533,6 +1612,7 @@ def change_color():
 """
 
 @app.route('/load_graph',methods=['GET'])
+@validate_input
 def load_graph():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1633,6 +1713,7 @@ def login():
 
 
 @app.route('/new_project', methods=['POST'])
+@validate_input
 def new_project():
     if not IS_ENV_SAFE:
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)

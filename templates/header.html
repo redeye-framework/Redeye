@@ -41,3 +41,8 @@
             // return JSON.parse(jsonPayload);
         };
     </script>
+    {% if msg %}
+    <script>
+        alert("{{ msg }}")
+    </script>
+    {% endif %}

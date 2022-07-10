@@ -45,28 +45,28 @@
                             {% for user in users %}
                             <tr>
                                 <td><a class="hover-user-details editable" style="padding: 5px 10px;" id="user-{{ user[0] }}" href="#" onmouseover="showUser('{{ user[2] }}', '{{ user[3] }}', '{{ user[1] }}', '{{ user[4] }}', '{{ user[5] }}', '{{ user[0] }}')">{{ user[2] }}</a>
-                                    <input class="editable-inp" size="5" type="text" value="{{ user[2] }}">
+                                    <input class="editable-inp" size="5" maxlength="15" type="text" value="{{ user[2] }}">
                                     <input class="editable-type" type="hidden" value="username">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[3] }}</span>
-                                    <input class="editable-inp" size="5" type="text" value="{{ user[3] }}">
+                                    <input class="editable-inp" size="5" maxlength="30" type="text" value="{{ user[3] }}">
                                     <input class="editable-type" type="hidden" value="password">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[1] }}</span>
-                                    <input class="editable-inp" size="5" type="text" value="{{ user[1] }}">
+                                    <input class="editable-inp" size="5" maxlength="15" type="text" value="{{ user[1] }}">
                                     <input class="editable-type" type="hidden" value="type">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ user[4] }}</span>
-                                    <input class="editable-inp" size="8" type="text" value="{{ user[4] }}">
+                                    <input class="editable-inp" size="8" maxlength="15" type="text" value="{{ user[4] }}">
                                     <input class="editable-type" type="hidden" value="permissions">
                                     <input class="editable-obj" type="hidden" value="user">
                                     <input class="editable-id" type="hidden" value="{{ user[0] }}">
@@ -79,10 +79,10 @@
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
                                 <!--input type="hidden" id="user-type-input" name="user_type" value="Unknown"-->
-                                <td><input type="text" size="5" name="username" placeholder="User"></td>
-                                <td><input type="text" size="5" name="password" placeholder="Pass"></td>
-                                <td><input type="text" size="5" name="user_type" placeholder="Type"></td>
-                                <td><input type="text" size="8" name="permissions" placeholder="Perm"></td>
+                                <td><input type="text" size="5" maxlength="15" name="username" placeholder="User"></td>
+                                <td><input type="text" size="5" maxlength="30" name="password" placeholder="Pass"></td>
+                                <td><input type="text" size="5" maxlength="15" name="user_type" placeholder="Type"></td>
+                                <td><input type="text" size="8" maxlength="15" name="permissions" placeholder="Perm"></td>
                                 <td><a onclick="getElementById('user-form').submit()" href="#"><i class="fas fa-plus"
                             style="margin: 5px 15px; font-size: 18px;"></i></a></td>
                             </tr>
@@ -106,21 +106,21 @@
                             <tr>
                                 <td>
                                     <span class="editable">{{ vuln[1] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ vuln[1] }}">
+                                    <input class="editable-inp" maxlength="40" type="text" value="{{ vuln[1] }}">
                                     <input class="editable-type" type="hidden" value="name">
                                     <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ vuln[2] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ vuln[2] }}">
+                                    <input class="editable-inp" maxlength="60" type="text" value="{{ vuln[2] }}">
                                     <input class="editable-type" type="hidden" value="data">
                                     <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ vuln[3] }}</span>
-                                    <input class="editable-inp" type="text" value="{{ vuln[3] }}">
+                                    <input class="editable-inp" maxlength="10" type="text" value="{{ vuln[3] }}">
                                     <input class="editable-type" type="hidden" value="fix">
                                     <input class="editable-obj" type="hidden" value="vuln">
                                     <input class="editable-id" type="hidden" value="{{ vuln[0] }}">
@@ -132,9 +132,9 @@
                             <tr class="item-add">
                                 <input type="hidden" name="server_ip" value="{{ server[1] }}">
                                 <input type="hidden" name="server_id" value="{{ server[0] }}">
-                                <td><input type="text" name="name" placeholder="Name"></td>
-                                <td><input type="text" name="description" placeholder="Description"></td>
-                                <td><input type="text" name="fix" placeholder="Recommendation"></td>
+                                <td><input type="text" name="name" maxlength="40" placeholder="Name"></td>
+                                <td><input type="text" name="description" maxlength="60" placeholder="Description"></td>
+                                <td><input type="text" name="fix" maxlength="10" placeholder="Recommendation"></td>
                                 <td><a href="javascript:$('#vuln-form').submit();"><i class="fas fa-plus"
                             style="margin-left: 15px;"></i></a></td>
                             </tr>
@@ -178,28 +178,28 @@
                             <tr>
                                 <td>
                                     <span class="editable">{{ port[1] }}</span>
-                                    <input class="editable-inp" size="3" type="text" value="{{ port[1] }}">
+                                    <input class="editable-inp" maxlength="10" size="3" type="text" value="{{ port[1] }}">
                                     <input class="editable-type" type="hidden" value="port">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[2] }}</span>
-                                    <input class="editable-inp" size="3" type="text" value="{{ port[2] }}">
+                                    <input class="editable-inp" maxlength="10" size="3" type="text" value="{{ port[2] }}">
                                     <input class="editable-type" type="hidden" value="service">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[3] }}</span>
-                                    <input class="editable-inp" size="3" type="text" value="{{ port[3] }}">
+                                    <input class="editable-inp" maxlength="10" size="3" type="text" value="{{ port[3] }}">
                                     <input class="editable-type" type="hidden" value="state">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[4] }}</span>
-                                    <input class="editable-inp" size="10" type="text" value="{{ port[4] }}">
+                                    <input class="editable-inp" maxlength="10" size="10" type="text" value="{{ port[4] }}">
                                     <input class="editable-type" type="hidden" value="vuln">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
@@ -210,10 +210,10 @@
                             {% endfor %}
                             <tr class="item-add">
                                 <input name="server_id" type="hidden" value="{{ server[0] }}">
-                                <td><input id="input_port1" name="port" type="text" size="3" placeholder="Port"></td>
-                                <td><input id="input_port2" name="service" type="text" size="3" placeholder="Service"></td>
-                                <td><input id="input_port3" name="state" type="text" size="3" placeholder="State"></td>
-                                <td><input id="input_port4" name="vuln" type="text" size="10" placeholder="Vuln"></td>
+                                <td><input id="input_port1" name="port" maxlength="10" type="text" size="3" placeholder="Port"></td>
+                                <td><input id="input_port2" name="service" maxlength="10" type="text" size="3" placeholder="Service"></td>
+                                <td><input id="input_port3" name="state" maxlength="10" type="text" size="3" placeholder="State"></td>
+                                <td><input id="input_port4" name="vuln" maxlength="10" type="text" size="10" placeholder="Vuln"></td>
                                 <td><a href="javascript:$('#port-form').submit();"><i class="fas fa-plus"
                       style="margin-left: 15px"></i></a></td>
                             </tr>
