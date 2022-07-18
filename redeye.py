@@ -951,7 +951,7 @@ def files():
             return render_template('404.html'), 404
         else:
             if "load_files" in request.referrer:
-                return send_from_directory(os.path.abspath(path), name)
+                return send_from_directory(os.path.abspath(path), name)  
             else:
                 return send_from_directory(os.path.abspath(path), name,as_attachment=True)
     else:
@@ -1031,6 +1031,19 @@ def add_new_dir():
     else:
         os.mkdir(os.path.join(full_path,dir_name))
     return redirect(request.referrer)
+
+
+@app.route('/change_file_name', methods=['POST'])
+@validate_input
+def change_file_name():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    helper.renameFiles(dict["path"],dict["new_file_name"])
+
+    return redirect(request.referrer)
+
 
 """
 =======================================================

@@ -311,6 +311,9 @@ def debug(text):
     print(text)
     print("-------------")
 
+def renameFiles(oldFileName,newFileName):
+    os.rename(oldFileName,newFileName)
+
 def zipdir(filesPath, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(filesPath):
