@@ -724,7 +724,7 @@ def export_users():
     users = db.get_users(session["db"])
 
     with open(os.path.join(helper.FILES_FOLDER.format(session["project"]), "users.csv"), 'w', newline='') as csv_file:
-        fieldnames = ['Username', 'Password', 'Permission', "Type", "Attain"]
+        fieldnames = ['Username', 'Password', 'Permission', "Found On", "User Type"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -1202,11 +1202,15 @@ def add_report():
     dic = {}
     for key, val in request.form.items():
         dic[key] = val
-    
-    img_extension = helper.get_img_extension(dic['image_data'])
-    img_path = helper.save_image(r"{}{}".format(str(uuid4()),img_extension), dic['image_data'])
-    db.save_to_report(session["db"], dic['data'], dic['section_name'], img_path)
-    return redirect(request.referrer)
+
+    if "base64" in dic['image_data']:
+        img_extension = helper.get_img_extension(dic['image_data'])
+        img_path = helper.save_image(r"{}{}".format(str(uuid4()),img_extension), dic['image_data'])
+        db.save_to_report(session["db"], dic['data'], dic['section_name'], img_path)
+        return redirect(request.referrer)
+
+    return '', 204
+
 
 @app.route('/delete_from_report', methods=['GET'])
 @validate_input
@@ -1363,7 +1367,7 @@ def add_exploit():
             dic[key] = val
         if request.files.get("exploit-file"):
             file = request.files.get("exploit-file")
-            full_path, file_name = helper.save_file(file, helper.PAYLOAD_FILES.format(session["project"]))
+            full_path, file_name = helper.save_file(file, helper.PAYLOAD_FOLDER.format(session["project"]))
             db.insert_new_standalone_file(session["db"], full_path, file_name, "Exploit File Added", session["username"])
         else:
             full_path = None
