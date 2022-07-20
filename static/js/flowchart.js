@@ -307,7 +307,7 @@
 
 		var defaultFlowchartData = {
 			operators: {
-				operator1: {
+				/*operator1: {
 					top: 80,
 					left: 300,
 					properties: {
@@ -318,7 +318,7 @@
 							},
 						}
 					}
-				},
+				},*/
 			},
 		};
 		if (false) console.log('remove lint unused warning', defaultFlowchartData);

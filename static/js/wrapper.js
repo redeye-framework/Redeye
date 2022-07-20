@@ -28,10 +28,10 @@ jQuery(function($) {
     $("#show-sidebar").click(function() {
         $(".page-wrapper").addClass("toggled");
     });
-
+    
 });
 
-var dark = 1;
+var dark = 0;
 
 function toggleDark() {
     if (!dark) {
@@ -173,6 +173,25 @@ function editNote() {
     $(".taskbox-edit").css("display", "inline-block");
 }
 
+var keyMap = 0;
+function toggleKeyMap() {
+    $("#keybinding-map").toggle();
+    if (!keyMap) {
+        keyMap = 1;
+        $(".page-content").css("filter", "brightness(40%)");
+        this.addEventListener("keyup", function(event) {
+            if (event.keyCode === 27) {
+                keyMap = 0;
+                $("#keybinding-map").hide();
+                $(".page-content").css("filter", "brightness(100%)");
+            }
+        });
+    } else {
+        keyMap = 0;
+        $(".page-content").css("filter", "brightness(100%)");
+    }
+}
+
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text);
     tempAlert(text, 1000);
@@ -207,11 +226,18 @@ $(".user-details").mouseover(function(e) {
 
 
 function key_sc(obj, key) {
-    console.log()
     document.addEventListener("keyup", function(event) {
         if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
             $(obj).focus();
             $(obj).click();
+        }
+    })
+}
+
+function key_sc_func(func, key) {
+    document.addEventListener("keyup", function(event) {
+        if (event.key === key) {
+            func();
         }
     })
 }

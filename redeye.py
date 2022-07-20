@@ -28,6 +28,7 @@ from fire import Fire
 from glob import glob
 import zipfile
 import graph
+from functools import wraps
 
 app = Flask(__name__, template_folder="templates")
 jsglue = JSGlue(app)
@@ -56,9 +57,9 @@ DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
 MANAGEMENT_DB = r"RedDB/managementDB.db"
 ZIP_FOLDER = r"zip"
-FILES_FOLDER = r"files/"
 PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
+MAX_INPUT = 100
 
 
 #Init
@@ -80,7 +81,35 @@ def init(app):
         makedirs(d6, exist_ok=True)
         makedirs(d7, exist_ok=True)
         makedirs(d8, exist_ok=True)
-        makedirs(FILES_FOLDER, exist_ok=True)
+
+
+def serialize_input(user_input):
+    #for data in user_input:
+    #    if len(user_input[data]) > MAX_INPUT:
+    #        return False
+    # For future use
+    return True
+        
+
+def validate_input(func):
+    @wraps(func)
+    def wrapper(*args, **kw):
+        
+        output = True
+        if request.args.to_dict():
+            data = request.args.to_dict()
+            output = serialize_input(data)
+        elif request.form.to_dict():
+            data = request.form.to_dict()
+            output = serialize_input(data)
+    
+        if output:
+            return func(*args, **kw)
+
+        else:
+            return '', 204
+
+    return wrapper
 
 """
 =======================================================
@@ -89,6 +118,7 @@ def init(app):
 """
 
 @app.route('/server', methods=['GET'])
+@validate_input
 def server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -133,6 +163,7 @@ def server():
     return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
+@validate_input
 def edit_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -157,6 +188,7 @@ def edit_server():
     return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
 
 @app.route('/servers')
+@validate_input
 def servers():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -184,6 +216,7 @@ def servers():
     return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
+@validate_input
 def update_server_attain():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -195,6 +228,7 @@ def update_server_attain():
         return ('', 204)
 
 @app.route('/delete_server', methods=['POST'])
+@validate_input
 def delete_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -213,6 +247,7 @@ def delete_server():
         return redirect('servers')
 
 @app.route('/change_server', methods=['POST'])
+@validate_input
 def change_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -273,6 +308,7 @@ def change_server():
         return redirect(request.referrer)
     
 @app.route('/add_server_from_file', methods=['POST'])
+@validate_input
 def add_server_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -285,6 +321,7 @@ def add_server_from_file():
 
 
 @app.route('/change_section_name', methods=['POST'])
+@validate_input
 def change_section_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -296,6 +333,7 @@ def change_section_name():
 
 
 @app.route('/add_new_section', methods=['POST'])
+@validate_input
 def add_new_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -305,6 +343,7 @@ def add_new_section():
     return redirect('servers')
 
 @app.route('/delete_section', methods=['POST'])
+@validate_input
 def delete_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -325,6 +364,7 @@ def delete_section():
 
 
 @app.route('/change_server_section', methods=['POST'])
+@validate_input
 def change_server_section():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -338,6 +378,7 @@ def change_server_section():
 
 
 @app.route('/change_server_color', methods=['POST'])
+@validate_input
 def change_server_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -348,6 +389,7 @@ def change_server_color():
     return redirect(request.referrer)
 
 @app.route('/add_new_server', methods=['POST'])
+@validate_input
 def add_new_server():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -367,6 +409,7 @@ def add_new_server():
 """
 
 @app.route('/logs',methods=['GET','POST'])
+@validate_input
 def logs():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -383,25 +426,8 @@ def logs():
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
     return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
-@app.route('/logs2',methods=['GET','POST'])
-def logs2():
-    if not is_logged():
-        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-
-    logs = db.get_all_log(session["db"])
-    if request.method == 'POST':
-        keyword = request.form.get('key_word')
-        if keyword != '' and keyword is not None:
-            all_objects,logs,days,month_years = helper.get_logs(session["db"], logs,keyword)
-        else:
-            all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-
-    else:
-        all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-
-    return render_template('logs2.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
-
 @app.route('/export_logs', methods=['POST'])
+@validate_input
 def export_logs():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -434,6 +460,7 @@ def export_logs():
 """
 
 @app.route('/tasks')
+@validate_input
 def tasks():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -454,6 +481,7 @@ def tasks():
     return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
+@validate_input
 def edit_note():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -478,6 +506,7 @@ def edit_note():
     return redirect(url_for('tasks'))
 
 @app.route('/add_task', methods=['POST'])
+@validate_input
 def add_task():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -500,6 +529,7 @@ def add_task():
             return redirect(url_for('tasks'))
 
 @app.route('/update_task', methods=['POST'])
+@validate_input
 def update_task():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -511,7 +541,7 @@ def update_task():
         if 'task_done' in task:
             db.delete_task(session["db"], task['task_id'], session["username"])
         elif 'trash_task' in task:
-            db.unrelevent_task(session["db"], task['task_id'], session["username"])
+            db.unrelevant_task(session["db"], task['task_id'], session["username"])
         else:
             pass
         return redirect(url_for('tasks'))
@@ -523,6 +553,7 @@ def update_task():
 """
 
 @app.route('/create_user', methods=['POST'])
+@validate_input
 def create_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -531,9 +562,13 @@ def create_user():
         user_name = request.form.get('username')
         user_pass = request.form.get('password')
         user_perm = request.form.get('permissions')
-        user_type = request.form.get('user_type')
         server_id = request.form.get('server_id')
         server_ip = request.form.get('server_ip')
+        user_type = request.form.get('user_type')
+        user_type_select = request.form.get('user_type_select')
+
+        helper.debug(user_type)
+        helper.debug(user_type_select)
 
         if not user_name:
             return redirect(request.referrer)
@@ -541,10 +576,13 @@ def create_user():
             user_pass="-"
 
         if not user_perm:
-            user_perm="READ|WRITE"
+            user_perm="-"
 
         if not user_type:
-            user_type="-"
+            if user_type_select:
+                user_type = user_type_select
+            else:
+                user_type="-"
 
         userTypeId = db.get_user_type(session["db"],user_type)
             
@@ -573,6 +611,7 @@ def create_user():
         return redirect(request.referrer)
 
 @app.route('/edit_user', methods=['POST'])
+@validate_input
 def edit_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -598,8 +637,13 @@ def edit_user():
         else:
             server_id = ""
         """
+        if user_type:
+            typeName = db.get_user_type(session["db"], user_type)[0][0]
+        else:
+            typeName = None
+
         db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=user_type, found_on=user_found_on, found_on_server=False, attain=user_attain)
+                     passwd=user_pass, perm=user_perm, type=typeName, found_on=user_found_on, found_on_server=False, attain=user_attain)
 
         if IS_DOCKER_ENV:
             if db.get_server_id_by_name(session["db"], user_found_on):
@@ -620,6 +664,7 @@ def edit_user():
         return redirect(url)
 
 @app.route('/delete_user')
+@validate_input
 def delete_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -634,6 +679,7 @@ def delete_user():
         return ('', 204)
 
 @app.route('/all_users', methods=['GET'])
+@validate_input
 def all_users():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -667,9 +713,10 @@ def all_users():
     for index,typeName in enumerate(allUserTypes):
         allUserTypes[index] = typeName[0]
 
-    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, type=6, allUserTypes=allUserTypes)
+    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
+@validate_input
 def export_users():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -677,7 +724,7 @@ def export_users():
     users = db.get_users(session["db"])
 
     with open(os.path.join(helper.FILES_FOLDER.format(session["project"]), "users.csv"), 'w', newline='') as csv_file:
-        fieldnames = ['Username', 'Password', 'Permission', "Type", "Attain"]
+        fieldnames = ['Username', 'Password', 'Permission', "Found On", "User Type"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -689,6 +736,7 @@ def export_users():
     return send_from_directory(helper.FILES_FOLDER.format(session["project"]), "users.csv", as_attachment=True)
 
 @app.route('/add_users_from_file', methods=['POST'])
+@validate_input
 def add_users_from_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -717,6 +765,7 @@ def add_users_from_file():
 """
 
 @app.route('/create_vuln', methods=['POST'])
+@validate_input
 def create_vuln():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -738,6 +787,7 @@ def create_vuln():
         return redirect(request.referrer)
 
 @app.route('/delete_vuln')
+@validate_input
 def delete_vuln():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -754,6 +804,7 @@ def delete_vuln():
 """
 
 @app.route('/delete_comment', methods=['POST'])
+@validate_input
 def delete_comment():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -766,6 +817,7 @@ def delete_comment():
 
 
 @app.route('/create_comment', methods=['POST'])
+@validate_input
 def create_comment():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -781,6 +833,7 @@ def create_comment():
 =======================================================
 """
 @app.route('/delete_port')
+@validate_input
 def delete_port():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -793,6 +846,7 @@ def delete_port():
 
 
 @app.route('/create_server_port', methods=['POST'])
+@validate_input
 def create_server_port():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -819,6 +873,7 @@ def create_server_port():
 =======================================================
 """
 @app.route('/delete_file')
+@validate_input
 def delete_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -829,6 +884,7 @@ def delete_file():
         return ('', 204)
 
 @app.route('/delete_file_from_dir')
+@validate_input
 def delete_file_from_dir():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -837,6 +893,7 @@ def delete_file_from_dir():
     return redirect(request.referrer)
 
 @app.route('/upload_file', methods=['POST'])
+@validate_input
 def upload_file():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -876,6 +933,7 @@ def upload_file():
 
 
 @app.route('/files/', methods=['GET', 'POST'])
+@validate_input
 def files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -893,13 +951,14 @@ def files():
             return render_template('404.html'), 404
         else:
             if "load_files" in request.referrer:
-                return send_from_directory(os.path.abspath(path), name)
+                return send_from_directory(os.path.abspath(path), name)  
             else:
                 return send_from_directory(os.path.abspath(path), name,as_attachment=True)
     else:
         return render_template('404.html'), 404
 
 @app.route('/delete_files', methods=['GET'])
+@validate_input
 def delete_files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -910,13 +969,20 @@ def delete_files():
     return redirect(request.referrer)
 
 @app.route('/load_files', methods=['GET', 'POST'])
+@validate_input
 def load_files():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
     current_dir = request.args.get("dir_name")
+    mainFolder = helper.MAIN_FILES.format(session["project"])
+
+    if not current_dir.startswith(mainFolder):
+        return redirect(request.referrer)
+
 
     if not current_dir:
-        full_path = helper.MAIN_FILES.format(session["project"])
+        full_path = mainFolder
 
     else:
         if helper.secure_file_name(current_dir):
@@ -935,7 +1001,7 @@ def load_files():
             for key,val in helper.get_all_files(helper.MAIN_FILES.format(session["project"])).items():
                 if key_word['key_word'].lower() in key.lower():
                     keyword_files[key].append(val)
-    
+
             if keyword_files:
                 return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
 
@@ -950,6 +1016,7 @@ def load_files():
         return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
 
 @app.route('/add_new_dir', methods=['POST'])
+@validate_input
 def add_new_dir():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -965,6 +1032,19 @@ def add_new_dir():
         os.mkdir(os.path.join(full_path,dir_name))
     return redirect(request.referrer)
 
+
+@app.route('/change_file_name', methods=['POST'])
+@validate_input
+def change_file_name():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    helper.renameFiles(dict["path"],dict["new_file_name"])
+
+    return redirect(request.referrer)
+
+
 """
 =======================================================
                 Stats Functions
@@ -972,6 +1052,7 @@ def add_new_dir():
 """
 
 @app.route('/stats', methods=['GET'])
+@validate_input
 def stats():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -994,6 +1075,7 @@ def stats():
 """
 
 @app.route('/new_attack')
+@validate_input
 def new_attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1001,7 +1083,7 @@ def new_attack():
     name = "New"
     jfiles = os.listdir(helper.JSON_FOLDER.format(session["project"]))
 
-    for i in range(1, len(jfiles) + 1):
+    for i in range(1, len(jfiles) + 2):
         if f"{name}{str(i)}.json" not in jfiles:
             name += str(i)
             name += ".json"
@@ -1022,10 +1104,12 @@ def new_attack():
 
 
 @app.route('/attack', methods=['GET', 'POST'])
+@validate_input
 def attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
+        
     tab = ""
 
     if request.method == 'POST':
@@ -1035,33 +1119,33 @@ def attack():
         tab = request.form.get('tab')
         jdata = request.form.get('json')
 
-        if name != last_name:
-            if last_name + ".json" in os.listdir(helper.JSON_FOLDER.format(session["project"])):
-                os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]),last_name + ".json"))
+        if not name:
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(last_name)), 'w', newline='') as data:
+                data.write(jdata)
 
-        with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(name)), 'w', newline='') as data:
-            data.write(jdata)
-        if original_name != name:
-            if original_name in os.listdir(helper.JSON_FOLDER.format(session["project"])):
-                os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(original_name)))
-    
+        else:
+            if name != last_name:
+                if last_name + ".json" in os.listdir(helper.JSON_FOLDER.format(session["project"])):
+                    os.remove(os.path.join(helper.JSON_FOLDER.format(session["project"]),last_name + ".json"))
+
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), r"{}.json".format(name)), 'w', newline='') as data:
+                data.write(jdata)
+
     dic_data = {}
-    if session["project"] == DEFAULT_DB:
-        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(session["project"]))
 
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    if "New" in attacks:
-        attacks.remove("New")
-    for i, attack in enumerate(attacks):
-        attacks[i] = attack[:-5]
-        with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
-            dic_data[attack] = data.read()
-        
 
+    if attacks:
+        for i, attack in enumerate(attacks):
+            attacks[i] = attack[:-5]
+            with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
+                dic_data[attack] = data.read()
+        
     return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
 
 @app.route('/delete_attack')
+@validate_input
 def delete_attack():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1074,7 +1158,6 @@ def delete_attack():
     
     dic_data = {}
     attacks = os.listdir(helper.JSON_FOLDER.format(session["project"]))
-    attacks.remove("New")
     for i, attack in enumerate(attacks):
         attacks[i] = attack[:-5]
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
@@ -1089,6 +1172,7 @@ def delete_attack():
 """
 
 @app.route('/build_report')
+@validate_input
 def build_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1097,6 +1181,7 @@ def build_report():
 
 
 @app.route('/pre_report')
+@validate_input
 def pre_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1109,31 +1194,37 @@ def pre_report():
 
 
 @app.route('/add_report', methods=['POST'])
+@validate_input
 def add_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dic = {}
-    if request.method == 'POST':
-        for key, val in request.form.items():
-            dic[key] = val
-    
-    img_extension = helper.get_img_extension(dic['image_data'])
-    img_path = helper.save_image(r"{}{}".format(str(uuid4()),img_extension), dic['image_data'])
-    db.save_to_report(session["db"], dic['data'], dic['section_name'], img_path)
-    return redirect(request.referrer)
+    for key, val in request.form.items():
+        dic[key] = val
+
+    if "base64" in dic['image_data']:
+        img_extension = helper.get_img_extension(dic['image_data'])
+        img_path = helper.save_image(r"{}{}".format(str(uuid4()),img_extension), dic['image_data'])
+        db.save_to_report(session["db"], dic['data'], dic['section_name'], img_path)
+        return redirect(request.referrer)
+
+    return '', 204
+
 
 @app.route('/delete_from_report', methods=['GET'])
+@validate_input
 def delete_from_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     image_id = request.args.get('image_id')
-    db.change_relevent_to_zero(session["db"], "report",image_id)
+    db.change_relevant_to_zero(session["db"], "report",image_id)
 
     return redirect(request.referrer)
 
 @app.route('/update_report', methods=['POST'])
+@validate_input
 def update_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1149,6 +1240,7 @@ def update_report():
     return redirect(request.referrer)
 
 @app.route('/generate_report', methods=['POST'])
+@validate_input
 def generate_report():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1171,6 +1263,7 @@ def generate_report():
 """
 
 @app.route('/create_achievement', methods=['POST'])
+@validate_input
 def create_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1183,6 +1276,7 @@ def create_achievement():
     return redirect(request.referrer)
 
 @app.route('/edit_achievement', methods=['POST'])
+@validate_input
 def edit_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1193,6 +1287,7 @@ def edit_achievement():
         return ('', 204) 
 
 @app.route('/delete_achievement', methods=['GET'])
+@validate_input
 def delete_achievement():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1209,6 +1304,7 @@ def delete_achievement():
 """
 
 @app.route('/search', methods=['GET','POST'])
+@validate_input
 def search():
     '''
     match[0] ==> data | match[1] ==> id_of_item | match[2] ==> table_name
@@ -1246,6 +1342,7 @@ def search():
 """
 
 @app.route('/exploits')
+@validate_input
 def exploits():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1255,6 +1352,7 @@ def exploits():
     return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, exploits=exploits, exploits_len=len(exploits))
 
 @app.route('/add_exploit',methods=['POST'])
+@validate_input
 def add_exploit():
     """
     Save new exploit to DB - if File has uploded ==> saves it to payloads dir
@@ -1269,7 +1367,7 @@ def add_exploit():
             dic[key] = val
         if request.files.get("exploit-file"):
             file = request.files.get("exploit-file")
-            full_path, file_name = helper.save_file(file, helper.PAYLOAD_FILES.format(session["project"]))
+            full_path, file_name = helper.save_file(file, helper.PAYLOAD_FOLDER.format(session["project"]))
             db.insert_new_standalone_file(session["db"], full_path, file_name, "Exploit File Added", session["username"])
         else:
             full_path = None
@@ -1278,6 +1376,7 @@ def add_exploit():
     return redirect(request.referrer)
 
 @app.route('/update_exploit',methods=['POST'])
+@validate_input
 def update_exploit():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1291,15 +1390,16 @@ def update_exploit():
     return redirect(request.referrer)
 
 @app.route('/delete_exploit',methods=['GET'])
+@validate_input
 def delete_exploit():
     """
-    Changes exploit relevent to 0
+    Changes exploit relevant to 0
     """
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     exploit_id = request.args.get("id")
-    db.change_relevent_to_zero(session["db"], "exploits",exploit_id)
+    db.change_relevant_to_zero(session["db"], "exploits",exploit_id)
     
     return redirect(request.referrer)
 
@@ -1310,6 +1410,7 @@ def delete_exploit():
 """
 
 @app.route("/management",methods=['GET'])
+@validate_input
 def management():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1324,6 +1425,7 @@ def management():
 
 
 @app.route('/add_user',methods=['POST'])
+@validate_input
 def add_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1337,6 +1439,7 @@ def add_user():
 
 
 @app.route('/update_user_name',methods=['POST'])
+@validate_input
 def update_user_name():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1347,6 +1450,7 @@ def update_user_name():
     return redirect(request.referrer)
 
 @app.route('/update_password',methods=['POST'])
+@validate_input
 def update_password():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1358,6 +1462,7 @@ def update_password():
 
 
 @app.route('/delete_managment_user',methods=['POST'])
+@validate_input
 def delete_managment_user():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1373,6 +1478,7 @@ def delete_managment_user():
 
 
 @app.route('/uploadManagmentUserPicture',methods=['POST'])
+@validate_input
 def uploadManagmentUserPicture():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1397,6 +1503,7 @@ def uploadManagmentUserPicture():
 
     
 @app.route('/exportAll',methods=['GET'])
+@validate_input
 def exportAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1417,6 +1524,7 @@ def exportAll():
 
 
 @app.route('/importAll',methods=['POST'])
+@validate_input
 def importAll():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1492,6 +1600,7 @@ def updateNoteName(json):
 """
 
 @app.route('/add_color',methods=['POST'])
+@validate_input
 def add_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1503,6 +1612,7 @@ def add_color():
 
 
 @app.route('/change_color',methods=['POST'])
+@validate_input
 def change_color():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1513,6 +1623,19 @@ def change_color():
 
     return redirect(request.referrer)
 
+
+@app.route('/change_color_name',methods=['POST'])
+@validate_input
+def change_color_name():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    
+    db.change_color(session["db"], dict["obj"], dict["value"], dict["id"])    
+
+    return redirect(request.referrer)
+
 """
 =======================================================
                 Graph Functions
@@ -1520,6 +1643,7 @@ def change_color():
 """
 
 @app.route('/load_graph',methods=['GET'])
+@validate_input
 def load_graph():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1544,7 +1668,7 @@ def add_scan(file):
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
 
-                    if not db.check_if_server_exsist(session["db"], ip_addr):
+                    if not db.check_if_server_exist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id, 1)
@@ -1620,6 +1744,7 @@ def login():
 
 
 @app.route('/new_project', methods=['POST'])
+@validate_input
 def new_project():
     if not IS_ENV_SAFE:
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
@@ -1728,17 +1853,18 @@ def showHelpMenu():
     in the most efficient and organized way.
 
     optional arguments:
+    --port      Select listening port [Default: 5000].
+    --docker    Should be set only when running from a docker container [Default: False].
+    --safe      Set state to "safe" - Allows to create new projects [Default: False].
     --reset     Resets the DB and deletes all files [Default: False].
     --debug     Debugging mode [Default: False].
-    --port      Select listening port [Default: 5000].
-    --safe      Set state to "safe" - Allows to create new projects [Default: False].
-    --docker    Should be set only when running from a docker container [Default: False].
+    --demo      Load demo DB for demonstration purposes [Default: False].
     --help      Display this help message.
     """
     print(description)
     
 
-def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=False):
+def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, demo=False, help=False):
     if help:
         showHelpMenu()
         sys.exit(0)
@@ -1746,6 +1872,7 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
     if reset:
         projectsFiles = glob("RedDB/Projects/*")
         allFiles = glob("files/**", recursive=True)
+        profilePics = glob("static/pics/profiles/*")
 
         # Remove management DB
         if path.exists(MANAGEMENT_DB):
@@ -1754,7 +1881,14 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
         # Remove all project files
         if projectsFiles:
             for project in projectsFiles:
-                    os.remove(project)
+                os.remove(project)
+
+        if profilePics:
+            for profile in profilePics:
+                if "user.png" not in profile:
+                    os.remove(profile)
+
+        allFiles.reverse()
 
         # Remove all files
         if allFiles:
@@ -1764,6 +1898,7 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
 
         # List all Dirs under files
         allFolders = glob("files/**", recursive=True)
+
         # Delete Subdirs to Root dirs
         allFolders.reverse()
 
@@ -1780,9 +1915,15 @@ def startRedeye(reset=False,debug=False,port=5000,safe=False,docker=False,help=F
     global IS_ENV_SAFE
     IS_ENV_SAFE = safe
 
-    if docker:
-        global IS_DOCKER_ENV
-        IS_DOCKER_ENV = True
+    global IS_DOCKER_ENV
+    IS_DOCKER_ENV = docker
+    
+    if demo:
+        #init exampleDB.
+        # Load default json file.
+        db.init_demo_db()
+        copyFile(DEFAULT_JSONS + "/Attack.json", helper.JSON_FOLDER.format(DEFAULT_DB))
+
 
     if debug:
         socketio.run(app, debug=True, host='0.0.0.0', port=port)

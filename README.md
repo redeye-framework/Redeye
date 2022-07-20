@@ -79,6 +79,8 @@ docker save redeyeframework/redeye:latest neo4j:latest > Redeye.tar
 docker load < Redeye.tar
 ```
 
+DockerHub: https://hub.docker.com/r/redeyeframework/redeye
+
 ### General
 Redeye will listen on: http://0.0.0.0:8443</br>
 Default Credentials:

@@ -122,6 +122,10 @@
     filter: brightness(120%);
 }
 
+#add-new-attack:hover {
+    filter: brightness(120%);
+}
+
 /* Style the tab content */
 .tabcontent {
     display: none;

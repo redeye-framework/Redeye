@@ -18,34 +18,40 @@ SERVICES_FILE = "Tools/services"
 
 def setGlobals():
     global MAIN_FILES
-    global FILES_FOLDER
+    global LOOT_FOLDER
     global SCAN_FOLDER
     global JSON_FOLDER
-    global PAYLOAD_FILES
-    global SCREENSHOTS_FILES
+    global PAYLOAD_FOLDER
+    global SCREENSHOTS_FOLDER
     global REPORT_IMAGES
     global PASS_FOLDER
-    MAIN_FILES = "files/{}"
-    FILES_FOLDER = "files/{}/data"
-    SCAN_FOLDER = "files/{}/scans"
-    JSON_FOLDER = "files/{}/jsons"
-    PAYLOAD_FILES = "files/{}/payloads"
-    SCREENSHOTS_FILES = "files/{}/screenshots"
-    REPORT_IMAGES = "files/{}/report_images"
-    PASS_FOLDER = "files/{}/passwords"
+    global FILES_FOLDER
 
+    # FrontEnd
+    MAIN_FILES = "files/{}/frontend"
+    LOOT_FOLDER = "files/{}/frontend/Loot"
+    SCAN_FOLDER = "files/{}/frontend/Scans"
+    SCREENSHOTS_FOLDER = "files/{}/frontend/Screenshots"
+
+    # Backend
+    PASS_FOLDER = "files/{}/backend/passwords"
+    JSON_FOLDER = "files/{}/backend/jsons"
+    PAYLOAD_FOLDER = "files/{}/backend/payloads"
+    REPORT_IMAGES = "files/{}/backend/report_images"
+    FILES_FOLDER = "files/{}/backend/General"
+    
 def setFilesFolder(folderName):
-    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FILES.format(folderName), SCREENSHOTS_FILES.format(folderName), REPORT_IMAGES.format(folderName), PASS_FOLDER.format(folderName)
+    return MAIN_FILES.format(folderName), FILES_FOLDER.format(folderName), SCAN_FOLDER.format(folderName), JSON_FOLDER.format(folderName), PAYLOAD_FOLDER.format(folderName), SCREENSHOTS_FOLDER.format(folderName), REPORT_IMAGES.format(folderName), PASS_FOLDER.format(folderName)
 
 def save_image(name, data):
     """
     Save image got from pre report page ==> img_path
     """
     imgdata = base64.b64decode(data.split(r"base64,")[1])
-    with open(r"{}".format(os.path.join(PAYLOAD_FILES.format(session["project"]), name)), 'wb') as out:
+    with open(r"{}".format(os.path.join(PAYLOAD_FOLDER.format(session["project"]), name)), 'wb') as out:
         out.write(imgdata)
 
-    return r"{}".format(os.path.join(PAYLOAD_FILES.format(session["project"]), name))
+    return r"{}".format(os.path.join(PAYLOAD_FOLDER.format(session["project"]), name))
 
 def delete_file2(path):
     if '..' in path:
@@ -66,34 +72,6 @@ def get_image(path):
     with open(r"{}".format(path), 'rb') as out:
         encoded_string = base64.b64encode(out.read())
     return (r"data:image/jpeg;base64,{}".format(encoded_string.decode()))
-
-def user_type_to_name(user_type):
-    if user_type == 1:
-        return "Domain"
-    elif user_type == 2:
-        return "Localhost"
-    elif user_type == 3:
-        return "Application"
-    elif user_type == 4:
-        return "Net-Device"
-    elif user_type == 5:
-        return "Other"
-    else:
-        return "Unknown"
-
-def user_name_to_type(user_type_name):
-    if user_type_name.lower() == "domain":
-        return 1
-    elif user_type_name.lower() == "localhost":
-        return 2
-    elif user_type_name.lower() == "application":
-        return 3
-    elif user_type_name.lower() == "net-device":
-        return 4
-    elif user_type_name.lower() == "other":
-        return 5
-    else:
-        return "Unknown"
 
 def time_left():
     start = datetime.strptime(PROJECT_START, "%b %d %Y")
@@ -328,6 +306,13 @@ def get_service_name_by_port(port):
             return word
     return "unknown"
 
+def debug(text):
+    print("------------------------\n")
+    print(text)
+    print("-------------")
+
+def renameFiles(oldFileName,newFileName):
+    os.rename(oldFileName,newFileName)
 
 def zipdir(filesPath, ziph):
     # ziph is zipfile handle

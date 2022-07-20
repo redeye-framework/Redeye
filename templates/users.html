@@ -25,9 +25,7 @@
                 <th>Password</th>
                 <th>Permissions</th>
                 <th>Found on</th>
-                {% if type==6 %}
                 <th>User Type</th>
-                {% endif %}
                 <th>Action</th>
             </tr>
         </thead>
@@ -39,35 +37,31 @@
                 <td onclick="copyToClipboard(this.innerHTML)" style="cursor:pointer;">{{ info[0] }}</td>
                 <td>{{ info[1] }}</td>
                 <td>{{ info[2] }}</td>
-                {% if type==6 %}
                 <td>{{ info[3] }}</td>
-                {% endif %}
                 <td><a href="{{ url_for('delete_user') }}?id={{ info[5] }}" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"
-              style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
+                style="margin-left: 15px; color: rgb(212, 71, 71);"></i></a></td>
             </tr>
             {% endfor %} {% endfor %}
             <tr style="overflow:scroll">
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
-                    <input type="hidden" name="type" value="{{ type }}">
-                    <input type="hidden" id="userTypeForm" name="userType">
-                    <td><input class="username-create-input modern-input" type="text" name="username" placeholder="Username"></td>
+                    <td><input class="username-create-input modern-input" type="text" name="username" maxlength="" placeholder="Username"></td>
                     <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
                     <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
                     <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
-                    {% if type==6 %}
-                    <td name="type_selector" id="type_selector">
-                        {% if allUserTypes|length == 0 %}
-                        <input class="modern-input" type="text" name="userType" id="userType" placeholder="User Type"> {% else %}
-                        <select id="userType" name="userType" class="exec-users-input inline" id="select_type" onchange="addNewUserType(this)">
+                    <td id="type_selector">
+                        {% if allUserTypes|length %}
+                        <select id="userTypeSelector" name="user_type_select" class="exec-users-input inline" id="select_type" onchange="addNewUserType(this)">
                             {% for userType in allUserTypes %}
                                 <option>{{ userType }}</option>
                             {% endfor %}
                             <option>Other</option>
-                        {% endif %}
-              
-            </select></td>
-                    {% endif %}
-                    <td><a onclick="submitUserForm()" href="#"><i class="fas fa-plus" style="margin-left: 15px;"></i></a>
+                        </select>
+                        <input class="modern-input" type="text" name="user_type" style="display: none;" id="userType" placeholder="User Type"> {% else %}
+                        <input class="modern-input" type="text" name="user_type" id="userType" placeholder="User Type"> {% endif %}
+
+
+                    </td>
+                    <td><a onclick="submitUserForm()" href="#"><i class="fas fa-plus" style="margin: 5px 15px;"></i></a>
                     </td>
                 </form>
             </tr>
@@ -80,56 +74,11 @@
     <label class="btn btn-primary" for="file"><i class="fas fa-upload"></i></label>
 </form>
 
-<script>
-    function sortUsers() {
-        var type = document.getElementById('type').value;
-        var table = document.getElementById('users-table');
-
-        for (var i = 1; i <= table.rows.length - 1; ++i) {
-            // Show All  
-            if (table.rows[i].style.display == "none") {
-                table.rows[i].style.display = "";
-            }
-
-            // Hide none relevant
-            var user_type = table.rows[i].cells[4].innerHTML;
-            if (type.toLowerCase() != user_type.toLowerCase() && type != "All") {
-                table.rows[i].style.display = 'none';
-            } else if (type == "All") {
-                for (var i = 1; i <= table.rows.length; ++i) {
-                    table.rows[i].style.display = "";
-                }
-            }
-        }
-    }
-
-    function addNewUserType(obj) {
-        if (obj.value == "Other") {
-            // Create new Text-Box element
-            var el = document.createElement("input");
-            el.setAttribute("class", "modern-input");
-            el.setAttribute("type", "text");
-            el.setAttribute("name", "userType");
-            el.setAttribute("id", "userType");
-            el.setAttribute("placeholder", "User Type");
-
-            // Remove the selector
-            obj.remove();
-
-            // Places an text box so the user will be able to create new userType roles
-            document.getElementById("type_selector").appendChild(el);
-        }
-    }
-
-    function submitUserForm() {
-        document.getElementById('userTypeForm').value = document.getElementById('userType').value;
-        $('#user-form').submit();
-    }
-</script>
 {% include 'user.html' %} {% include 'wrapper_end.html' %}
 <script>
     key_sc($(".export-users-btn"), 'e');
     key_sc($(".username-create-input"), 'n');
     key_sc($(".import-btn"), 'u');
 </script>
+<script src="{{ url_for('static', filename='js/users.js') }}"></script>
 {% include 'footer.html' %}

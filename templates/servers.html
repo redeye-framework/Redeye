@@ -54,11 +54,11 @@
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
             <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
         </form>
-    </div>    
+    </div>
 </div>
 <form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
     <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
-    <label class="btn btn-primary floating-btn" for="file"><i class="fa fa-upload"></i></label>
+    <label class="btn btn-primary floating-btn" title="Enter nmap xml output file (-oX)." for="file"><i class="fa fa-upload"></i></label>
 </form>
 <a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status" tabindex="-1">
     <i class="fas fa-edit"></i> Edit Labels
@@ -73,7 +73,7 @@
 
                 </td>
                 <td>
-                    <input id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name"></input>
+                    <input id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name" maxlength="20"></input>
                 </td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                     <span>Server IP</span>
                 </td>
                 <td>
-                    <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP">
+                    <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP" maxlength="15">
                 </td>
             </tr>
             <tr>
@@ -123,7 +123,7 @@
         <tr>
             <td class="status">
                 <span class="editable">{{ color[1] }}</span>
-                <input class="editable-inp" type="text" size="4" value="name" style="display: none;">
+                <input id="{{ color[0] }}" class="editable-inp" type="text" size="4" value="name" style="display: none;">
             </td>
             <td class="status-color">
                 <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:50px; height:30px;">
@@ -137,7 +137,7 @@
         {% endfor %}
         <form id="color_form" action="{{ url_for('add_color') }}" method="POST">
             <tr>
-                <td class="status-add"><input name="colorName" type="text" size="4"></td>
+                <td class="status-add"><input name="colorName" type="text" size="4" maxlength="20"></td>
                 <td class="status-color-add"><input name="hexColor" type="color" value="#cccccc" style="width:50px; height:30px;" </td>
                     <td onclick="document.getElementById('color_form').submit();" class="add"><i class="fas fa-plus"></i></td>
             </tr>
@@ -148,6 +148,7 @@
 {% include 'wrapper_end.html' %}
 <script>
     key_sc($(".section-hide-all-btn"), 'm');
+    key_sc($(".section-hide-all-btn"), 'f');
     key_sc($(".new-section"), 'N');
     key_sc($(".add-server-btn")[0], 'n');
     key_sc($(".edit-server-status"), 'e');

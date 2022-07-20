@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/files.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/dropzone/dropzone.css') }}"> {% include 'wrapper.html' %}
 <ul class='custom-menu'>
+    <!-- <li id="menu-pre-report" data-action="pre-report" style="display: none;">Add to pre-report</li> TODO: auto add to preReport-->
     <li data-action="Rename">Rename</li>
     <li data-action="Delete">Delete</li>
     <li data-action="Download">Download</li>
@@ -43,7 +44,7 @@
                                     <i style="background-image: url(/static/pics/file_xls.png);" class="file-icons"></i>
                                 {% elif ".doc" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_doc.png);" class="file-icons"></i>
-                                {% elif ".jpg" in key|lower %}
+                                {% elif ".jpg" in key|lower or ".jpeg" in key|lower%}
                                     <i style="background-image: url(/static/pics/file_jpg.png);" class="file-icons"></i>
                                 {% elif ".png" in key|lower %}
                                     <i style="background-image: url(/static/pics/file_png.png);" class="file-icons"></i>
@@ -67,7 +68,6 @@
             </div>
         </div>
     </div>
-    {% if dir_name != "Tools" %}
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -82,7 +82,6 @@
             </div>
         </div>
     </div>
-    {% endif %}
 </div>
 
 {% include 'wrapper_end.html' %}
@@ -92,5 +91,6 @@
     key_sc($(".dropzone"), 'u');
     key_sc($(".find-file-btn"), 'f');
 </script>
+<script src="{{ url_for('static', filename='js/download.js') }}"></script>
 <script src="{{ url_for('static', filename='js/files.js') }}"></script>
 {% include 'footer.html' %}

@@ -3,9 +3,10 @@
 <div class="vectors-box">
     <div class="tabs">
         {% for i in range(attacks_len) %}
-        <button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}" onclick="changeCurrentTab(this)">{{ attacks[i] }}</button> {% endfor %}
+        <button class="tablinks" id="{{ attacks[i] }}.json" value="{{ data[attacks[i] + '.json'] }}" onclick="changeCurrentTab(this)">{{ attacks[i] }}</button>
+        {% endfor %}
         <form action="{{ url_for('new_attack') }}">
-            <button class="tablinks"><i class="fas fa-plus"></i></button>
+            <button id="add-new-attack"><i class="fas fa-plus"></i></button>
         </form>
     </div>
 
@@ -15,6 +16,7 @@
         </div>
     </div>
     <div class="edit">
+        {% if attacks_len %}
         <div class="edit-operator">
             <form action="{{ url_for('attack') }}" method="POST" id="attack-form">
                 <input type="hidden" value="" name="tab" id="tab-input">
@@ -22,7 +24,7 @@
                 <div id="attack_properties">
                     <input id="attack-current-name" type="hidden" name="current-attack-name" value="">
                     <input id="last-attack-name-input" type="hidden" value="" name="last-attack-name">
-                    <input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value="">
+                    <input id="attack-name-input" class="input attack-name-input" type="text" name="attack-name" value=""  maxlength="22">
                 </div>
                 <div id="operator_properties" style="display: none;">
                     <input class="input title-input" id="operator_title" type="text" placeholder="Title">
@@ -42,7 +44,6 @@
                 </div>
             </form>
             <a class="save floating-btn" id="save_local" title="Save Attack"><i class="fas fa-save"></i></a>
-            <a class="redo floating-btn" id="clear_screen" title="Clean Page"><i class="fas fa-redo"></i></a>
         </div>
         <div class="operators">
             <div class="flowchart-operator flowchart-default-operator ui-draggable draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
@@ -141,10 +142,12 @@
             <a class="delete floating-btn" href="#" onclick="deleteAttack()" title="Delete Attack"><i
 					class="fas fa-trash"></i></a>
         </div>
+        {% endif %}
     </div>
 </div>
 <div class="stats-box">
     <div class="section severity">
+        {% if attacks_len %}
         <h6>Severity</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -159,8 +162,10 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
     <div class="section plausibility">
+        {% if attacks_len %}
         <h6>plausibility</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -175,8 +180,10 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
     <div class="section risk">
+        {% if attacks_len %}
         <h6>Risk</h6>
         <div class="onetoten">
             <input type="hidden" value="0">
@@ -191,12 +198,17 @@
             <div id="d9" class="dot"></div>
             <div id="d10" class="dot"></div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% include 'wrapper_end.html' %}
 <script>
-    var currentTab = "{{tab}}";
+    var currentTab = "{{ tab }}";
+    var attacks_len = {{ attacks_len }};
     var changed = false;
+    key_sc($("#add-new-attack"), 'n');
+    key_sc($(".save"), 's');
+    key_sc($(".delete"), 'd');
 </script>
 <script src="{{ url_for('static', filename='js/attack.js') }}"></script>
 {% include 'footer.html' %}
