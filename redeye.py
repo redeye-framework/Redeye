@@ -1200,9 +1200,8 @@ def add_report():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dic = {}
-    if request.method == 'POST':
-        for key, val in request.form.items():
-            dic[key] = val
+    for key, val in request.form.items():
+        dic[key] = val
     
     img_extension = helper.get_img_extension(dic['image_data'])
     img_path = helper.save_image(r"{}{}".format(str(uuid4()),img_extension), dic['image_data'])
@@ -1617,6 +1616,19 @@ def change_color():
     dict = request.args.to_dict()
     
     db.change_color(session["db"], dict["obj"], "#%s" % (dict["value"]), dict["id"])    
+
+    return redirect(request.referrer)
+
+
+@app.route('/change_color_name',methods=['POST'])
+@validate_input
+def change_color_name():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    
+    db.change_color(session["db"], dict["obj"], dict["value"], dict["id"])    
 
     return redirect(request.referrer)
 

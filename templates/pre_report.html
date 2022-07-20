@@ -63,10 +63,10 @@
     function get_image_name() {
         try {
             var image_name = document.getElementsByClassName('image-title')[0].innerText;
-            document.getElementById('image_name').value = image_name;
         } catch {
-            return 0;
+            var image_name = "Unnamed Picture"
         }
+        document.getElementById('image_name').value = image_name;
         return 1;
     }
 
