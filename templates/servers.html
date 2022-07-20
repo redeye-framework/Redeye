@@ -58,7 +58,7 @@
 </div>
 <form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
     <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
-    <label class="btn btn-primary floating-btn" for="file"><i class="fa fa-upload"></i></label>
+    <label class="btn btn-primary floating-btn" title="Enter nmap xml output file (-oX)." for="file"><i class="fa fa-upload"></i></label>
 </form>
 <a class="edit-server-status floating-btn" href="#" onclick="editServerStatus();return false;" title="Edit Server Status" tabindex="-1">
     <i class="fas fa-edit"></i> Edit Labels
