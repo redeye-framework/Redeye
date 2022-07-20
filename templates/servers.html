@@ -54,7 +54,7 @@
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
             <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
         </form>
-    </div>    
+    </div>
 </div>
 <form enctype="multipart/form-data" action="{{ url_for('add_server_from_file') }}" method="POST">
     <input type="file" name="upload_file" id="file" onchange="form.submit()" class="import-btn" multiple/>
@@ -73,7 +73,7 @@
 
                 </td>
                 <td>
-                    <input id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name"></input>
+                    <input id="newServerName" name="name" class="modern-input" type="text" size="32" placeholder="Server Name" maxlength="20"></input>
                 </td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                     <span>Server IP</span>
                 </td>
                 <td>
-                    <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP">
+                    <input id="newServerIp" name="ip" class="modern-input" type="text" size="32" placeholder="Server IP" maxlength="15">
                 </td>
             </tr>
             <tr>
@@ -137,7 +137,7 @@
         {% endfor %}
         <form id="color_form" action="{{ url_for('add_color') }}" method="POST">
             <tr>
-                <td class="status-add"><input name="colorName" type="text" size="4"></td>
+                <td class="status-add"><input name="colorName" type="text" size="4" maxlength="20"></td>
                 <td class="status-color-add"><input name="hexColor" type="color" value="#cccccc" style="width:50px; height:30px;" </td>
                     <td onclick="document.getElementById('color_form').submit();" class="add"><i class="fas fa-plus"></i></td>
             </tr>

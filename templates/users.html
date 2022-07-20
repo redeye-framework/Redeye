@@ -44,7 +44,7 @@
             {% endfor %} {% endfor %}
             <tr style="overflow:scroll">
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
-                    <td><input class="username-create-input modern-input" type="text" name="username" placeholder="Username"></td>
+                    <td><input class="username-create-input modern-input" type="text" name="username" maxlength="" placeholder="Username"></td>
                     <td><input class="modern-input" type="text" name="password" placeholder="Password"></td>
                     <td><input class="modern-input" type="text" name="permissions" placeholder="Permissions"></td>
                     <td><input class="modern-input" type="text" name="found" placeholder="Found On"></td>
