@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
                                       password text,
                                       permissions text NOT NULL DEFAULT '-',
                                       attain text DEFAULT "-",
-                                      relevent INTEGER NOT NULL DEFAULT 1,
+                                      relevant INTEGER NOT NULL DEFAULT 1,
                                       found_on text,
                                       server_id INTEGER,
                                       device_id INTEGER,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS tasks (
                                       data text,
                                       notes text,
                                       is_private INTEGER,
-                                      relevent INTEGER NOT NULL DEFAULT 1
+                                      relevant INTEGER NOT NULL DEFAULT 1
                                   );
 CREATE TABLE IF NOT EXISTS sections (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS servers (
                                       vendor text,
                                       is_access INTEGER NOT NULL DEFAULT 1,
                                       attain text,
-                                      relevent INTEGER NOT NULL DEFAULT 1,
+                                      relevant INTEGER NOT NULL DEFAULT 1,
                                       section_id INTEGER NOT NULL DEFAULT 1,
                                       color_id INTEGER NOT NULL DEFAULT 1,
                                       FOREIGN KEY(color_id) REFERENCES colors(id),
@@ -71,14 +71,14 @@ CREATE TABLE IF NOT EXISTS netdevices (
                                       type text NOT NULL,
                                       description text,
                                       attain text,
-                                      relevent INTEGER NOT NULL DEFAULT 1
+                                      relevant INTEGER NOT NULL DEFAULT 1
                                    );
 CREATE TABLE IF NOT EXISTS vulns (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       name text NOT NULL,
                                       data text NOT NULL,
                                       fix text NOT NULL DEFAULT '-',
-                                      relevent INTEGER NOT NULL DEFAULT 1,
+                                      relevant INTEGER NOT NULL DEFAULT 1,
                                       server_id INTEGER,
                                       device_id INTEGER,
                                       FOREIGN KEY(server_id) REFERENCES servers(id),
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS files (
                                       name text NOT NULL,
                                       path text,
                                       description text,
-                                      relevent INTEGER NOT NULL DEFAULT 1,
+                                      relevant INTEGER NOT NULL DEFAULT 1,
                                       server_id INTEGER,
                                       FOREIGN KEY(server_id) REFERENCES servers(id)
 );
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS comments (
                                       data text NOT NULL,
                                       executor NOT NULL,
                                       date text NOT NULL,
-                                      relevent INTEGER NOT NULL DEFAULT 1
+                                      relevant INTEGER NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS ports (
@@ -117,13 +117,13 @@ CREATE TABLE IF NOT EXISTS Achievements (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       data text NOT NULL,
                                       is_done INT NOT NULL DEFAULT 0,
-                                      relevent INTEGER NOT NULL DEFAULT 1
+                                      relevant INTEGER NOT NULL DEFAULT 1
 );
 CREATE TABLE IF NOT EXISTS report (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       data text NOT NULL,
                                       section_name text,
-                                      relevent INTEGER NOT NULL DEFAULT 1,
+                                      relevant INTEGER NOT NULL DEFAULT 1,
                                       image_path text
 );
 CREATE TABLE IF NOT EXISTS exploits (
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS exploits (
                                       name text NOT NULL,
                                       data text,
                                       file_path text DEFAULT NULL,
-                                      relevent INTEGER NOT NULL DEFAULT 1
+                                      relevant INTEGER NOT NULL DEFAULT 1
 );
 CREATE TABLE IF NOT EXISTS notebooks (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -541,7 +541,7 @@ def update_task():
         if 'task_done' in task:
             db.delete_task(session["db"], task['task_id'], session["username"])
         elif 'trash_task' in task:
-            db.unrelevent_task(session["db"], task['task_id'], session["username"])
+            db.unrelevant_task(session["db"], task['task_id'], session["username"])
         else:
             pass
         return redirect(url_for('tasks'))
@@ -1215,7 +1215,7 @@ def delete_from_report():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     image_id = request.args.get('image_id')
-    db.change_relevent_to_zero(session["db"], "report",image_id)
+    db.change_relevant_to_zero(session["db"], "report",image_id)
 
     return redirect(request.referrer)
 
@@ -1389,13 +1389,13 @@ def update_exploit():
 @validate_input
 def delete_exploit():
     """
-    Changes exploit relevent to 0
+    Changes exploit relevant to 0
     """
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     exploit_id = request.args.get("id")
-    db.change_relevent_to_zero(session["db"], "exploits",exploit_id)
+    db.change_relevant_to_zero(session["db"], "exploits",exploit_id)
     
     return redirect(request.referrer)
 
@@ -1664,7 +1664,7 @@ def add_scan(file):
                     vendor, hostname, lst_ports = data[0]["vendor"], data[0]["hostname"], data[1]["ports"]
                     section_id = helper.get_section_id(session["db"], ip_addr)
 
-                    if not db.check_if_server_exsist(session["db"], ip_addr):
+                    if not db.check_if_server_exist(session["db"], ip_addr):
                         if hostname != "":
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id, 1)

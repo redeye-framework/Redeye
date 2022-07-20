@@ -110,7 +110,7 @@ def delete_user(db, user_id, exec):
     Delete user by id of user.
     """
     #query = 'DELETE FROM users WHERE id="{}"'.format(user_id)
-    result = change_relevent_to_zero(db, "users", user_id)
+    result = change_relevant_to_zero(db, "users", user_id)
     create_log(db, "User Deleted", "user_id", user_id, "Deleted User", exec)
     return(result)
 
@@ -187,22 +187,22 @@ def set_user_password(db, user_id, password, exec):
 
 @check_input
 def get_all_users(db):
-    query = r'SELECT * FROM users WHERE relevent=1'
+    query = r'SELECT * FROM users WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
 def get_all_cracked_users(db):
-    query = r'SELECT * FROM users WHERE (password is NOT "Unknown") and relevent=1'
+    query = r'SELECT * FROM users WHERE (password is NOT "Unknown") and relevant=1'
     return db_get(db, query)
 
 @check_input
 def get_users(db):
-    query = r'SELECT * FROM users WHERE relevent=1'
+    query = r'SELECT * FROM users WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
 def get_users_by_server_id(db, id):
-    query = r'SELECT * FROM users WHERE server_id="{}" and relevent=1'.format(
+    query = r'SELECT * FROM users WHERE server_id="{}" and relevant=1'.format(
         id)
     return db_get(db, query)
 
@@ -213,7 +213,7 @@ def get_user_details(db, id):
 
 @check_input
 def get_user_with_password(db, password):
-    query = r'SELECT * FROM users WHERE password="{}" and relevent=1'.format(
+    query = r'SELECT * FROM users WHERE password="{}" and relevant=1'.format(
         password)
     return db_get(db, query)
 
@@ -272,12 +272,12 @@ def insert_new_task(db, task_name, is_task_done, executers, data, is_private, ex
     return(result)
 
 @check_input
-def unrelevent_task(db, id, exec):
+def unrelevant_task(db, id, exec):
     query = ''' UPDATE tasks
-            SET relevent = 0
+            SET relevant = 0
             WHERE id = "{}"'''.format(id)
     result = get_db_with_actions(db, query)
-    create_log(db, "Task Unrelevent", "task_id", id, "Task Unrelevent", exec)
+    create_log(db, "Task Unrelevant", "task_id", id, "Task Unrelevant", exec)
     return(result)
 
 @check_input
@@ -321,12 +321,12 @@ def get_task(db, task_id):
 
 @check_input
 def get_all_tasks(db):
-    query = r'SELECT * FROM tasks WHERE relevent=1 and is_private=0 order by is_task_done = "1";'
+    query = r'SELECT * FROM tasks WHERE relevant=1 and is_private=0 order by is_task_done = "1";'
     return db_get(db, query)
 
 @check_input
 def get_all_my_tasks(db, exec):
-    query = r'SELECT * FROM tasks WHERE relevent=1 and executers="{}"'.format(
+    query = r'SELECT * FROM tasks WHERE relevant=1 and executers="{}"'.format(
         exec)
     return db_get(db, query)
 
@@ -396,14 +396,14 @@ def delete_vuln(db, id, exec):
     Delete vuln by id of vuln.
     """
     #query = 'DELETE FROM vulns WHERE id="{}"'.format(id)
-    result = change_relevent_to_zero(db, "vulns", id)
+    result = change_relevant_to_zero(db, "vulns", id)
     create_log(db, "Vulln Deleted", "vuln_id", id,
                "Deleted Vulnerability", exec)
     return(result)
 
 @check_input
 def get_vulns_by_server_id(db, id):
-    query = r'SELECT * FROM vulns WHERE server_id="{}" and relevent=1'.format(
+    query = r'SELECT * FROM vulns WHERE server_id="{}" and relevant=1'.format(
         id)
     return db_get(db, query)
 
@@ -414,7 +414,7 @@ def get_vulns(db, vull_id):
 
 @check_input
 def get_all_vullns(db):
-    query = r'SELECT * FROM vulns WHERE relevent=1'
+    query = r'SELECT * FROM vulns WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
@@ -463,19 +463,19 @@ def delete_device(db, device_id, exec):
     Delete user by id of net device.
     """
     #query = 'DELETE FROM netdevices WHERE id="{}"'.format(device_id)
-    result = change_relevent_to_zero(db, "netdevices", device_id)
+    result = change_relevant_to_zero(db, "netdevices", device_id)
     create_log(db, "Netdevice Deleted", "device_id",
                id, "Deleted Device", exec)
     return result
 
 @check_input
 def get_netdevices(db, ip):
-    query = r'SELECT * FROM netdevices WHERE ip="{}" and relevent=1'.format(ip)
+    query = r'SELECT * FROM netdevices WHERE ip="{}" and relevant=1'.format(ip)
     return db_get(db, query)
 
 @check_input
 def get_all_netdevices(db):
-    query = r'SELECT * FROM netdevices WHERE relevent=1'
+    query = r'SELECT * FROM netdevices WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
@@ -566,7 +566,7 @@ def delete_server_by_id(db, server_id, exec):
     Delete server by id of server.
     """
     #query = 'DELETE FROM servers WHERE id="{}"'.format(server_id)
-    result = change_relevent_to_zero(db, "servers", server_id)
+    result = change_relevant_to_zero(db, "servers", server_id)
     create_log(db, "Server Deleted", "server_id",
                server_id, "Deleted Server", exec)
     return result
@@ -615,22 +615,22 @@ def get_section_name_by_section_id(db, section_id):
 
 @check_input
 def get_servers(db):
-    query = r'SELECT * FROM servers WHERE relevent=1'
+    query = r'SELECT * FROM servers WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
 def get_no_access_servers(db):
-    query = r'SELECT * FROM servers WHERE is_access=0 and relevent=1'
+    query = r'SELECT * FROM servers WHERE is_access=0 and relevant=1'
     return db_get(db, query)
 
 @check_input
-def check_if_server_exsist(db, ip):
-    query = r'SELECT * FROM servers WHERE ip="{}"'.format(ip)
+def check_if_server_exist(db, ip):
+    query = r'SELECT * FROM servers WHERE ip="{}" AND relevant=1'.format(ip)
     return db_get(db, query)
 
 @check_input
 def get_server_by_ip(db, ip):
-    query = r'SELECT * FROM servers WHERE ip="{}" and relevent=1'.format(ip)
+    query = r'SELECT * FROM servers WHERE ip="{}" and relevant=1'.format(ip)
     return db_get(db, query)
 
 @check_input
@@ -650,7 +650,7 @@ def get_server_id_by_name(db, name):
 
 @check_input
 def get_servers_by_section_id(db, section_id):
-    query = r'SELECT * FROM servers WHERE section_id="{}" AND relevent=1'.format(section_id)
+    query = r'SELECT * FROM servers WHERE section_id="{}" AND relevant=1'.format(section_id)
     return db_get(db, query)
 
 @check_input
@@ -710,20 +710,20 @@ def insert_new_standalone_file(db, file_path, file_name, description, exec):
 
 @check_input
 def delete_file(db, file_id, exec):
-    result = change_relevent_to_zero(db, "files", file_id)
+    result = change_relevant_to_zero(db, "files", file_id)
     create_log(db, "File Deleted", "file_id",
                file_id, "Deleted File", exec)
     return result
 
 @check_input
 def get_files_by_server_id(db, id):
-    query = r'SELECT * FROM files WHERE server_id="{}" and relevent=1'.format(
+    query = r'SELECT * FROM files WHERE server_id="{}" and relevant=1'.format(
         id)
     return db_get(db, query)
 
 @check_input
 def get_all_files_names(db):
-    query = r'SELECT name FROM files WHERE relevent=1'
+    query = r'SELECT name FROM files WHERE relevant=1'
     return db_get(db, query)
 
 @check_input
@@ -769,7 +769,7 @@ def delete_achievement(db, id):
     """
     Delete achievement by achievement id.
     """
-    result = change_relevent_to_zero(db, "achievements", id)
+    result = change_relevant_to_zero(db, "achievements", id)
     return result
 
 @check_input
@@ -779,7 +779,7 @@ def get_achievement_state(db, id):
 
 @check_input
 def get_achievements(db):
-    query = r'SELECT id,data,is_done FROM achievements WHERE relevent=1'
+    query = r'SELECT id,data,is_done FROM achievements WHERE relevant=1'
     return db_get(db, query)
 
 """
@@ -817,7 +817,7 @@ def get_all_report_data(db):
     """
     Gets all report data for pre report page
     """
-    query = r'SELECT * FROM report WHERE relevent=1 ORDER BY id DESC'
+    query = r'SELECT * FROM report WHERE relevant=1 ORDER BY id DESC'
     return db_get(db, query)
 
 """
@@ -864,7 +864,7 @@ def edit_port_by_id(db, portId, type, value):
 @check_input
 def get_all_comments(db):
     # DESC reverse order so new comments will be at the top.
-    query = r'SELECT * FROM comments WHERE relevent=1 ORDER BY id DESC'
+    query = r'SELECT * FROM comments WHERE relevant=1 ORDER BY id DESC'
     return db_get(db, query)
 
 @check_input
@@ -875,7 +875,7 @@ def create_comment(db, data, executor, date):
 
 @check_input
 def delete_comment_by_id(db, comment_id):
-    query = 'UPDATE comments SET relevent=0 WHERE id={}'.format(comment_id)
+    query = 'UPDATE comments SET relevant=0 WHERE id={}'.format(comment_id)
     return get_db_with_actions(db, query)
 
 """
@@ -922,14 +922,14 @@ def get_all_data(db):
     '''
     Returns data from all DB for search bar query
     '''
-    query = r'SELECT data,id,is_done,relevent,"Achievements" FROM Achievements UNION ' \
-        r'SELECT data,id,executor,relevent,"comments" FROM comments UNION ' \
-            r'SELECT name,id,description,relevent,"files" FROM files UNION ' \
-                r'SELECT ip,id,type,relevent,"netdevices" from netdevices UNION ' \
-                    r'SELECT ip,id,name,relevent,"servers" from servers UNION ' \
-                        r'SELECT task_name,id,executers,relevent,"tasks" from tasks UNION ' \
-                            r'SELECT username,id,password,relevent,"users" from users UNION ' \
-                                r'SELECT name,id,data,relevent,"vulns" from vulns UNION ' \
+    query = r'SELECT data,id,is_done,relevant,"Achievements" FROM Achievements UNION ' \
+        r'SELECT data,id,executor,relevant,"comments" FROM comments UNION ' \
+            r'SELECT name,id,description,relevant,"files" FROM files UNION ' \
+                r'SELECT ip,id,type,relevant,"netdevices" from netdevices UNION ' \
+                    r'SELECT ip,id,name,relevant,"servers" from servers UNION ' \
+                        r'SELECT task_name,id,executers,relevant,"tasks" from tasks UNION ' \
+                            r'SELECT username,id,password,relevant,"users" from users UNION ' \
+                                r'SELECT name,id,data,relevant,"vulns" from vulns UNION ' \
                                     r'SELECT data,id,section_name,image_path,"report" from report'  
 
     return db_get(db, query)
@@ -942,7 +942,7 @@ def get_all_data(db):
 
 @check_input
 def get_all_exploits(db):
-    query = r'SELECT * FROM exploits WHERE relevent=1 ORDER BY id DESC;'
+    query = r'SELECT * FROM exploits WHERE relevant=1 ORDER BY id DESC;'
     return db_get(db, query)
 
 @check_input
@@ -1066,9 +1066,9 @@ def get_data_by_table(db, table_name,id):
     return db_get(db, query)
 
 @check_input
-def get_relevent_by_id(db, object_name, object_id):
+def get_relevant_by_id(db, object_name, object_id):
     """
-    returns 1 if relevent, 0 else
+    returns 1 if relevant, 0 else
     """
     table_name = ""
     if "user" in object_name:
@@ -1083,18 +1083,18 @@ def get_relevent_by_id(db, object_name, object_id):
         table_name = "vulns"
     else:
         pass
-    query = ''' SELECT relevent FROM {} WHERE id={}'''.format(
+    query = ''' SELECT relevant FROM {} WHERE id={}'''.format(
         table_name, object_id)
-    relevent = db_get(db, query)
-    return(relevent)
+    relevant = db_get(db, query)
+    return(relevant)
 
 @check_input
-def change_relevent_to_zero(db, table_name, object_id):
+def change_relevant_to_zero(db, table_name, object_id):
     """
-    Update relevent by id of the object.
+    Update relevant by id of the object.
     """
     query = ''' UPDATE {}
-              SET relevent = 0
+              SET relevant = 0
               WHERE id = "{}"'''.format(table_name, object_id)
     result = get_db_with_actions(db, query)
     return result
