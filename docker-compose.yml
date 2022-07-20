@@ -8,8 +8,8 @@ services:
     links:
       - "neo4j:neo4j"
     volumes:
-      - /redeye/files
-      - /redeye/RedDB
+      - Files:/redeye/files
+      - DB:/redeye/RedDB
   neo4j:
     image: "neo4j:latest"
     ports:
@@ -17,3 +17,7 @@ services:
       - "0.0.0.0:7687:7687"
     env_file:
       - graph.env
+
+volumes:
+  Files:
+  DB:

@@ -101,6 +101,16 @@ $(".status-color").change(function() {
 })
 
 
+$(".editable-inp").change(function() {
+    var colorName = $(this).val()
+    var colorId = $(this).attr('id')
+    $.post(Flask.url_for('change_color_name', {
+        obj: 'name',
+        id: colorId,
+        value: colorName
+    }));
+})
+
 $(".section-delete-btn").click(function() {
     var sectionId = $(this).attr("id");
     $.post(Flask.url_for('delete_section', {

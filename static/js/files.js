@@ -35,9 +35,9 @@ $(".custom-menu li").click(function() {
         case "Download":
             download_file(el.value, el.children[2].textContent);
             break;
-        case "pre-report":
-            add_to_pre_report(el.value);
-            break;
+            //    case "pre-report":
+            //        add_to_pre_report(el.value);
+            //       break;
     }
     $(".custom-menu").hide(100);
 });
@@ -75,5 +75,5 @@ function download_file(path, name) {
 }
 
 function add_to_pre_report(path) {
-    alert(path + "\n@elad_pt search: add_to_pre_report");
+    // Todo : Add picture to report
 }
