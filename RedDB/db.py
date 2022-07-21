@@ -357,7 +357,7 @@ def edit_data_for_task(db, data, task_id):
 
 """
 =======================================================
-                Vullns Functions
+                vulns Functions
 =======================================================
 """
 
@@ -370,7 +370,7 @@ def insert_new_vuln(db, name, data, fix, server_id, exec):
     query = ''' INSERT INTO vulns(name,data,fix,server_id)
               VALUES("{}","{}","{}","{}") '''.format(name, data, fix, server_id)
     result = get_db_with_actions(db, query)
-    create_log(db, "Vulln Created", "vuln_id", result,
+    create_log(db, "vuln Created", "vuln_id", result,
                "New Vulnerability Added", exec)
     return(result)
 
@@ -386,7 +386,7 @@ def update_vuln(db, name, data, fix, server_id, id, exec):
                   server_id = "{}"
               WHERE id = "{}"'''.format(name, data, fix, server_id, id)
     result = get_db_with_actions(db, query)
-    create_log(db, "Vulln Updated", "vuln_id", result,
+    create_log(db, "vuln Updated", "vuln_id", result,
                "Updated Vulnerability", exec)
     return(result)
 
@@ -397,7 +397,7 @@ def delete_vuln(db, id, exec):
     """
     #query = 'DELETE FROM vulns WHERE id="{}"'.format(id)
     result = change_relevant_to_zero(db, "vulns", id)
-    create_log(db, "Vulln Deleted", "vuln_id", id,
+    create_log(db, "vuln Deleted", "vuln_id", id,
                "Deleted Vulnerability", exec)
     return(result)
 
@@ -413,7 +413,7 @@ def get_vulns(db, vull_id):
     return db_get(db, query)
 
 @check_input
-def get_all_vullns(db):
+def get_all_vulns(db):
     query = r'SELECT * FROM vulns WHERE relevant=1'
     return db_get(db, query)
 

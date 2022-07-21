@@ -224,6 +224,15 @@ $(".user-details").mouseover(function(e) {
     }
 });
 
+/*
+function key_sc_con(obj, key, obj2) {
+    document.addEventListener("keyup", function(event) {
+        if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
+            $(obj).focus();
+            $(obj).click();
+        }
+    })
+}*/
 
 function key_sc(obj, key) {
     document.addEventListener("keyup", function(event) {
