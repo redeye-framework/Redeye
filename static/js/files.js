@@ -53,8 +53,10 @@ function replaceChildName(file) {
     $.post(Flask.url_for('change_file_name', {
         path: file.value,
         new_file_name: newFileName
-    }));
-    window.location.reload();
+    })).done(function(data) {
+        console.log("done")
+    });
+    window.location.reload(true);
 }
 
 function delete_file(path) {
