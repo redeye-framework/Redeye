@@ -52,7 +52,7 @@
     {% endfor %}
     <div class="section">
         <form action="{{ url_for('add_new_section')}}" method="post" id="add_section_form">
-            <a class="new-section" href="javascript:{}" onclick="document.getElementById('add_section_form').submit();"><i class="fas fa-plus"></i></a>
+            <a class="new-section" href="#"><i class="fas fa-plus"></i></a>
         </form>
     </div>
 </div>
@@ -121,14 +121,14 @@
     <table style="width: 100%;" id="labels-table" class="table table-dark table-striped">
         {% for color in colors %}
         <tr>
-            <td class="status">
+            <td class="status" width="50%">
                 <span class="editable">{{ color[1] }}</span>
-                <input id="{{ color[0] }}" class="editable-inp" type="text" size="4" value="name" style="display: none;">
+                <input id="{{ color[0] }}" class="editable-inp" type="text" size="18" value="{{ color[1] }}" style="display: none;">
             </td>
-            <td class="status-color">
-                <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:50px; height:30px;">
+            <td class="status-color" width="40%">
+                <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:70px; height:30px;">
             </td>
-            <td>
+            <td width="10%">
                 <a href="#" onclick="this.parentElement.parentElement.remove()">
                     <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
                 </a>
@@ -137,8 +137,8 @@
         {% endfor %}
         <form id="color_form" action="{{ url_for('add_color') }}" method="POST">
             <tr>
-                <td class="status-add"><input name="colorName" type="text" size="4" maxlength="20"></td>
-                <td class="status-color-add"><input name="hexColor" type="color" value="#cccccc" style="width:50px; height:30px;" </td>
+                <td class="status-add"><input name="colorName" id="newStatusColor" type="text" size="18" maxlength="20"></td>
+                <td class="status-color-add"><input name="hexColor" type="color" value="#cccccc" style="width:70px; height:30px;" </td>
                     <td onclick="document.getElementById('color_form').submit();" class="add"><i class="fas fa-plus"></i></td>
             </tr>
         </form>

@@ -20,6 +20,12 @@ $(".section-name").click(function() {
     })
 })
 
+$(".new-section").click(function() {
+    $("#add_section_form").submit()
+    //var sections = $(".section-name")
+    //$(sections[sections.length - 1]).click()
+});
+
 $(".section-hide-btn").click(function() {
     var i = $(this).find("i")
     if (i.hasClass("fa-angle-down")) {
@@ -57,6 +63,7 @@ $(".section-hide-all-btn").click(function() {
 function editServerStatus() {
     $(".create-server-box").css("display", "none");
     $(".edit-server-status-box").css("display", "inline-block");
+    $("#newStatusColor").focus()
     $(".sections").css("filter", "brightness(40%)");
     $(".sections").click(function() {
         $(".edit-server-status-box").css("display", "none");
@@ -72,6 +79,7 @@ function editServerStatus() {
 
 function createNewServer(section) {
     $(".create-server-box").css("display", "inline-block");
+    $("#newServerName").focus()
     if (section != "") {
         $("#newServerSection").val(section);
     }

@@ -393,7 +393,11 @@ input[type="file"] {
 
 .edit-server-status-box table {
     border-radius: 10px;
-    ;
+    overflow: hidden;
+}
+
+.edit-server-status-box table .status {
+
 }
 
 .edit-server-status-box input {

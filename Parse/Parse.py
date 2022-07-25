@@ -101,9 +101,9 @@ def get_all_data(path):
     tree = ET.parse(path)
     root = tree.getroot()
     for elem in root.iter():
-	    dic = {}
-	    dic[elem.tag] = elem.items()
-	    elemList.append(dic)
+        dic = {}
+        dic[elem.tag] = elem.items()
+        elemList.append(dic)
     return elemList
 
 #def parse_output(path = r"files\passwords.txt"):
@@ -115,7 +115,7 @@ def get_all_data(path):
 
 def parse_users_passwords(dbName,exec,file_name,path, isDockerEnv):
     with open(path,'r') as users_passwords:
-        data = users_passwords.readlines()
+        data = users_passwords.read().split("\n")
 
     importedTypeName = "Imported from " + secure_filename(file_name)
 
@@ -136,10 +136,11 @@ def parse_users_passwords(dbName,exec,file_name,path, isDockerEnv):
     for line in data:
         try:
             user,password = line.split(":")
-            password.rstrip("\n")
+
         except:
             continue
-
+        
+        print(user,password)
         user_id = db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
         
         if isDockerEnv:

@@ -24,7 +24,7 @@ $(".box-part-result").click(function() {
         filePath = $(this).text().split("\n")[7].split("-")[1].replace(/\s/g, '');
         window.location.href = "/files/?file_name=" + filePath;
 
-    } else if (type.includes("Vullnerability")) {
+    } else if (type.includes("vulnerability")) {
         serverId = $(this).children()[1].getElementsByTagName("span")[0].id;
         window.location.href = "/server?id=" + serverId;
 

@@ -6,7 +6,7 @@
 	var users_len = document.getElementById("users_info");
 	var servers_len = document.getElementById("servers_info");
 	var no_access_servers_len = document.getElementById('no_access_servers_info');
-	var vullns_len = document.getElementById("vullns_info");
+	var vulns_len = document.getElementById("vulns_info");
 	var net_devices_len = document.getElementById("netdevices_info");
 	var cracked_users = document.getElementById("cracked_users_info");
 	
@@ -15,7 +15,7 @@
 		type: 'pie',
 		data: {
 			datasets: [ {
-				data: [ users_len.value - cracked_users.value, cracked_users.value, servers_len.value - no_access_servers_len.value, no_access_servers_len.value, vullns_len.value, net_devices_len.value ],
+				data: [ users_len.value - cracked_users.value, cracked_users.value, servers_len.value - no_access_servers_len.value, no_access_servers_len.value, vulns_len.value, net_devices_len.value ],
 				backgroundColor: [
                                     "rgba(0, 123, 255,1.1)",
                                     "rgba(0, 123, 255,0.9)",
@@ -40,7 +40,7 @@
 							"Cracked Users",
 							"Owned Servers",
 							"Not Owned Servers",
-							"Vullnerabilites",
+							"vulnerabilites",
 							"Net Devices"
                         ]
 		},

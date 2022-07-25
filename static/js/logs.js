@@ -59,7 +59,7 @@ function parse_logs(){
             item = build_item(content,log_name,time,exec,date,i);
             lst_items.push(item);
         }
-        if (details_log[7].includes("Vulln")){
+        if (details_log[7].includes("vuln")){
             var name = details_obj[2].slice(2,-1);
             var data = details_obj[3].slice(2,-1);
             var fix = details_obj[4].slice(2,-1);
