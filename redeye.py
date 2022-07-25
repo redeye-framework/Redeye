@@ -1062,11 +1062,11 @@ def stats():
     users = db.get_users(session["db"])
     cracked_users = db.get_all_cracked_users(session["db"])
     netdevices = db.get_all_netdevices(session["db"])
-    vullns = db.get_all_vullns(session["db"])
+    vulns = db.get_all_vulns(session["db"])
     achievements = db.get_achievements(session["db"])
     days, time = helper.time_left()
 
-    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vullns_len=len(vullns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
+    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vulns_len=len(vulns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
 
 """
 =======================================================
