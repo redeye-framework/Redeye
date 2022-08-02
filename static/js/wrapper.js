@@ -245,7 +245,7 @@ function key_sc(obj, key) {
 
 function key_sc_func(func, key) {
     document.addEventListener("keyup", function(event) {
-        if (event.key === key) {
+        if (event.key === key && (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA")) {
             func();
         }
     })
