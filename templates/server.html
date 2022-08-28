@@ -156,12 +156,12 @@
 
             <div class="col col-sm-auto">
                 <select value="None" style="height: 40px;width: 150px; margin: 8px;" onchange="sort_ports()" class="select-ports" id="state" name="sort_ports">
-          <option value="All" selected disabled hidden>All</option>
-          <option>All</option>
-          <option>Open</option>
-          <option>Filtered</option>
-          <option>Closed</option>
-        </select>
+                    <option value="All" selected disabled hidden>All</option>
+                    <option value="All">All</option>
+                    <option value="Open">Open</option>
+                    <option value="Filtered">Filtered</option>
+                    <option value="Closed">Closed</option>
+                </select>
                 <form action="{{ url_for('create_server_port') }}" method="POST" id="port-form">
                     <table id="ports_table" class="table table-dark ports">
                         <thead>
@@ -192,7 +192,11 @@
                                 </td>
                                 <td>
                                     <span class="editable">{{ port[3] }}</span>
-                                    <input class="editable-inp" maxlength="10" size="3" type="text" value="{{ port[3] }}">
+                                    <select value="None" style="display: none;" class="editable-inp" name="state">
+                                        <option>Open</option>
+                                        <option>Filtered</option>
+                                        <option>Closed</option>
+                                    </select>
                                     <input class="editable-type" type="hidden" value="state">
                                     <input class="editable-obj" type="hidden" value="port">
                                     <input class="editable-id" type="hidden" value="{{ port[0] }}">
@@ -210,9 +214,15 @@
                             {% endfor %}
                             <tr class="item-add">
                                 <input name="server_id" type="hidden" value="{{ server[0] }}">
-                                <td><input id="input_port1" name="port" maxlength="10" type="text" size="3" placeholder="Port"></td>
-                                <td><input id="input_port2" name="service" maxlength="10" type="text" size="3" placeholder="Service"></td>
-                                <td><input id="input_port3" name="state" maxlength="10" type="text" size="3" placeholder="State"></td>
+                                <td><input id="input_port1" name="port" maxlength="5" type="text" size="3" placeholder="Port"></td>
+                                <td><input id="input_port2" name="service" maxlength="12" type="text" size="6" placeholder="Service"></td>
+                                <td>
+                                    <select value="None" class="editable-inp" name="state">
+                                        <option value="Open">Open</option>
+                                        <option value="Filtered">Filtered</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </td>
                                 <td><input id="input_port4" name="vuln" maxlength="10" type="text" size="10" placeholder="Vuln"></td>
                                 <td><a href="javascript:$('#port-form').submit();"><i class="fas fa-plus"
                       style="margin-left: 15px"></i></a></td>
