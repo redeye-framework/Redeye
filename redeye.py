@@ -289,6 +289,7 @@ def change_server():
                     graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
+                print("new desk is " , value)
                 db.edit_server_by_id(session["db"], id, type, value)
 
         else:

@@ -5,6 +5,7 @@ from sqlite3 import Error
 from datetime import date, datetime
 from functools import wraps
 import re
+from html import escape, unescape
 
 MANAGE_DB = r"RedDB/managementDB.db"
 EXAMPLE_DB = r"RedDB/ExampleDB.db"
@@ -36,6 +37,11 @@ def check_input(func):
             """
             Blacklist not found !
             """
+            args = list(args)
+            
+            for index, arg in enumerate(args):
+                args[index] = escape(str(arg))
+
             return func(*args, **kwargs)
     return check
 
@@ -1159,17 +1165,28 @@ def db_get(db, query):
     conn = create_connection(db)
     cur = conn.cursor()
     cur.execute(query)
-    result = cur.fetchall()
+    results = cur.fetchall()
     conn.close()
-    return result
+
+    decodedResults = []
+    for result in results:
+        result = list(result)
+        for index, res in enumerate(result):
+            try:
+                result[index] = unescape(res)
+            except Exception:
+                result[index] = res
+
+        decodedResults.append(tuple(result))
+
+    print(decodedResults)
+    return decodedResults
 
 def get_db_with_actions(db, query):
     """
     Like db_get() but with commit to change the db and returns the id of the row
     That the Action took place
     """
-    #if serialize_input(query):
-    #    return
     conn = create_connection(db)
     cur = conn.cursor()
     cur.execute(query)
