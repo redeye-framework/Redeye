@@ -117,7 +117,7 @@ $(".editable-inp").change(function() {
         id: colorId,
         value: colorName
     }));
-})
+});
 
 function is_section_empty(section) { 
     if ($(section).parent().parent().find(".server").length > 0) {
@@ -135,3 +135,12 @@ $(".section-delete-btn").click(function() {
         $(this).parent().parent().remove();
     }
 })
+
+$(".delete-color").click(function() {
+    var colorId = $(this).attr('id');
+    $.post(Flask.url_for('delete_color', {
+        id: colorId
+    }));
+
+    location.reload();
+});

@@ -127,9 +127,11 @@
                 <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:70px; height:30px;">
             </td>
             <td width="10%">
-                <a href="#" onclick="this.parentElement.parentElement.remove()">
-                    <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
-                </a>
+                {% if color[0] != 1 %}
+                    <a href="#" onclick="this.parentElement.parentElement.remove()">
+                        <i id="{{ color[0] }}" class="fas fa-trash delete-color" style="color: rgb(212, 71, 71);"></i>
+                    </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

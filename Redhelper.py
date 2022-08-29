@@ -321,3 +321,9 @@ def zipdir(filesPath, ziph):
             ziph.write(path.join(root, file), 
                        path.relpath(path.join(root, file), 
                                        path.join(filesPath, '..')))
+
+
+def setDefaultColor(dbSession, color_id):
+    changeColorTo = db.get_servers_by_color_id(dbSession, color_id)
+    for server in changeColorTo:
+        db.change_server_color(dbSession, server[0], 1)

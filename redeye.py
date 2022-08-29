@@ -1637,6 +1637,20 @@ def change_color_name():
 
     return redirect(request.referrer)
 
+
+@app.route('/delete_color',methods=['POST'])
+@validate_input
+def delete_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    
+    db.delete_color(session["db"], dict["id"])
+    helper.setDefaultColor(session["db"], dict['id'])
+
+    return redirect(request.referrer)
+
 """
 =======================================================
                 Graph Functions
