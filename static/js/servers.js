@@ -117,7 +117,7 @@ $(".editable-inp").change(function() {
         id: colorId,
         value: colorName
     }));
-})
+});
 
 $(".section-delete-btn").click(function() {
     var sectionId = $(this).attr("id");
@@ -125,4 +125,13 @@ $(".section-delete-btn").click(function() {
         id: sectionId
     }));
     $(this).parent().parent().remove();
-})
+});
+
+$(".delete-color").click(function() {
+    var colorId = $(this).attr('id');
+    $.post(Flask.url_for('delete_color', {
+        id: colorId
+    }));
+
+    location.reload();
+});

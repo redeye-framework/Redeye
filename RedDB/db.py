@@ -665,6 +665,11 @@ def get_color_by_server_id(db, server_id):
     return db_get(db, query)
 
 @check_input
+def get_servers_by_color_id(db, color_id):
+    query = r'SELECT id FROM servers WHERE color_id="%s"' % (color_id)
+    return db_get(db, query)
+
+@check_input
 def change_section_id(db, id, newName):
     query = '''UPDATE sections
               SET name = "{}" 
@@ -1060,6 +1065,11 @@ def get_color_by_id(db, colorId):
     query = r'SELECT hexColor FROM colors WHERE id="%s"' % (colorId)
     return db_get(db, query)
 
+@check_input
+def delete_color(db, colorId):
+    query = 'DELETE FROM colors WHERE id="%s"' % (colorId)
+    return get_db_with_actions(db, query)
+
 """
 =======================================================
                 Helpers Functions
@@ -1179,7 +1189,6 @@ def db_get(db, query):
 
         decodedResults.append(tuple(result))
 
-    print(decodedResults)
     return decodedResults
 
 def get_db_with_actions(db, query):
