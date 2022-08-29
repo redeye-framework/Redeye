@@ -1,7 +1,7 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}"> {% include 'wrapper.html' %}
 
-<h1 class="page-title-result"> {{ data_len }} Search results for: {{ keyword }}</h1>
+<h1 class="page-title-result"> {{ data_len }} Search results for: <span id="keyword">{{ keyword }}</span></h1>
 <div class="box-result">
     {% for name in data %} {% for info in data[name] %}
     <div class="box-part-result text-center" style="cursor: pointer">
@@ -43,7 +43,7 @@
 {% include 'wrapper_end.html' %}
 <script>
     searchbox = document.getElementById('search-box');
-    searchbox.value = "{{ keyword }}";
+    searchbox.value = document.getElementById('keyword').innerHTML;
     searchbox.focus();
 </script>
 <script src="{{ url_for('static', filename='js/results.js') }}"></script>
