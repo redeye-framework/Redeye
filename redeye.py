@@ -641,10 +641,16 @@ def edit_user():
         if user_type:
             typeName = db.get_user_type(session["db"], user_type)[0][0]
         else:
-            typeName = None
+            print("is unknown exsists", db.get_user_type(session["db"], "Unknown"))
+            unknownType = db.get_user_type(session["db"], "Unknown")
+            print(unknownType)
+            if not unknownType:
+                typeName = db.insert_new_user_type(session["db"], "Unknown")
+            else:
+                typeName = unknownType[0][0]
 
-        db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=typeName, found_on=user_found_on, found_on_server=False, attain=user_attain)
+        db.edit_user(session["db"], session["username"], user_id, user_name,
+                     user_pass, user_perm, typeName, user_found_on, False, user_attain)
 
         if IS_DOCKER_ENV:
             if db.get_server_id_by_name(session["db"], user_found_on):

@@ -62,17 +62,6 @@ var useredit = 0;
 
 function showUser(username, password, type, perm, attain, uid, found) {
     $(".user-edit").hide()
-    if (type == 1) {
-        type = "Domain user";
-    } else if (type == 2) {
-        type = "Localhost user";
-    } else if (type == 3) {
-        type = "Application user";
-    } else if (type == 4) {
-        type = "Net-device user";
-    } else if (type == 5) {
-        type = "Other user";
-    }
 
     $(".user-info > .id").text(uid);
     $(".user-info > .username").text(username);
@@ -106,22 +95,11 @@ function editUser() {
     $("#input-refferer").val(window.location.href)
     $("#input-username").val(username);
     $("#input-password").val(password);
-    /* Type doesn't work for some reason */
-    if (type == "Domain user") {
-        $("#input-type").val(1);
-    } else if (type == "Localhost user") {
-        $("#input-type").val(2);
-    } else if (type == "Application user") {
-        $("#input-type").val(3);
-    } else if (type == "Net-device user") {
-        $("#input-type").val(4);
-    } else if (type == "Other user") {
-        $("#input-type").val(5);
-    }
-    $("#input-type").val(username);
+    $("#input-type").val(type);
     $("#input-perm").val(perm);
     $("#input-found").val(found);
     $("#input-attain").val(attain);
+
     $(".user-edit").show()
     $(".user-info").hide()
 

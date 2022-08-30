@@ -38,6 +38,7 @@ def check_input(func):
             Blacklist not found !
             """
             args = list(args)
+            print(args)
             
             for index, arg in enumerate(args):
                 args[index] = escape(str(arg))
@@ -121,7 +122,7 @@ def delete_user(db, user_id, exec):
     return(result)
 
 @check_input
-def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, found_on=False,found_on_server=False, attain=False):
+def edit_user(db, exec, uid, name, passwd, perm, type, found_on, found_on_server, attain):
     """
     Update user by id.
     """
@@ -145,7 +146,7 @@ def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, f
         if not first:
             query += ', '
             first = 0
-        query += f'type = {type}'
+        query += f'type = "{type}"'
     if found_on:
         if not first:
             query += ', '
@@ -172,6 +173,7 @@ def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, f
         return ""
 
     query += f" WHERE id = {uid};"
+    print(query)
     result = get_db_with_actions(db, query)
     create_log(db, "User Updated", "user_id",
                uid, "Updated User", exec)
