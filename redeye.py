@@ -731,7 +731,7 @@ def export_users():
     users = db.get_users(session["db"])
 
     with open(os.path.join(helper.FILES_FOLDER.format(session["project"]), "users.csv"), 'w', newline='') as csv_file:
-        fieldnames = ['Username', 'Password', 'Permission', "Found On", "User Type"]
+        fieldnames = ['Username', 'Password', 'Permission', "Found On", "Type", "Attain"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
