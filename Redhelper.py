@@ -26,8 +26,10 @@ def setGlobals():
     global REPORT_IMAGES
     global PASS_FOLDER
     global FILES_FOLDER
+    global GENERAL_FILES
 
     # FrontEnd
+    GENERAL_FILES = "files/"
     MAIN_FILES = "files/{}/frontend"
     LOOT_FOLDER = "files/{}/frontend/Loot"
     SCAN_FOLDER = "files/{}/frontend/Scans"

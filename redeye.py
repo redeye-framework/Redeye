@@ -289,7 +289,6 @@ def change_server():
                     graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
-                print("new desk is " , value)
                 db.edit_server_by_id(session["db"], id, type, value)
 
         else:
@@ -641,9 +640,8 @@ def edit_user():
         if user_type:
             typeName = db.get_user_type(session["db"], user_type)[0][0]
         else:
-            print("is unknown exsists", db.get_user_type(session["db"], "Unknown"))
+            
             unknownType = db.get_user_type(session["db"], "Unknown")
-            print(unknownType)
             if not unknownType:
                 typeName = db.insert_new_user_type(session["db"], "Unknown")
             else:
@@ -1561,7 +1559,7 @@ def importAll():
 
     # Copy files dir to Redeye files dir
     if projectName in projectFiles:
-        copyDir(path.join(ZIP_FOLDER,projectName),path.join(FILES_FOLDER,projectName))
+        copyDir(path.join(ZIP_FOLDER,projectName),path.join(helper.GENERAL_FILES,projectName))
 
     # Create new Project in managment DB
     newProjectId = db.insert_new_project(projectName,dbFile[0])
