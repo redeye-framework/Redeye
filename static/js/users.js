@@ -23,6 +23,15 @@ $(document).ready(function() {
     })
 });
 
+$(".hover-user-details").mouseover(function() {
+    userDetails = {};
+    $(this).parent().parent().find('td').each(function(index) {
+        userDetails[index] = $(this).text()
+    })
+
+    showUser(userDetails[0], userDetails[1], userDetails[4], userDetails[2], userDetails[5],$(this).attr('id').split('-')[1],userDetails[3]);
+});
+
 function sortUsers() {
     var type = document.getElementById('type').value;
     var table = document.getElementById('users-table');

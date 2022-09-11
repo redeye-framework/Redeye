@@ -117,12 +117,30 @@ $(".editable-inp").change(function() {
         id: colorId,
         value: colorName
     }));
-})
+});
+
+function is_section_empty(section) { 
+    if ($(section).parent().parent().find(".server").length > 0) {
+        return false;
+    }
+    return true;
+}
 
 $(".section-delete-btn").click(function() {
     var sectionId = $(this).attr("id");
-    $.post(Flask.url_for('delete_section', {
-        id: sectionId
-    }));
-    $(this).parent().parent().remove();
+    if (is_section_empty(this) || confirm("Are you sure you want to delete this section? This will delete all servers in section.")) {
+        $.post(Flask.url_for('delete_section', {
+            id: sectionId
+        }));
+        $(this).parent().parent().remove();
+    }
 })
+
+$(".delete-color").click(function() {
+    var colorId = $(this).attr('id');
+    $.post(Flask.url_for('delete_color', {
+        id: colorId
+    }));
+
+    location.reload();
+});

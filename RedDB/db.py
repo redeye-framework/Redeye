@@ -5,6 +5,7 @@ from sqlite3 import Error
 from datetime import date, datetime
 from functools import wraps
 import re
+from html import escape, unescape
 
 MANAGE_DB = r"RedDB/managementDB.db"
 EXAMPLE_DB = r"RedDB/ExampleDB.db"
@@ -36,6 +37,12 @@ def check_input(func):
             """
             Blacklist not found !
             """
+            args = list(args)
+            print(args)
+            
+            for index, arg in enumerate(args):
+                args[index] = escape(str(arg))
+
             return func(*args, **kwargs)
     return check
 
@@ -115,7 +122,7 @@ def delete_user(db, user_id, exec):
     return(result)
 
 @check_input
-def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, found_on=False,found_on_server=False, attain=False):
+def edit_user(db, exec, uid, name, passwd, perm, type, found_on, found_on_server, attain):
     """
     Update user by id.
     """
@@ -139,7 +146,7 @@ def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, f
         if not first:
             query += ', '
             first = 0
-        query += f'type = {type}'
+        query += f'type = "{type}"'
     if found_on:
         if not first:
             query += ', '
@@ -166,6 +173,7 @@ def edit_user(db, exec, uid, name=False, passwd=False, perm=False, type=False, f
         return ""
 
     query += f" WHERE id = {uid};"
+    print(query)
     result = get_db_with_actions(db, query)
     create_log(db, "User Updated", "user_id",
                uid, "Updated User", exec)
@@ -659,6 +667,11 @@ def get_color_by_server_id(db, server_id):
     return db_get(db, query)
 
 @check_input
+def get_servers_by_color_id(db, color_id):
+    query = r'SELECT id FROM servers WHERE color_id="%s"' % (color_id)
+    return db_get(db, query)
+
+@check_input
 def change_section_id(db, id, newName):
     query = '''UPDATE sections
               SET name = "{}" 
@@ -1054,6 +1067,11 @@ def get_color_by_id(db, colorId):
     query = r'SELECT hexColor FROM colors WHERE id="%s"' % (colorId)
     return db_get(db, query)
 
+@check_input
+def delete_color(db, colorId):
+    query = 'DELETE FROM colors WHERE id="%s"' % (colorId)
+    return get_db_with_actions(db, query)
+
 """
 =======================================================
                 Helpers Functions
@@ -1159,17 +1177,27 @@ def db_get(db, query):
     conn = create_connection(db)
     cur = conn.cursor()
     cur.execute(query)
-    result = cur.fetchall()
+    results = cur.fetchall()
     conn.close()
-    return result
+
+    decodedResults = []
+    for result in results:
+        result = list(result)
+        for index, res in enumerate(result):
+            try:
+                result[index] = unescape(res)
+            except Exception:
+                result[index] = res
+
+        decodedResults.append(tuple(result))
+
+    return decodedResults
 
 def get_db_with_actions(db, query):
     """
     Like db_get() but with commit to change the db and returns the id of the row
     That the Action took place
     """
-    #if serialize_input(query):
-    #    return
     conn = create_connection(db)
     cur = conn.cursor()
     cur.execute(query)

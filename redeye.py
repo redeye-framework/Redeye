@@ -289,6 +289,7 @@ def change_server():
                     graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
+                print("new desk is " , value)
                 db.edit_server_by_id(session["db"], id, type, value)
 
         else:
@@ -640,10 +641,16 @@ def edit_user():
         if user_type:
             typeName = db.get_user_type(session["db"], user_type)[0][0]
         else:
-            typeName = None
+            print("is unknown exsists", db.get_user_type(session["db"], "Unknown"))
+            unknownType = db.get_user_type(session["db"], "Unknown")
+            print(unknownType)
+            if not unknownType:
+                typeName = db.insert_new_user_type(session["db"], "Unknown")
+            else:
+                typeName = unknownType[0][0]
 
-        db.edit_user(session["db"], session["username"], user_id, name=user_name,
-                     passwd=user_pass, perm=user_perm, type=typeName, found_on=user_found_on, found_on_server=False, attain=user_attain)
+        db.edit_user(session["db"], session["username"], user_id, user_name,
+                     user_pass, user_perm, typeName, user_found_on, False, user_attain)
 
         if IS_DOCKER_ENV:
             if db.get_server_id_by_name(session["db"], user_found_on):
@@ -1633,6 +1640,20 @@ def change_color_name():
     dict = request.args.to_dict()
     
     db.change_color(session["db"], dict["obj"], dict["value"], dict["id"])    
+
+    return redirect(request.referrer)
+
+
+@app.route('/delete_color',methods=['POST'])
+@validate_input
+def delete_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    
+    db.delete_color(session["db"], dict["id"])
+    helper.setDefaultColor(session["db"], dict['id'])
 
     return redirect(request.referrer)
 

@@ -5,11 +5,9 @@
     {% for section in data %}
     <div class="container-fluid section">
         <div class="section-title">
-            {% if not data[section]['info'] %}
             <a href="#" id="{{ section }}" class="section-delete-btn">
                 <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
             </a>
-            {% endif %}
             <h4 class="section-name">{{ data[section]['name'] }}</h4>
             <input class="section-name-input" type="text" value="{{ section }}">
         </div>
@@ -17,7 +15,7 @@
         <div class="row">
             {% for server in data[section]['info'] %}
             <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}" tabindex="1">
-                <div class="server-box" style="border-top: 4px solid {{ data[section]['info'][server]['color'] }}">
+                <div class="server-box server" style="border-top: 4px solid {{ data[section]['info'][server]['color'] }}">
                     <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
                     <div class="content">
                         <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
@@ -129,9 +127,11 @@
                 <input id="{{ color[0] }}" type="color" value="{{ color[2] }}" style="width:70px; height:30px;">
             </td>
             <td width="10%">
-                <a href="#" onclick="this.parentElement.parentElement.remove()">
-                    <i class="fas fa-trash" style="color: rgb(212, 71, 71);"></i>
-                </a>
+                {% if color[0] != 1 %}
+                    <a href="#" onclick="this.parentElement.parentElement.remove()">
+                        <i id="{{ color[0] }}" class="fas fa-trash delete-color" style="color: rgb(212, 71, 71);"></i>
+                    </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
