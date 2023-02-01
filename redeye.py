@@ -161,7 +161,7 @@ def server():
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color, tags=tags)
 
 @app.route('/edit_server', methods=['GET'])
 @validate_input
@@ -389,6 +389,27 @@ def change_server_color():
     db.change_server_color(session["db"],dict["serverId"], dict["colorId"])
 
     return redirect(request.referrer)
+
+
+@app.route('/add_tag', methods=['POST'])
+def add_tag():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.add_tag(session["db"], dict["serverId"], dict["name"], dict["color"])
+    print(url_for('login', id=dict["serverId"]))
+    return redirect('/')
+
+
+@app.route('/edit_tag', methods=['POST'])
+def edit_tag():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    db.edit_tag(session["db"], dict["tagId"], dict["name"], dict["color"])
+    return redirect(request.url)
 
 @app.route('/add_new_server', methods=['POST'])
 @validate_input

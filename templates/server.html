@@ -27,10 +27,11 @@
             {% endif %}
         {% endfor %}
     </select>
+    
     <div class="head-right">
         <div class="tags">
             {% for tag in tags %}
-                <div class="tag {{ tag['color'] }}">{{ tag['name'] }}</div>
+                <div class="tag normal-tag {{ tag['color'] }}" id="{{ tag['id'] }}">{{ tag['name'] }}</div>
             {% endfor %}
             <a href="#" class="tag grey add-tag">+</a>
         </div>
