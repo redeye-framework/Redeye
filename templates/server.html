@@ -27,6 +27,14 @@
             {% endif %}
         {% endfor %}
     </select>
+    <div class="head-right">
+        <div class="tags">
+            {% for tag in tags %}
+                <div class="tag {{ tag['color'] }}">{{ tag['name'] }}</div>
+            {% endfor %}
+            <a href="#" class="tag grey add-tag">+</a>
+        </div>
+    </div>
     <div class="container-fluid server-content">
         <div class="row">
             <div class="col col-sm-4 users">

@@ -1,5 +1,5 @@
 # Start by pulling the python image
-FROM python:latest
+FROM python:3.10.7
 
 # Copy the requirements file into the image
 RUN mkdir -p /redeye
@@ -12,7 +12,7 @@ COPY . /redeye
 RUN pip install -r requirements.txt
 
 # Install sqlite3
-RUN apt-get update && apt-get install -y sqlite3
+RUN apt-get install -y sqlite3
 
 # Expose the port
 EXPOSE 8443
@@ -24,4 +24,4 @@ RUN python RedDB/db.py
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["redeye.py", "--safe", "--docker", "--port", "8443"]
+CMD ["redeye.py", "--safe", "--port", "8443"]

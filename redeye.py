@@ -51,7 +51,7 @@ projects = []
 
 # CONSTS
 IS_ENV_SAFE = True # If enviroment is exposed to network (redeye should be less permissive) set this to False.
-IS_DOCKER_ENV = False
+USE_NEO4J = False
 PROFILE_PICS = r"static/pics/profiles"
 DEFAULT_JSONS = r"static/jsons"
 DEFAULT_DB = r"ExampleDB"
@@ -68,7 +68,7 @@ def init(app):
     projects = db.get_projects()
     projects.reverse()
 
-    if IS_DOCKER_ENV:
+    if USE_NEO4J:
         graph.init()
 
     for project in projects:
@@ -155,12 +155,13 @@ def server():
     vendor = db.get_vendor_by_server_id(session["db"], server[0])[0][0]
     colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
     color = db.get_color_by_id(session["db"], colorId)[0][0]
+    tags = db.get_tags_by_server_id(session["db"], server[0])
     users_with_type = []
     for user in users:
         type = db.get_user_type_id(session["db"],user[1])[0][0]
         tuser = [user[0], type, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9], user[10]]
         users_with_type.append(tuser)
-    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
+    return render_template('server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, server=server, users=users_with_type, vulns=vulns, files=files, ports=ports, attain=attain, vendor=vendor, sections=sections, section=section, colors=colors, color=color)
 
 @app.route('/edit_server', methods=['GET'])
 @validate_input
@@ -184,8 +185,8 @@ def edit_server():
             files = db.get_files_by_server_id(session["db"], server[0])
             ports = db.get_ports_by_server_id(session["db"], server[0])
             attain = db.get_attain_by_server_id(session["db"], server[0])[0][0]
-            return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
-    return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
+            return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, sections=sections, section=section, server=server, users=users, vulns=vulns, files=files, ports=ports, attain=attain)
+    return render_template('edit_server.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, sections=sections, section=section, server=["", "", ""], users=[], vulns=[])
 
 @app.route('/servers')
 @validate_input
@@ -213,7 +214,7 @@ def servers():
     # {'SectionId': {
     #   servers : {id:{'server':(tuple),'ports':[ports],'users':[users]},..,}
     # , "SectionName2"...}
-    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=allData, colors=colors, sections=dbsections)
+    return render_template('servers.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, data=allData, colors=colors, sections=dbsections)
 
 @app.route('/update_server_attain', methods=['POST'])
 @validate_input
@@ -241,7 +242,7 @@ def delete_server():
 
         db.delete_server_by_id(session["db"], id, session["username"])
 
-        if IS_DOCKER_ENV:
+        if USE_NEO4J:
             graph.deleteServerNode(id)
 
         return redirect('servers')
@@ -283,9 +284,9 @@ def change_server():
 
             elif "servers" == obj:
                 db.edit_server_by_id(session["db"], id, type, value)
-                if type == "name":
+                if type == "name" and USE_NEO4J:
                     graph.changeServerNode(id,name=value)
-                elif type == "ip":
+                elif type == "ip" and USE_NEO4J:
                     graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
@@ -300,7 +301,7 @@ def change_server():
 
             server_id = db.create_new_server(session["db"], session["username"],
                                  ip, name, "", access, attain, section_id)
-            if IS_DOCKER_ENV:
+            if USE_NEO4J:
                 graph.addServerNode(server_id,ip,name,access,db.get_section_name_by_section_id(session["db"],section_id), SERVER_URL.format(server_id))
             
             return redirect(url_for("server", ip=ip))
@@ -372,7 +373,8 @@ def change_server_section():
     dict = request.args.to_dict()
     db.edit_server_by_id(session["db"],dict["serverId"], "section_id", dict["sectionId"])
     sectionName = db.get_section_name_by_section_id(session["db"],dict["sectionId"])
-    graph.changeServerNode(id,sectionName=sectionName)
+    if USE_NEO4J:
+        graph.changeServerNode(id,sectionName=sectionName)
 
     return redirect(request.referrer)
 
@@ -397,7 +399,7 @@ def add_new_server():
     dict = request.form.to_dict()
     server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
 
-    if IS_DOCKER_ENV:
+    if USE_NEO4J:
         graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
         
     return redirect(request.referrer)
@@ -424,7 +426,7 @@ def logs():
 
     else:
         all_objects,logs,days,month_years = helper.get_logs(session["db"], logs)
-    return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
+    return render_template('logs.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, objects=all_objects, log=logs, len=len(all_objects), day=days, year=month_years)
 
 @app.route('/export_logs', methods=['POST'])
 @validate_input
@@ -478,7 +480,7 @@ def tasks():
 
     projectId = db.get_projectId_by_projectName(session["project"])
     team_members = db.get_redeye_users_names(projectId)
-    return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
+    return render_template('tasks.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, all_tasks=tasks, len=len(tasks), my_tasks=my_tasks_lst, my_tasks_len=len(my_tasks_lst), team_members=team_members, len_members=len(team_members))
 
 @app.route('/edit_note', methods=['POST'])
 @validate_input
@@ -605,7 +607,7 @@ def create_user():
 
         user_id = db.insert_new_user(session["db"], userTypeId, server_id, found, user_name, user_pass,
                                 user_perm, session["username"])
-        if IS_DOCKER_ENV:
+        if USE_NEO4J:
             graph.addUserNode(user_id, user_name, user_pass, user_perm, server_id)
 
         return redirect(request.referrer)
@@ -650,7 +652,7 @@ def edit_user():
         db.edit_user(session["db"], session["username"], user_id, user_name,
                      user_pass, user_perm, typeName, user_found_on, False, user_attain)
 
-        if IS_DOCKER_ENV:
+        if USE_NEO4J:
             if db.get_server_id_by_name(session["db"], user_found_on):
                 server_id = db.get_server_id_by_name(session["db"], user_found_on)[0][0]
             elif db.get_server_id_by_ip(session["db"], user_found_on):
@@ -678,7 +680,7 @@ def delete_user():
         user_id = request.values.get('id')
         db.delete_user(session["db"], user_id, session["username"])
 
-        if IS_DOCKER_ENV:
+        if USE_NEO4J:
             graph.deleteUserNode(user_id)
 
         return ('', 204)
@@ -718,7 +720,7 @@ def all_users():
     for index,typeName in enumerate(allUserTypes):
         allUserTypes[index] = typeName[0]
 
-    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, allUserTypes=allUserTypes)
+    return render_template('users.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, data=data, allUserTypes=allUserTypes)
 
 @app.route('/export_users', methods=['POST'])
 @validate_input
@@ -759,7 +761,7 @@ def add_users_from_file():
             
             if file_name:
                 parse.parse_users_passwords(session["db"],
-                    session["username"], file_name, full_path, IS_DOCKER_ENV)
+                    session["username"], file_name, full_path, USE_NEO4J)
 
     return redirect(request.referrer)
 
@@ -1008,17 +1010,17 @@ def load_files():
                     keyword_files[key].append(val)
 
             if keyword_files:
-                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,root="Found files for {}".format(key_word['key_word']),dirs={},files=keyword_files, files_found=len(keyword_files))
 
             else:
                 root, dirs, files,last_dir = helper.share_files(full_path)
-                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
+                return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, root=root, dirs=dirs, files=files,files_found="0",last_dir=last_dir)
         else:
             root, dirs, files,last_dir = helper.share_files(full_path)
-            return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
+            return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)    
     else:
         root, dirs, files,last_dir = helper.share_files(full_path)
-        return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
+        return render_template('load_files.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, root=root, dirs=dirs, files=files,files_found="None",last_dir=last_dir)
 
 @app.route('/add_new_dir', methods=['POST'])
 @validate_input
@@ -1071,7 +1073,7 @@ def stats():
     achievements = db.get_achievements(session["db"])
     days, time = helper.time_left()
 
-    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vulns_len=len(vulns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
+    return render_template('stats.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, servers_len=len(servers),no_access_len=len(no_access_servers), users_len=len(users), netdevices_len=len(netdevices), vulns_len=len(vulns), cracked_users_len=len(cracked_users), achievements=achievements, achievements_len=len(achievements), time_left=time, days=days)
 
 """
 =======================================================
@@ -1105,7 +1107,7 @@ def new_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()
     
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=name)
 
 
 @app.route('/attack', methods=['GET', 'POST'])
@@ -1146,7 +1148,7 @@ def attack():
             with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
                 dic_data[attack] = data.read()
         
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab=tab)
 
 
 @app.route('/delete_attack')
@@ -1168,7 +1170,7 @@ def delete_attack():
         with open(os.path.join(helper.JSON_FOLDER.format(session["project"]), attack), 'r', newline='') as data:
             dic_data[attack] = data.read()    
 
-    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
+    return render_template('attack.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, attacks=attacks, attacks_len=len(attacks), data=dic_data, tab="")
 
 """
 =======================================================
@@ -1195,7 +1197,7 @@ def pre_report():
     data = db.get_all_report_data(session["db"])
     for image in data:
         images.append(helper.get_image(image[4]))
-    return render_template('pre_report.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, data=data, len=len(data), images=images)
+    return render_template('pre_report.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, data=data, len=len(data), images=images)
 
 
 @app.route('/add_report', methods=['POST'])
@@ -1338,7 +1340,7 @@ def search():
         for match in matches:
             info[match[4]].append(db.get_data_by_table(session["db"], match[4],match[1]))
 
-    return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,keyword=keyword,data_len=len(matches),data=info)
+    return render_template('results.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,keyword=keyword,data_len=len(matches),data=info)
 
 """
 =======================================================
@@ -1354,7 +1356,7 @@ def exploits():
     
     exploits = db.get_all_exploits(session["db"])
 
-    return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, exploits=exploits, exploits_len=len(exploits))
+    return render_template('exploits.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, exploits=exploits, exploits_len=len(exploits))
 
 @app.route('/add_exploit',methods=['POST'])
 @validate_input
@@ -1426,7 +1428,7 @@ def management():
     for i,user in enumerate(users):
         users[i] = users[i][:2] + ("*********************",) + users[i][3:] + ("RedTeam",)
         
-    return render_template("management.html", project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, users=users)
+    return render_template("management.html", project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, users=users)
 
 
 @app.route('/add_user',methods=['POST'])
@@ -1588,7 +1590,7 @@ def notebook():
 
     # get all notebooks
     notebooks = db.get_all_notebooks(session["db"],session["uid"])
-    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV,notebooks=notebooks)
+    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,notebooks=notebooks)
 
 
 @socketio.on('updateNoteName')
@@ -1667,7 +1669,7 @@ def load_graph():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV)
+    return render_template('graph.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J)
 
 """
 =======================================================
@@ -1692,14 +1694,14 @@ def add_scan(file):
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, hostname, vendor, 0, "Added from nmap scan",section_id, 1)
 
-                            if IS_DOCKER_ENV:
+                            if USE_NEO4J:
                                 graph.addServerNode(server_id,ip_addr,hostname,0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
 
                         else:
                             server_id = db.create_new_server(session["db"], session["username"]
                             , ip_addr, "Unknown", vendor, 0, "Added from nmap scan",section_id, 1)
 
-                            if IS_DOCKER_ENV:
+                            if USE_NEO4J:
                                 graph.addServerNode(server_id,ip_addr,"Unknown",0,sectionName=db.get_section_name_by_section_id(session["db"],section_id), url=SERVER_URL.format(server_id))
 
                         for data in lst_ports:
@@ -1852,7 +1854,7 @@ def index(logged=False):
 
         projects.insert(0,lastProject)
 
-    return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=IS_DOCKER_ENV, display_name=session["username"], comments=comments)
+    return render_template('index.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, display_name=session["username"], comments=comments)
 
 
 @app.errorhandler(404)
@@ -1934,8 +1936,8 @@ def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, d
     global IS_ENV_SAFE
     IS_ENV_SAFE = safe
 
-    global IS_DOCKER_ENV
-    IS_DOCKER_ENV = docker
+    global USE_NEO4J
+    USE_NEO4J = docker
     
     if demo:
         #init exampleDB.

@@ -145,3 +145,10 @@ CREATE TABLE IF NOT EXISTS colors (
                                       name text text NOT NULL, 
                                       hexColor text NOT NULL
 );
+CREATE TABLE IF NOT EXISTS tags (
+                                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                      name text text NOT NULL, 
+                                      color text NOT NULL,
+                                      server_id INTEGER,
+                                      FOREIGN KEY(server_id) REFERENCES servers(id)
+);

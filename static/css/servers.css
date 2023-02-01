@@ -1,3 +1,55 @@
+.head-right {
+    float: right;
+    padding: 15px;
+}
+
+.tags .tag {
+    display: inline;
+    border-radius: 15px;
+    border-width: 2px;
+    border: 2px solid rgba(223, 208, 208, 0.5);
+    padding: 3px 10px 5px;
+    color: #eee;
+    margin-left: 4px;
+}
+
+.tags .tag:hover {
+    filter: brightness(110%);
+}
+
+.grey {
+    background-color: rgba(129, 120, 120, 0.699);
+}
+
+.red {
+    background-color: rgba(223, 45, 45, 0.664);
+}
+
+.blue {
+    background-color: rgba(61, 65, 243, 0.664);
+}
+
+.green {
+    background-color: rgba(32, 209, 32, 0.664);
+}
+
+.purple {
+    background-color: rgba(217, 40, 233, 0.664);
+}
+
+.yellow {
+    background-color: rgba(235, 221, 32, 0.664);
+}
+
+.tags .add-tag {
+    color: inherit;
+    text-decoration: none;
+    border-radius: 15px;
+    border-width: 2px;
+    border: 2px solid rgba(223, 208, 208, 0.5);
+    padding: 3px 10px 5px;
+}
+
 .section {
     position: relative;
     padding-top: 70px;

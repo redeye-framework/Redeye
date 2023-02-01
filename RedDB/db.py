@@ -602,6 +602,19 @@ def get_vendor_by_server_id(db, id):
     query = r'SELECT vendor FROM servers WHERE id="{}"'.format(id)
     return db_get(db, query)
 
+def get_tags_by_server_id(db, id):
+    query = r'SELECT * FROM tags WHERE server_id="{}"'.format(id)
+    tags = db_get(db, query)
+    ordered_tags = [{}]
+    for tag in tags:
+        ordered_tags.append({
+            "id": tag[0],
+            "name": tag[1],
+            "color": tag[2],
+            "server_id": tag[3]
+        })
+    return ordered_tags
+
 @check_input
 def get_attain_by_server_id(db, id):
     query = r'SELECT attain FROM servers WHERE id="{}"'.format(id)
