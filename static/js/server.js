@@ -258,7 +258,7 @@ $('.color-picker').on('change', function(e) {
 $(".add-tag").on('click', function(e) {
     var serverId = $(".editable-id").val();
     var tagName = prompt("Enter new tag name: ");
-    var tagColor = prompt("Enter new tag color: ");
+    var tagColor = prompt("Enter new tag color (like- red): ");
     $.post(Flask.url_for('add_tag', {
         serverId: serverId,
         name: tagName,
@@ -269,8 +269,8 @@ $(".add-tag").on('click', function(e) {
 
 $(".normal-tag").on('click', function(e) {
     var serverId = $(".editable-id").val();
-    var tagName = prompt("Enter new tag name: ");
-    var tagColor = prompt("Enter new tag color: ");
+    var tagName = prompt("Enter new tag name (leave empty for delete): ");
+    var tagColor = prompt("Enter new tag color (like- red): ");
     var tagId = $(this).attr('id');
     $.post(Flask.url_for('edit_tag', {
         tagId: tagId,

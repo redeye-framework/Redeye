@@ -41,6 +41,10 @@
     background-color: rgba(235, 221, 32, 0.664);
 }
 
+.white {
+    background-color: rgba(252, 252, 252, 0.925);
+}
+
 .tags .add-tag {
     color: inherit;
     text-decoration: none;

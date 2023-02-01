@@ -399,7 +399,6 @@ def add_tag():
     dict = request.args.to_dict()
     db.add_tag(session["db"], dict["serverId"], dict["name"], dict["color"])
     print(url_for('login', id=dict["serverId"]))
-    return redirect('/')
 
 
 @app.route('/edit_tag', methods=['POST'])
@@ -409,7 +408,7 @@ def edit_tag():
 
     dict = request.args.to_dict()
     db.edit_tag(session["db"], dict["tagId"], dict["name"], dict["color"])
-    return redirect(request.url)
+
 
 @app.route('/add_new_server', methods=['POST'])
 @validate_input
