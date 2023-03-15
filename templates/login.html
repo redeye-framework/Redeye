@@ -15,41 +15,28 @@
 </head>
 
 <body>
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100 p-t-50 p-b-90">
-                <form class="login100-form validate-form flex-sb flex-w" action="login" method="POST">
-                    <span class="login100-form-title p-b-51">
-						Redeye Login
-					</span>
+    <div class="login">
+        <form class="login-form" action="login" method="POST">
+            <span class="login-form-title">
+                Redeye Login
+            </span><br><br>
 
-
-                    <div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
-                        <input class="input100" type="text" name="username" placeholder="Username">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div style="top:-20px" class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
-                        <input class="input100" type="password" name="password" placeholder="Password">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div style="top:-30px" class="wrap-input100 validate-input m-b-16">
-                        <select class="input100" name="project" id="#">
-							{% for project in projects %}
-							<option value="{{ project[1] }}">{{ project[2] }}</option>
-							{% endfor %}
-						</select>
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <div class="container-login100-form-btn m-t-17">
-                        <button class="login100-form-btn">
-							Login
-						</button>
-                    </div>
-
-                </form>
+            <input class="login-input" type="text" name="username" placeholder="Username"><br>
+            <input class="login-input" type="password" name="password" placeholder="Password">
+            <div style="top:-30px">
+                <select class="login-input" name="project">
+                    {% for project in projects %}
+                    <option value="{{ project[1] }}">{{ project[2] }}</option>
+                    {% endfor %}
+                </select>
             </div>
-        </div>
+
+            <button class="login-form-btn">
+                Login
+            </button>
+
+        </form>
+    </div>
         {% if show_create_project %}
         <a href="javascript:newProject()" class="new-project-btn"><i class="fas fa-plus"></i></a>
         <form id="new-project-form" action="{{ url_for('new_project') }}" method="POST" style="display:none">
