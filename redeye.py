@@ -290,6 +290,8 @@ def change_server():
                     graph.changeServerNode(id,ip=value)
     
             elif "description" == obj:
+                #text = value.split(".")
+                #value = ".</br>".join(text)
                 db.edit_server_by_id(session["db"], id, type, value)
 
         else:

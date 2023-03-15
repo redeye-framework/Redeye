@@ -156,8 +156,9 @@
             <div class="col col-sm-6 free-text">
                 <h1>Description</h1>
                 <!-- This was previously called Attain -->
-                <p class="editable" style="font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
-                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="Description" style="display: none; font-size: 28px;overflow: scroll;word-wrap:break-word;min-height: 200px;max-height: 500px;" placeholder="Description..">{{ attain }}</textarea>
+                <p class="editable" style="white-space: pre-wrap;font-size: 28px;overflow: scroll;word-wrap:break-word;white-space:pre-wrap;max-height: 200px;">{{ attain }}</p>
+                <script>console.log("{{ attain }}");</script>
+                <textarea class="desc-add form-control editable-inp" id="attain-input" rows="5" name="Description" placeholder="Description..">{{ attain }}</textarea>
                 <input class="editable-obj" type="hidden" value="description">
                 <input class="editable-id" type="hidden" value="{{ server[0] }}">
                 <input class="editable-type" type="hidden" value="attain">

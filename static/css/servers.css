@@ -491,3 +491,15 @@ input[type="file"] {
     border: 1px solid rgb(86, 92, 104);
     outline: none;
 }
+
+#attain-input {
+    display: none; 
+    font-size: 28px;
+    overflow: scroll;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    min-height: 200px;
+    max-height: 500px;
+}
