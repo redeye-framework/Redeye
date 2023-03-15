@@ -602,6 +602,19 @@ def get_vendor_by_server_id(db, id):
     query = r'SELECT vendor FROM servers WHERE id="{}"'.format(id)
     return db_get(db, query)
 
+def get_tags_by_server_id(db, id):
+    query = r'SELECT * FROM tags WHERE server_id="{}"'.format(id)
+    tags = db_get(db, query)
+    ordered_tags = []
+    for tag in tags:
+        ordered_tags.append({
+            "id": tag[0],
+            "name": tag[1],
+            "color": tag[2],
+            "server_id": tag[3]
+        })
+    return ordered_tags
+
 @check_input
 def get_attain_by_server_id(db, id):
     query = r'SELECT attain FROM servers WHERE id="{}"'.format(id)
@@ -688,6 +701,28 @@ def change_server_color(db, serverId, colorId):
 
     result = get_db_with_actions(db, query)
     return(result)
+
+@check_input
+def edit_tag(db, id, name, color):
+    if name == "":
+        query = '''DELETE from tags
+                WHERE id="{}"'''.format(id)
+    else:
+        query = '''UPDATE tags
+                SET name = "{}",
+                    color = "{}"
+                WHERE id = "{}" '''.format(name, color, id)
+
+    result = get_db_with_actions(db, query)
+    return (result)
+
+@check_input
+def add_tag(db, serverId, name, color):
+    query = ''' INSERT INTO tags(server_id, name, color)
+                  VALUES("{}", "{}", "{}") '''.format(serverId, name, color)
+
+    result = get_db_with_actions(db, query)
+    return (result)
 
 """
 =======================================================

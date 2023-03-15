@@ -10,9 +10,6 @@ function editServerSubmit(section) {
 function sort_ports() {
     var state = document.getElementById('state').value;
     var table = document.getElementById('ports_table');
-    console.log(state)
-    console.log(table)
-
     console.log(table.rows[1].style)
 
     for (var i = 1; i <= table.rows.length - 1; ++i) {
@@ -256,4 +253,30 @@ $('.color-picker').on('change', function(e) {
         serverId: serverId,
         colorId: colorId
     }));
+});
+
+$(".add-tag").on('click', function(e) {
+    var serverId = $(".editable-id").val();
+    var tagName = prompt("Enter new tag name: ");
+    var tagColor = prompt("Enter new tag color (like- red): ");
+    $.post(Flask.url_for('add_tag', {
+        serverId: serverId,
+        name: tagName,
+        color: tagColor
+    }));
+    location.reload();
+});
+
+$(".normal-tag").on('click', function(e) {
+    var serverId = $(".editable-id").val();
+    var tagName = prompt("Enter new tag name (leave empty for delete): ");
+    var tagColor = prompt("Enter new tag color (like- red): ");
+    var tagId = $(this).attr('id');
+    $.post(Flask.url_for('edit_tag', {
+        tagId: tagId,
+        serverId: serverId,
+        name: tagName,
+        color: tagColor
+    }));
+    location.reload();
 });
