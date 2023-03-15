@@ -114,6 +114,9 @@ Default Credentials:
         * licensed by - https://creativecommons.org/licenses/by/4.0
     * http://www.freepik.com
     
+* Logs
+    * https://codepen.io/jo_Geek/pen/NLoGZZ
+        * licensed by - https://blog.codepen.io/documentation/terms-of-service/
 
 
 If you own any Code/File in Redeye that is not under MIT License please contact us at: redeye.framework@gmail.com
