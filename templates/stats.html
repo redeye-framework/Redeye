@@ -1,9 +1,4 @@
 {% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/chartist/chartist.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/owl.theme.default.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/nestable/nest.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/nestable/nestable.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/bootstrap/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/stats.css') }}">
 {% include 'wrapper.html' %}
@@ -38,13 +33,6 @@
         <div class="panel">
             <div class="panel-heading"></div>
             <div class="panel-body">
-                <input type="hidden" value="{{ users_len }}" id="users_info">
-                <input type="hidden" value="{{ servers_len }}" id="servers_info">
-                <input type="hidden" value="{{ no_access_len }}" id="no_access_servers_info">
-                <input type="hidden" value="{{ vulns_len }}" id="vulns_info">
-                <input type="hidden" value="{{ netdevices_len }}" id="netdevices_info">
-                <input type="hidden" value="{{ cracked_users_len }}" id="cracked_users_info">
-                <canvas id="pieChart"></canvas>
             </div>
         </div>
     </div>
@@ -62,28 +50,11 @@
                                 <ul style="list-style-type: none;">                                
                                     {% for i in range(achievements_len) %}
                                     <li class="achievements-list">
-                                        <label>
-                                            {% if achievements[i][2] == 1  %}
-                                                <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" checked style="display: none"/>
-                                                <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
-                                                    <svg width="12px" height="10px" viewbox="0 0 12 10">
-                                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                                                    </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
-                                            {% else %}
-                                                <input onclick="submitCheckbox('{{ achievements[i][0] }}')" name="check" class="inp-cbx" id="{{ achievements[i][0] }}" type="checkbox" style="display: none"/>
-                                                <label class="cbx" for="{{ achievements[i][0] }}"><span class="checkbox">
-                                                    <svg width="12px" height="10px" viewbox="0 0 12 10">
-                                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                                                    </svg></span><span style="font-size: 26px;">{{ achievements[i][1] }}</span></label>
-                                            {% endif %}
-                                        </label>
-                                        <a href="{{ url_for('delete_achievement') }}?id={{ achievements[i][0] }}" id="em" onclick="this.parentElement.remove()"><i class="fas fa-trash icon-set" style="font-size: 20px;float: right; color: rgb(212, 71, 71);"></i></a>
                                     </li>
                                     {% endfor %}
                                 </ul>
                             </div>
                             <form action="{{ url_for('create_achievement') }}" method="POST" id="achievement-form">
-                                <input style="margin-bottom: 20px;" type="text" class="main-achiv-input" name="achievement" placeholder="Type achievement">
                             </form>
                         </div>
                     </div>
@@ -93,16 +64,6 @@
     </div>
 </div>
 
-<!--
-<div style="float: right;margin-top: -30%;margin-right: -10%;" class="col-lg-6">
-    <div style="box-shadow:none !important;border: none !important;" class="card">
-        <div style="background:linear-gradient(315deg, #1E2229 10%, #242a38 70%);background-attachment: fixed;" class="card-content">
-            <input type="hidden" value="{{ time_left }}" id="time">
-            <input type="hidden" value="{{ days }}" id="days">
-            <div id="gauge" style="height: 450%;"></div>
-        </div>
-    </div>
-</div>-->
 {% include 'wrapper_end.html' %}
     <script>
         function parseJwt () {
@@ -118,11 +79,5 @@
         // return JSON.parse(jsonPayload);
     };
     </script>
-    <script src="{{ url_for('static', filename='js/lib/chart-js/Chart.bundle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/echart/echarts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/echart/echarts-init.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/nestable/jquery.nestable.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/nestable/nestable.init.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/chart-js/chartjs-init.js') }}"></script>
     <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 {% include 'footer.html' %}
