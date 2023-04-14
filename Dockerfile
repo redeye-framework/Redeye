@@ -24,4 +24,4 @@ RUN python RedDB/db.py
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["redeye.py", "--safe", "--port", "8443"]
+CMD ["redeye.py", "--safe", "--port", "8443", "--docker"]

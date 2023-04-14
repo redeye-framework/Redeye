@@ -2,12 +2,25 @@ version: "3.3"
 services:
   redeye:
     container_name: "Redeye"
-    image: "redeyeframework/redeye:stable"
+    image: "ghcr.io/redeye-framework/redeye:latest"
     ports:
       - "8443:8443"
     volumes:
       - Files:/redeye/files
       - DB:/redeye/RedDB
+  neo4j:
+    image: "neo4j:4.4.9"
+    ports:
+      - "0.0.0.0:7474:7474"
+      - "0.0.0.0:7687:7687"
+    volumes:
+      - NeoData:/data
+      - NeoLogs:/logs
+      - NeoImport:/var/lib/neo4j/import
+      - NeoPlugins:/plugins
+
+    env_file:
+      - graph.env
 
 volumes:
   Files:
