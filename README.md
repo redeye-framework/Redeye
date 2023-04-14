@@ -4,12 +4,16 @@ This project was built by pentesters for pentesters.
 Redeye is a tool intended to help you manage your data during a pentest operation in the most efficient and organized way.
 
 ## Table of Contents
-- [The Developers](#The-Developers)
-- [Overview](#Overview)
-- [Source Installation](#Source)
-- [Docker Installation](#Docker)
-- [Special Thanks](#Special-Thanks)
-- [Credits](#Credits)
+- [Redeye](#redeye)
+  - [Table of Contents](#table-of-contents)
+  - [The Developers](#the-developers)
+  - [Overview](#overview)
+  - [Installation](#installation)
+    - [Source](#source)
+    - [Docker](#docker)
+    - [General](#general)
+  - [Special-Thanks](#special-thanks)
+  - [Credits](#credits)
 
 
 ## The Developers
@@ -51,6 +55,7 @@ Graph panel will contain all of the Users and Servers and the relationship betwe
 
 ### Source
 ```
+git clone https://github.com/redeye-framework/Redeye.git
 cd Redeye
 sudo apt install python3.8-venv
 python3 -m venv RedeyeVirtualEnv
@@ -62,8 +67,9 @@ python3 redeye.py --safe
 
 ### Docker
 
-Pull from Dockerhub.
+Pull from GitHub container registry.
 ```
+git clone https://github.com/redeye-framework/Redeye.git
 cd Redeye
 docker-compose up -d
 ```
@@ -75,11 +81,11 @@ sudo docker-compose start/stop
 
 Save/Load Redeye
 ```
-docker save redeyeframework/redeye:latest neo4j:latest > Redeye.tar
+docker save ghcr.io/redeye-framework/redeye:latest neo4j:4.4.9 > Redeye.tar
 docker load < Redeye.tar
 ```
 
-DockerHub: https://hub.docker.com/r/redeyeframework/redeye
+GitHub container registry: https://github.com/redeye-framework/Redeye/pkgs/container/redeye
 
 ### General
 Redeye will listen on: http://0.0.0.0:8443</br>
