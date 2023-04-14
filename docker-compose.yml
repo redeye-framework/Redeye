@@ -2,7 +2,7 @@ version: "3.3"
 services:
   redeye:
     container_name: "Redeye"
-    image: "redeyeframework/redeye:latest"
+    image: "ghcr.io/redeye-framework/redeye:latest"
     ports:
       - "8443:8443"
     links:
