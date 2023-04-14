@@ -89,7 +89,7 @@ function editUser() {
     password = $(".user-info > .password").text();
     type = $(".user-info > p > .type").text();
     perm = $(".user-info > p > .perm").text();
-    found = $(".user-info > .found").text();
+    found = $(".user-info > p > .found").text();
     attain = $(".user-info > .attain").text();
 
     $("#input-refferer").val(window.location.href)
