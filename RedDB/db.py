@@ -38,7 +38,6 @@ def check_input(func):
             Blacklist not found !
             """
             args = list(args)
-            print(args)
             
             for index, arg in enumerate(args):
                 args[index] = escape(str(arg))
@@ -173,7 +172,6 @@ def edit_user(db, exec, uid, name, passwd, perm, type, found_on, found_on_server
         return ""
 
     query += f" WHERE id = {uid};"
-    print(query)
     result = get_db_with_actions(db, query)
     create_log(db, "User Updated", "user_id",
                uid, "Updated User", exec)
@@ -1263,7 +1261,6 @@ def create_management_tables(tables, init):
         c = conn.cursor()
         c.executescript(tables)
         c.executescript(init)
-        print("Management Tables Created.")
     except Error as e:
         print(e)
     conn.close()
@@ -1280,7 +1277,6 @@ def create_tables(db, tables, init=False):
         c.executescript(tables)
         if init:
             c.executescript(init)
-        print("Tables Created.")
     except Error as e:
         print(e)
     conn.close()

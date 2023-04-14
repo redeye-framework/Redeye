@@ -400,7 +400,6 @@ def add_tag():
 
     dict = request.args.to_dict()
     db.add_tag(session["db"], dict["serverId"], dict["name"], dict["color"])
-    print(url_for('login', id=dict["serverId"]))
 
 
 @app.route('/edit_tag', methods=['POST'])

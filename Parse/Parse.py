@@ -140,7 +140,6 @@ def parse_users_passwords(dbName,exec,file_name,path, isDockerEnv):
         except:
             continue
         
-        print(user,password)
         user_id = db.insert_new_other_user(dbName,userTypeId,file_name,user,password,"-",exec)
         
         if isDockerEnv:

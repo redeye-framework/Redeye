@@ -5,8 +5,6 @@ services:
     image: "ghcr.io/redeye-framework/redeye:latest"
     ports:
       - "8443:8443"
-    links:
-      - "neo4j:neo4j"
     volumes:
       - Files:/redeye/files
       - DB:/redeye/RedDB
