@@ -12,7 +12,7 @@ COPY . /redeye
 RUN pip install -r requirements.txt
 
 # Install sqlite3
-RUN apt-get install -y sqlite3
+RUN apt-get update && apt-get install -y sqlite3
 
 # Expose the port
 EXPOSE 8443
