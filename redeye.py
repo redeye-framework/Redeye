@@ -1911,6 +1911,12 @@ def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, d
         showHelpMenu()
         sys.exit(0)
 
+    global IS_ENV_SAFE
+    IS_ENV_SAFE = safe
+
+    global USE_NEO4J
+    USE_NEO4J = docker
+
     if reset:
         projectsFiles = glob("RedDB/Projects/*")
         allFiles = glob("files/**", recursive=True)
@@ -1953,13 +1959,8 @@ def startRedeye(reset=False, debug=False, port=5000, safe=False, docker=False, d
         db.init()
 
     init(app)
-
-    global IS_ENV_SAFE
-    IS_ENV_SAFE = safe
-
-    global USE_NEO4J
-    USE_NEO4J = docker
     
+
     if demo:
         #init exampleDB.
         # Load default json file.
