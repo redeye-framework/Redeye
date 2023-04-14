@@ -71,7 +71,7 @@ function showUser(username, password, type, perm, attain, uid, found) {
     if (found == "None") {
         found = "Server not mentioned";
     }
-    $(".user-info > .found").text(found);
+    $(".user-info > p > .found").text(found);
     $(".user-info > .attain").text(attain);
     $(".user-info").css("display", "inline-block");
     $("#input-id").val(uid);
@@ -109,7 +109,6 @@ function editUser() {
 
 function removeUser() {
     var uid = $("#input-id").val();
-    console.log(uid);
     document.getElementById("user-" + uid).parentElement.parentElement.remove();
     window.location.href = "/delete_user?id=" + uid;
     hideUser();

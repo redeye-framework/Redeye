@@ -10,7 +10,6 @@ function editServerSubmit(section) {
 function sort_ports() {
     var state = document.getElementById('state').value;
     var table = document.getElementById('ports_table');
-    console.log(table.rows[1].style)
 
     for (var i = 1; i <= table.rows.length - 1; ++i) {
         table.rows[i].style.display = "";

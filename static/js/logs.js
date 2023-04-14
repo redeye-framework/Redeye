@@ -1,5 +1,4 @@
 $(document).ready(function() {
-        console.log(parse_logs());
         var items = parse_logs();
         $('#timeline-container-force-position').timelineMe({
             items
@@ -21,8 +20,6 @@ function parse_logs(){
     for (var i = 1; i <= len_logs.value; i++){
         details_log = lst_logs[i].split(",");
         details_obj = lst_objs[i].split(",");
-        console.log("current log" + details_log);
-        console.log("current obj" + details_obj);
         var log_name = details_log[7].slice(2,-1);
         var date = details_log[8].slice(2,-1);
         var time = details_log[9].slice(2,-1);

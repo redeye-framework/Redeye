@@ -6,7 +6,6 @@ $(document).ready(function () {
 });
 
 function changeCurrentTab(tab) {
-    console.log($(tab).attr("id"));
     tablinks = $(".tablinks")
     for (var i = 0; i < tablinks.length; i++) {
         $(tablinks[i]).removeClass("current");
@@ -78,7 +77,6 @@ $(".dot").mouseover(function (){
     $(this).parent().children(".dot").each(function(){
         prevColor.push(this.style.backgroundColor)
         if (check) {
-            console.log(this.style.backgroundColor)
             if (this.style.backgroundColor == "rgb(110, 110, 110)"){
                 this.style.backgroundColor = "rgba(" + r.toString() + "," + g.toString() + "," + b.toString() + ", 0.5)";
             } 
