@@ -60,7 +60,7 @@ ZIP_FOLDER = r"zip"
 PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
 MAX_INPUT = 100
-
+TOKEN_INIT = "redeye_"
 
 #Init
 def init(app):
@@ -1832,7 +1832,43 @@ def is_logged(logged=False):
         except:
             return False
 
+"""
+=======================================================
+                Access tokens
+=======================================================
+"""
 
+@app.route('/add_token',methods=['POST'])
+@validate_input
+def add_token():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    """
+    Clear-text token is retured once, it will be saved as sha-256 in the DB.
+    The user must keep the token in secured place like password manager.
+    """
+    dict = request.args.to_dict()
+    generated_token = TOKEN_INIT + uuid4()
+    hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
+    permissions = dict.get('perm')
+    valid_by = dict.get('date')
+    projectId = db.get_projectId_by_projectName(session["project"])
+
+    db.insert_new_token(dict.get('name'), hashed_token, permissions, valid_by, session['uid'], projectId)
+
+    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,token=generated_token)
+
+
+@app.route('/access_tokens',methods=['GET'])
+@validate_input
+def delete_color():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+    projectId = db.get_projectId_by_projectName(session["project"])
+    access_tokens = db.get_token_details(projectId)
+
+    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,access_tokens=access_tokens)
 
 """
 =======================================================

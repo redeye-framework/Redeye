@@ -1152,7 +1152,7 @@ def change_relevant_to_zero(db, table_name, object_id):
 
 """
 =======================================================
-                Management DB Functions
+                Management DB Functions - users
 =======================================================
 """
 
@@ -1200,6 +1200,24 @@ def get_projectId_by_DBName(dbName):
 def get_project_by_id(projectId):
     query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
+
+
+"""
+=======================================================
+                Management DB Functions - tokens
+=======================================================
+"""
+
+def get_tokens_details(projectId):
+    query = r'SELECT * FROM access_tokens WHERE projectID="{}"'.format(projectId)
+    return db_get(MANAGE_DB, query)
+
+
+def insert_new_token(name, token, permissions, valid_by, user_id, projectId):
+    query = r'INSERT INTO access_tokens(name, token, permissions, valid_by, user_id, projectID) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(name, token, permissions, valid_by, user_id, projectId)
+    result = get_db_with_actions(MANAGE_DB, query)
+    return(result)
+
 """
 =======================================================
                 DB Functions
