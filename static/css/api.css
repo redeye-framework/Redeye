@@ -46,7 +46,7 @@
 }
 
 .token .copy-token {
-    padding: 10px;  
+    padding: 7px 10px;  
 }
 
 .token .token-options .permissions {
@@ -67,6 +67,11 @@
     margin: 20px 0;
     display: inline-block;
     float: right;
+}
+
+.token .token-validity-btns .red {
+    background-color: rgb(38, 128, 255);
+    color: white;
 }
 
 .token a {
