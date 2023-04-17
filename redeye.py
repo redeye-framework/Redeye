@@ -1746,6 +1746,21 @@ def add_scan(file):
 
 """
 =======================================================
+                API Functions
+=======================================================
+"""
+
+@app.route('/api', methods=['GET', 'POST'])
+def api():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+    if request.method == 'GET':
+        return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"])
+
+
+"""
+=======================================================
                 Login & Project Functions
 =======================================================
 """
@@ -1861,7 +1876,7 @@ def add_token():
 
 @app.route('/access_tokens',methods=['GET'])
 @validate_input
-def delete_color():
+def access_tokens():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     

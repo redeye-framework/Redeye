@@ -1,0 +1,37 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/api.css') }}"> {% include 'wrapper.html' %}
+<div class="container-api">
+
+    <h2 style="font-weight: bolder;font-size: 36px;" class="inline">API Control</h2>
+    <div class="tokens">
+        <div class="token">
+            <span class="token-head">
+                <h3 class="name">Name</h3>
+                <span class="validity-time">10/5/2023 13:53:12</span>
+            </span>
+            <span class="token-options">
+                <input type="text" size="50" class="token-input">
+                <a href="#" class="copy-token"><i class="fa fa-copy"></i></a>
+                <div class="permissions">
+                    <span>READ</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>WRITE</span>
+                </div>
+                <div class="token-validity-btns">
+                    <a href="#" id="reset" class="time-btn">Reset</a>
+                    <a href="#" id="10m" class="time-btn">+10 Minutes</a>
+                    <a href="#" id="1h" class="time-btn">+1 Hour</a>
+                    <a href="#" id="1d" class="time-btn">+1 Day</a>
+                    <a href="#" id="1w" class="time-btn">+1 Week</a>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+
+{% include 'wrapper_end.html' %}
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+{% include 'footer.html' %}

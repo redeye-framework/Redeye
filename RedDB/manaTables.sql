@@ -11,12 +11,13 @@ CREATE TABLE IF NOT EXISTS projects (
                                       filename text NOT NULL,
                                       name text NOT NULL
                                   );
-CREATE TABLE IF NOT EXISTS access_tokens (
+REATE TABLE IF NOT EXISTS access_tokens (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       name text NOT NULL,
                                       token text NOT NULL,
                                       permissions text NOT NULL,
                                       valid_by text NOT NULL,
                                       user_id INTEGER NOT NULL,
-                                      projectID INTEGER NOT NULL
+                                      project_id INTEGER NOT NULL,
+                                      FOREIGN KEY (project_id) REFERENCES projects(id)
                                   );
