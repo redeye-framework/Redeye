@@ -1,3 +1,16 @@
+.add-token-btn {
+    float: right; 
+    margin-top: 10px;
+}
+
+.add-token-btn:hover {
+    filter: brightness(110%);
+}
+
+.inline {
+    display: inline;
+}
+
 .container-api {
     width: 90%;
     margin-left: 5%;
