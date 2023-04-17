@@ -82,8 +82,8 @@
     float: right;
 }
 
-.token .token-validity-btns .red {
-    background-color: rgb(38, 128, 255);
+.blue {
+    background-color: rgb(38, 128, 255) !important;
     color: white;
 }
 
@@ -95,9 +95,46 @@
     color: white;
     border-radius: 5px;
     margin: 5px;
-    
 }
 
 .token a:hover {
+    filter: brightness(110%);
+}
+
+.create-token-box .permissions .perm{
+    display: inline;
+    margin: 5px 10px;
+    font-size: 20px;
+}
+
+.create-token-box .validity-time {
+    padding: 3px 5px;
+    border: 1px solid white;
+    font-weight: 400;
+    color: white;
+    border-radius: 5px;
+}
+
+.create-token-box .validity-btns {
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.create-token-box .validity-btns a {
+    text-decoration: none;
+    background-color: #474b52;
+    padding: 3px 5px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.create-token-box .create-token {
+    background-color: #4969D1;
+    text-decoration: none;
+}
+
+.create-token-box a:hover {
     filter: brightness(110%);
 }

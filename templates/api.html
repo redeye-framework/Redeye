@@ -3,9 +3,7 @@
 <div class="container-api">
 
     <h2 style="font-weight: bolder;font-size: 36px;" class="inline">API Control</h2>
-    <form action="#" method="POST" class="inline">
-        <button class="btn btn-primary add-token-btn inline">Create New Token</button>
-    </form>
+    <button class="btn btn-primary add-token-btn inline" onclick="createNewToken()">Create New Token</button>
     <div class="tokens">
         <div class="token">
             <span class="token-head">
@@ -15,7 +13,7 @@
             <span class="token-options">
                 <input type="text" size="50" class="token-input">
                 <a href="#" class="copy-token"><i class="fa fa-copy"></i></a>
-                <div class="permissions">
+                <div class="permissions" style="display: none;">
                     <span>READ</span>
                     <label class="switch">
                         <input type="checkbox">
@@ -28,10 +26,52 @@
                     <a href="#" id="1h" class="time-btn">+1 Hour</a>
                     <a href="#" id="1d" class="time-btn">+1 Day</a>
                     <a href="#" id="1w" class="time-btn">+1 Week</a>
-                    <a href="#" id="reset" class="time-btn red">Reset</a>
+                    <a href="#" id="reset" class="time-btn blue">Reset</a>
                 </div>
             </span>
         </div>
+    </div>
+
+    <div class="floating-box create-token-box">
+        <h2 class="head">Create New Token</h2>
+        <form action="#" method="post" id="create_token_form">
+            <div class="content-center">
+                <br>
+                <input type="text" name="token-name" id="token-name-input" size="25" class="token-name" placeholder="Token Name">
+                <br><br>
+                <div class="permissions">
+                    <div class="perm">
+                        <input type="checkbox" name="servers"> Servers
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="users"> Users
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="files"> Files
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="exploits"> Exploits
+                    </div>
+                </div>
+                <br><br>
+                <div class="validity">
+                    <span class="validity-time">10/5/2023 13:53:12</span>
+                    <br>
+                    <div class="validity-btns">
+                        <a href="#" id="10m" class="time-btn">+10 Minutes</a>
+                        <a href="#" id="1h" class="time-btn">+1 Hour</a>
+                        <a href="#" id="1d" class="time-btn">+1 Day</a>
+                        <a href="#" id="1w" class="time-btn">+1 Week</a>
+                        <a href="#" id="reset" class="time-btn blue">Reset</a>
+                    </div>
+                    <br>
+                </div>
+                <br><br>    
+                <a class="create-token floating-btn" href="#" onclick="document.getElementById('create_token_form').submit();" title="Create New Token">
+                    <i class="fas fa-edit"></i><span> Create </span>
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 

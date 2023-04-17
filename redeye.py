@@ -1895,6 +1895,7 @@ def access_tokens():
 =======================================================
 """
 
+
 def emit_to_all_users(details, function_name):
     projectId = db.get_projectId_by_projectName(session["project"])
     for uid in db.get_redeye_users(projectId):
