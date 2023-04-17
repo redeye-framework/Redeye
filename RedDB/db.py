@@ -1208,8 +1208,8 @@ def get_project_by_id(projectId):
 =======================================================
 """
 
-def get_tokens_details(projectId):
-    query = r'SELECT * FROM access_tokens WHERE projectID="{}"'.format(projectId)
+def get_tokens_details(token):
+    query = r'SELECT * FROM access_tokens WHERE token="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)
 
 

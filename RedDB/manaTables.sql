@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS projects (
                                       filename text NOT NULL,
                                       name text NOT NULL
                                   );
-REATE TABLE IF NOT EXISTS access_tokens (
+CREATE TABLE IF NOT EXISTS access_tokens (
                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                                       name text NOT NULL,
                                       token text NOT NULL,

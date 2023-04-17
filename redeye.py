@@ -29,8 +29,12 @@ from glob import glob
 import zipfile
 import graph
 from functools import wraps
+from api import api_route
 
 app = Flask(__name__, template_folder="templates")
+
+app.register_blueprint(api_route)
+
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
 
