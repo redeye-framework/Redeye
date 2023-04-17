@@ -859,7 +859,7 @@ input:checked+.slider:before {
     border-radius: 40px;
     box-shadow: 0px 4px 20px black;
     background-color: #31353D !important;
-    display: solid;
+    display: none;
     width: 650px;
     min-height: 430px;
     z-index: 999;
