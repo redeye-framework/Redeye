@@ -5,14 +5,16 @@
     <h2 style="font-weight: bolder;font-size: 36px;" class="inline">API Control</h2>
     <button class="btn btn-primary add-token-btn inline" onclick="createNewToken()">Create New Token</button>
     <div class="tokens">
+    {% for token in access_tokens %}
         <div class="token">
             <span class="token-head">
-                <h3 class="name">Name</h3>
-                <span class="validity-time">10/5/2023 13:53:12</span>
+                <h3 class="name">{{ token[1] }}</h3>
+                <span class="validity-time">{{ token[4] }}</span>
             </span>
             <span class="token-options">
-                <input type="text" size="50" class="token-input">
-                <a href="#" class="copy-token"><i class="fa fa-copy"></i></a>
+                <input type="text" size="67" class="token-input" id="token-hash-{{ token[0] }}" value="{{ token[2] }}" disabled>
+                <a href="#" class="copy-token" onclick="navigator.clipboard.writeText('{{ token[2] }}'); return false;"><i class="fa fa-copy"></i></a>
+
                 <div class="permissions" style="display: none;">
                     <span>READ</span>
                     <label class="switch">
@@ -30,11 +32,12 @@
                 </div>
             </span>
         </div>
+    {% endfor %}
     </div>
 
     <div class="floating-box create-token-box">
         <h2 class="head">Create New Token</h2>
-        <form action="#" method="post" id="create_token_form">
+        <form action="add_token" method="post" id="create_token_form">
             <div class="content-center">
                 <br>
                 <input type="text" name="token-name" id="token-name-input" size="25" class="token-name" placeholder="Token Name">
@@ -55,20 +58,20 @@
                 </div>
                 <br><br>
                 <div class="validity">
-                    <span class="validity-time">10/5/2023 13:53:12</span>
+                    <input type="text"  class="validity-time" id="datetime" name="datetime" value="10/5/2023 13:53:12">
                     <br>
                     <div class="validity-btns">
-                        <a href="#" id="10m" class="time-btn">+10 Minutes</a>
-                        <a href="#" id="1h" class="time-btn">+1 Hour</a>
-                        <a href="#" id="1d" class="time-btn">+1 Day</a>
-                        <a href="#" id="1w" class="time-btn">+1 Week</a>
-                        <a href="#" id="reset" class="time-btn blue">Reset</a>
+                        <a href="javascript:addMinutes(10)" id="10m" class="time-btn">+10 Minutes</a>
+                        <a href="javascript:addHours(1)" id="1h" class="time-btn">+1 Hour</a>
+                        <a href="javascript:addDays(1)" id="1d" class="time-btn">+1 Day</a>
+                        <a href="javascript:addWeek()" id="1w" class="time-btn">+1 Week</a>
+                        <a href="javascript:setCurrentDatetime()" id="reset" class="time-btn blue">Reset</a>
                     </div>
                     <br>
                 </div>
                 <br><br>    
                 <a class="create-token floating-btn" href="#" onclick="document.getElementById('create_token_form').submit();" title="Create New Token">
-                    <i class="fas fa-edit"></i><span> Create </span>
+                    <i class="fas fa-edit"></i><span> Create</span>
                 </a>
             </div>
         </form>

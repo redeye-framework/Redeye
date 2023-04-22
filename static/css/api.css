@@ -23,7 +23,7 @@
 
 .token {
     padding: 10px 20px;
-    margin: 10px;
+    margin: 30px;
     background-color: #31353D;
     border-radius: 10px;
     box-shadow: 4px 4px 10px black;
@@ -111,6 +111,7 @@
     padding: 3px 5px;
     border: 1px solid white;
     font-weight: 400;
+    font-size: 18px;
     color: white;
     border-radius: 5px;
 }

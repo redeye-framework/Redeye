@@ -1748,20 +1748,6 @@ def add_scan(file):
         return 0
     return 1
 
-"""
-=======================================================
-                API Functions
-=======================================================
-"""
-
-@app.route('/api', methods=['GET', 'POST'])
-def api():
-    if not is_logged():
-        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-    
-    if request.method == 'GET':
-        return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"])
-
 
 """
 =======================================================
@@ -1857,37 +1843,43 @@ def is_logged(logged=False):
 =======================================================
 """
 
-@app.route('/add_token',methods=['POST'])
-@validate_input
-def add_token():
-    if not is_logged():
-        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-    """
-    Clear-text token is retured once, it will be saved as sha-256 in the DB.
-    The user must keep the token in secured place like password manager.
-    """
-    dict = request.args.to_dict()
-    generated_token = TOKEN_INIT + uuid4()
-    hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
-    permissions = dict.get('perm')
-    valid_by = dict.get('date')
-    projectId = db.get_projectId_by_projectName(session["project"])
 
-    db.insert_new_token(dict.get('name'), hashed_token, permissions, valid_by, session['uid'], projectId)
-
-    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,token=generated_token)
-
-
-@app.route('/access_tokens',methods=['GET'])
-@validate_input
-def access_tokens():
+@app.route('/api', methods=['GET'])
+def api():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     projectId = db.get_projectId_by_projectName(session["project"])
-    access_tokens = db.get_token_details(projectId)
+    access_tokens = db.get_tokens_details(projectId)
 
-    return render_template('notebook.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J,access_tokens=access_tokens)
+    return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, access_tokens=access_tokens)
+
+
+@app.route('/add_token', methods=['POST'])
+@validate_input
+def add_token():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    dict = request.args.to_dict()
+    generated_token = TOKEN_INIT + str(uuid4())
+    hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
+    token_name = request.form['token-name']
+    servers = request.form.get('servers')
+    users = request.form.get('users')
+    files = request.form.get('files')
+    exploits = request.form.get('exploits')
+    permissions = f"{{'servers': {servers}, 'files': {files}, 'exploits': {exploits}, 'users': {users}}}"
+    valid_by = request.form.get('datetime')
+    project_id = db.get_projectId_by_projectName(session["project"])
+
+    print("--------------------------------")
+    print(valid_by)
+    print("--------------------------------")
+
+    db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
+
+    return redirect(url_for('api'))
 
 """
 =======================================================
