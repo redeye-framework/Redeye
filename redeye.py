@@ -30,6 +30,7 @@ import zipfile
 import graph
 from functools import wraps
 from api import api_route
+import json
 
 app = Flask(__name__, template_folder="templates")
 
@@ -1850,7 +1851,17 @@ def api():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
     
     projectId = db.get_projectId_by_projectName(session["project"])
-    access_tokens = db.get_tokens_details(projectId)
+    db_access_tokens = db.get_tokens_details(projectId)
+    access_tokens = []
+
+    for token in db_access_tokens:
+        n_token = []
+        for i in range(len(token) - 1):
+            n_token.append(token[i])
+        
+        j = token[3].replace("'", "\"")
+        n_token[3] = json.loads(j)
+        access_tokens.append(n_token)
 
     return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, access_tokens=access_tokens)
 
@@ -1869,14 +1880,16 @@ def add_token():
     users = request.form.get('users')
     files = request.form.get('files')
     exploits = request.form.get('exploits')
-    permissions = f"{{'servers': {servers}, 'files': {files}, 'exploits': {exploits}, 'users': {users}}}"
+    permissions = {
+        'servers': str(servers),
+        'files': str(files),
+        'exploits': str(exploits),
+        'users': str(users)
+    }
     valid_by = request.form.get('datetime')
     project_id = db.get_projectId_by_projectName(session["project"])
 
-    print("--------------------------------")
-    print(valid_by)
-    print("--------------------------------")
-
+    helper.debug(json.dumps(permissions))
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
     return redirect(url_for('api'))

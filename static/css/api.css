@@ -17,13 +17,17 @@
     display: inline-block;
 }
 
+.inline div {
+    display: inline;
+}
+
 .tokens {
     padding: 50px;
 }
 
 .token {
     padding: 10px 20px;
-    margin: 30px;
+    margin: 30px 0;
     background-color: #31353D;
     border-radius: 10px;
     box-shadow: 4px 4px 10px black;
@@ -64,7 +68,7 @@
 
 .token .token-options .permissions {
     display: inline-block;
-    margin: -10px 0 0 150px;
+    margin: -10px 0 0 60px;
 }
 
 .token .validity-time {

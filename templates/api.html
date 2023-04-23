@@ -15,13 +15,38 @@
                 <input type="text" size="67" class="token-input" id="token-hash-{{ token[0] }}" value="{{ token[2] }}" disabled>
                 <a href="#" class="copy-token" onclick="navigator.clipboard.writeText('{{ token[2] }}'); return false;"><i class="fa fa-copy"></i></a>
 
-                <div class="permissions" style="display: none;">
-                    <span>READ</span>
+                <div class="permissions inline" style="display: inline-block;">
+                    <!--span>READ</span>
                     <label class="switch">
                         <input type="checkbox">
                         <span class="slider round"></span>
                     </label>
-                    <span>WRITE</span>
+                    <span>WRITE</span-->
+                    <script>console.log('{{token[3]}}')</script>
+                    <div class="perm">
+                        <input type="checkbox" name="servers" disabled 
+                        {% if token[3]['servers'] == "on" %}
+                        checked
+                        {% endif %}> Servers
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="users" disabled 
+                        {% if token[3]['users'] == "on" %}
+                        checked
+                        {% endif %}> Users
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="files" disabled 
+                        {% if token[3]['files'] == "on" %}
+                        checked
+                        {% endif %}> Files
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="exploits" disabled 
+                        {% if token[3]['exploits'] == "on" %}
+                        checked
+                        {% endif %}> Exploits
+                    </div>
                 </div>
                 <div class="token-validity-btns">
                     <a href="#" id="10m" class="time-btn">+10 Minutes</a>

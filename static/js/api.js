@@ -91,18 +91,3 @@ function formatDateTime(datetime) {
   
     return day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
-
-function copyToClipboard(elementId) {
-    /* Get the text field */
-    var inputElement = document.getElementById(elementId);
-
-    /* Select the text field */
-    inputElement.select();
-    inputElement.setSelectionRange(0, 99999); /* For mobile devices */
-
-    /* Copy the text inside the text field to the clipboard */
-    document.execCommand("copy");
-
-    /* Alert the copied text */
-    alert("Copied the text: " + inputElement.value);
-}
