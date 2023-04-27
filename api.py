@@ -42,3 +42,17 @@ def api_get_servers(token_data):
 @return_json
 def api_get_users():
     return {"status":200}
+
+
+@api_route.route('/api/exploits',methods=['GET'])
+@return_json
+def api_get_exploits(token_data):
+    permissions = json.loads(token_data[3])
+    if not permissions.get('exploits'):
+        return jsonify({"status" : 403})
+    
+
+    db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
+    exploits = jdb.exploits_info(db_name)
+
+    return jsonify(exploits)

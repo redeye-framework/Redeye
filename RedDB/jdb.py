@@ -25,3 +25,17 @@ def servers_info(db_name):
         })
 
     return servers
+
+
+def exploits_info(db_name):
+    exploits = []
+    raw_exploits = db.get_all_exploits(db_name)
+
+    for exploit in raw_exploits:
+        exploits.append({
+            "name": exploit[1],
+            "data": exploit[2],
+            "related_file": exploit[3]
+        })
+
+    return exploits
