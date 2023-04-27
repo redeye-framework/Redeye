@@ -11,6 +11,9 @@ import os
 api_route = Blueprint('api', __name__)
 PROJECTS = r"RedDB/Projects/{}"
 
+READ = 1
+READ_WRITE = 2
+
 
 def authentication(access_level, resource):
 
@@ -23,10 +26,10 @@ def authentication(access_level, resource):
                 return jsonify({ "status" : 401 })
             
             permissions = json.loads(token_details[0][3])
-            token_access_level = permissions.get('access_level')
+            token_access_level = int(permissions.get('access_level'))
             token_auth = permissions.get('auth')
 
-            if access_level == token_access_level and \
+            if access_level <= token_access_level and \
                 token_auth.get(resource):
                 response = f(token_details[0], request.args.to_dict())
                 return response
@@ -39,7 +42,7 @@ def authentication(access_level, resource):
 
 
 @api_route.route('/api/servers',methods=['GET'])
-@authentication('READ', 'servers')
+@authentication(READ, 'servers')
 def api_get_servers(token_data, args):
     
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
@@ -49,7 +52,7 @@ def api_get_servers(token_data, args):
 
 
 @api_route.route('/api/exploits',methods=['GET'])
-@authentication('READ', 'exploits')
+@authentication(READ, 'exploits')
 def api_get_exploits(token_data, args):
 
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
@@ -59,7 +62,7 @@ def api_get_exploits(token_data, args):
 
 
 @api_route.route('/api/files',methods=['GET'])
-@authentication('READ', 'files')
+@authentication(READ, 'files')
 def api_get_files(token_data, args):
 
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
@@ -69,7 +72,7 @@ def api_get_files(token_data, args):
 
 
 @api_route.route('/api/users',methods=['GET'])
-@authentication('READ', 'users')
+@authentication(READ, 'users')
 def api_get_users(token_data, args):
     
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
@@ -79,7 +82,7 @@ def api_get_users(token_data, args):
 
 
 @api_route.route('/api/logs',methods=['GET'])
-@authentication('READ', 'logs')
+@authentication(READ, 'logs')
 def api_get_logs(token_data, args):
     
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))

@@ -46,6 +46,12 @@
                         checked
                         {% endif %}> Exploits
                     </div>
+                    <div class="perm">
+                        <input type="checkbox" name="logs" disabled 
+                        {% if token[3].auth.logs %}
+                        checked
+                        {% endif %}> Logs
+                    </div>
                 </div>
                 <div class="token-validity-btns">
                     <a href="#" id="10m" class="time-btn">+10 Minutes</a>
@@ -78,6 +84,9 @@
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="exploits"> Exploits
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="logs"> Logs
                     </div>
                 </div>
                 <br><br>

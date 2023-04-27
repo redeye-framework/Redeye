@@ -1880,14 +1880,20 @@ def add_token():
     users = 1 if request.form.get('users') == "on" else 0
     files = 1 if request.form.get('files') == "on" else 0
     exploits = 1 if request.form.get('exploits') == "on" else 0
+    logs = 1 if request.form.get('logs') == "on" else 0
     permissions = json.dumps({
-        'servers': servers,
-        'files': files,
-        'exploits': exploits,
-        'users': users
+        'access_level': 1, # Change this when we have Read / Read_Write option
+        'auth': {
+            'servers': servers,
+            'files': files,
+            'exploits': exploits,
+            'users': users,
+            'logs': logs
+        }
     })
+
     valid_by = request.form.get('datetime')
-    print(session["project"])
+
     project_id = db.get_projectId_by_projectName(session["project"])
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
