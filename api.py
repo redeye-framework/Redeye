@@ -73,7 +73,6 @@ def api_get_users(token_data, args):
     if not permissions.get('users'):
         return jsonify({"status" : 403})
     
-    print("args", args)
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
     users = jdb.users_info(db_name, args)
 

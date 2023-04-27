@@ -509,7 +509,7 @@ def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id,
     return(result)
 
 @check_input
-def create_new_single_server(db, name, ip, section_id, colorId):
+def create_new_single_server(db, name, ip, section_id, colorId, exec):
     """
     Add new server to data base.
     """

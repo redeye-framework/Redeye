@@ -205,7 +205,6 @@ def servers():
     for section in dbsections:
         sectionId = section[0]
         name = section[1]
-        print("Session", session["db"])
         servers = db.get_servers_by_section_id(session["db"], sectionId)
         serverData = {}
         for server in servers:
@@ -424,7 +423,7 @@ def add_new_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.form.to_dict()
-    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"], session["username"])
 
     if USE_NEO4J:
         graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
