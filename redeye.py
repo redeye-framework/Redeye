@@ -1856,11 +1856,11 @@ def api():
 
     for token in db_access_tokens:
         n_token = []
-        for i in range(len(token) - 1):
-            n_token.append(token[i])
+        for index, _ in enumerate(token):
+            n_token.append(token[index])
         
-        j = token[3].replace("'", "\"")
-        n_token[3] = json.loads(j)
+        permissions_str = token[3]
+        n_token[3] = json.loads(permissions_str)
         access_tokens.append(n_token)
 
     return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, access_tokens=access_tokens)
