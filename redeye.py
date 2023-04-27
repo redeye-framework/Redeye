@@ -205,6 +205,7 @@ def servers():
     for section in dbsections:
         sectionId = section[0]
         name = section[1]
+        print("Session", session["db"])
         servers = db.get_servers_by_section_id(session["db"], sectionId)
         serverData = {}
         for server in servers:
@@ -1876,22 +1877,22 @@ def add_token():
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form['token-name']
-    servers = request.form.get('servers')
-    users = request.form.get('users')
-    files = request.form.get('files')
-    exploits = request.form.get('exploits')
-    permissions = {
-        'servers': str(servers),
-        'files': str(files),
-        'exploits': str(exploits),
-        'users': str(users)
-    }
+    servers = 1 if request.form.get('servers') == "on" else 0
+    users = 1 if request.form.get('users') == "on" else 0
+    files = 1 if request.form.get('files') == "on" else 0
+    exploits = 1 if request.form.get('exploits') == "on" else 0
+    permissions = json.dumps({
+        'servers': servers,
+        'files': files,
+        'exploits': exploits,
+        'users': users
+    })
     valid_by = request.form.get('datetime')
+    print(session["project"])
     project_id = db.get_projectId_by_projectName(session["project"])
-
-    helper.debug(json.dumps(permissions))
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
+    #return render_template('api.html', token=generated_token)
     return redirect(url_for('api'))
 
 """

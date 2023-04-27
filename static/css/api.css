@@ -143,3 +143,10 @@
 .create-token-box a:hover {
     filter: brightness(110%);
 }
+
+input[type='checkbox'] {
+    width:20px;
+    height:20px;
+    border-radius:10px;
+    border:2px solid #555;
+}
