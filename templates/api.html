@@ -24,25 +24,25 @@
                     <span>WRITE</span-->
                     <div class="perm">
                         <input type="checkbox" name="servers" disabled 
-                        {% if token[3].servers %}
+                        {% if token[3].auth.servers %}
                         checked
                         {% endif %}> Servers
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="users" disabled 
-                        {% if token[3].users %}
+                        {% if token[3].auth.users %}
                         checked
                         {% endif %}> Users
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="files" disabled 
-                        {% if token[3].files %}
+                        {% if token[3].auth.files %}
                         checked
                         {% endif %}> Files
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="exploits" disabled 
-                        {% if token[3].exploits %}
+                        {% if token[3].auth.exploits %}
                         checked
                         {% endif %}> Exploits
                     </div>
