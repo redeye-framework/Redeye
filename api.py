@@ -20,39 +20,61 @@ def return_json(f):
         if not token_details:
             return jsonify({ "status" : 401 })
         
-        response = f(token_details[0])
+        response = f(token_details[0], request.args.to_dict())
         return response
     
     return inner
 
 @api_route.route('/api/servers',methods=['GET'])
 @return_json
-def api_get_servers(token_data):
+def api_get_servers(token_data, args):
     permissions = json.loads(token_data[3])
     if not permissions.get('servers'):
         return jsonify({"status" : 403})
     
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
-    servers = jdb.servers_info(db_name)
+    servers = jdb.servers_info(db_name, args)
 
     return jsonify(servers)
 
 
-@api_route.route('/api/users',methods=['GET'])
-@return_json
-def api_get_users():
-    return {"status":200}
-
-
 @api_route.route('/api/exploits',methods=['GET'])
 @return_json
-def api_get_exploits(token_data):
+def api_get_exploits(token_data, args):
     permissions = json.loads(token_data[3])
     if not permissions.get('exploits'):
         return jsonify({"status" : 403})
     
 
     db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
-    exploits = jdb.exploits_info(db_name)
+    exploits = jdb.exploits_info(db_name, args)
 
     return jsonify(exploits)
+
+
+@api_route.route('/api/files',methods=['GET'])
+@return_json
+def api_get_files(token_data, args):
+    permissions = json.loads(token_data[3])
+    if not permissions.get('files'):
+        return jsonify({"status" : 403})
+    
+
+    db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
+    files = jdb.files_info(db_name, args)
+
+    return jsonify(files)
+
+
+@api_route.route('/api/users',methods=['GET'])
+@return_json
+def api_get_users(token_data, args):
+    permissions = json.loads(token_data[3])
+    if not permissions.get('users'):
+        return jsonify({"status" : 403})
+    
+    print("args", args)
+    db_name = PROJECTS.format(db.get_project_filename_by_id(token_data[6]))
+    users = jdb.users_info(db_name, args)
+
+    return jsonify(users)

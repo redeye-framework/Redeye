@@ -778,6 +778,11 @@ def get_files_by_id(db, id):
     query = r'SELECT * FROM files WHERE id="{}"'.format(id)
     return db_get(db, query)
 
+@check_input
+def get_all_files(db):
+    query = r'SELECT * FROM files WHERE relevant=1'
+    return db_get(db, query)
+
 """
 =======================================================
                 Achievements Functions
