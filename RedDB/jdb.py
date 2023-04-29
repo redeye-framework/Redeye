@@ -100,6 +100,15 @@ def logs_info(db_name, args):
                 "permissions": user_details[4]
             }
 
+        elif log[2]:
+            task_details = db.get_task(db_name, log[2])[0]
+            details = {
+                "task_name": task_details[1],
+                "is_task_done": True if int(task_details[2]) else False,
+                "executers": task_details[3],
+                "data": task_details[4]
+            }
+
         elif log[3]:
             server_details = db.get_server_by_id(db_name, log[3])[0]
             details = {
@@ -120,7 +129,7 @@ def logs_info(db_name, args):
             "event": log[7],
             "details": details
         }
-        
+
         is_match = filter(args, data)
         if is_match:
             logs.append(data)
