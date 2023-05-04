@@ -9,8 +9,8 @@ Redeye is a tool intended to help you manage your data during a pentest operatio
   - [The Developers](#the-developers)
   - [Overview](#overview)
   - [Installation](#installation)
-    - [Source](#source)
     - [Docker](#docker)
+    - [Source](#source)
     - [General](#general)
   - [Special-Thanks](#special-thanks)
   - [Credits](#credits)
@@ -53,18 +53,6 @@ Graph panel will contain all of the Users and Servers and the relationship betwe
 
 ## Installation
 
-### Source
-```
-git clone https://github.com/redeye-framework/Redeye.git
-cd Redeye
-sudo apt install python3.8-venv
-python3 -m venv RedeyeVirtualEnv
-source RedeyeVirtualEnv/bin/activate
-pip3 install -r requirements.txt
-python3 RedDB/db.py
-python3 redeye.py --safe
-```
-
 ### Docker
 
 Pull from GitHub container registry.
@@ -86,6 +74,18 @@ docker load < Redeye.tar
 ```
 
 GitHub container registry: https://github.com/redeye-framework/Redeye/pkgs/container/redeye
+
+### Source
+```
+git clone https://github.com/redeye-framework/Redeye.git
+cd Redeye
+sudo apt install python3.8-venv
+python3 -m venv RedeyeVirtualEnv
+source RedeyeVirtualEnv/bin/activate
+pip3 install -r requirements.txt
+python3 RedDB/db.py
+python3 redeye.py --safe
+```
 
 ### General
 Redeye will listen on: http://0.0.0.0:8443</br>
