@@ -71,6 +71,7 @@
 .token .token-options .token-input-flex {
     flex: 50%;  
     display: inline-block;
+    page-break-inside:avoid !important;
 }
 
 .token .token-options .permissions {
@@ -78,11 +79,21 @@
     flex: 50%;
 }
 
-@media (max-width: 800px) {
-    .permissions, .token-input-flex {
-      flex: 100%;
+@media (max-width: 1850px) {
+    .token-input-flex input{
+      width: 400px;
     }
   }
+@media (max-width: 1500px) {
+    .token-input-flex input{
+      width: 300px;
+    }
+}
+@media (max-width: 920px) {
+    .token-input-flex input{
+      width: 230px;
+    }
+}
 
 .token .validity-time {
     float: right;
