@@ -65,51 +65,50 @@
         </div>
     {% endfor %}
     </div>
-
-    <div class="floating-box create-token-box">
-        <h2 class="head">Create New Token</h2>
-        <form action="add_token" method="post" id="create_token_form">
-            <div class="content-center">
-                <br>
-                <input type="text" name="token-name" id="token-name-input" size="25" class="token-name" placeholder="Token Name">
-                <br><br>
-                <div class="permissions">
-                    <div class="perm">
-                        <input type="checkbox" name="servers"> Servers
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="users"> Users
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="files"> Files
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="exploits"> Exploits
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="logs"> Logs
-                    </div>
+</div>
+<div class="floating-box create-token-box">
+    <h2 class="head">Create New Token</h2>
+    <form action="add_token" method="post" id="create_token_form">
+        <div class="content-center">
+            <br>
+            <input type="text" name="token-name" id="token-name-input" size="25" class="token-name" placeholder="Token Name">
+            <br><br>
+            <div class="permissions">
+                <div class="perm">
+                    <input type="checkbox" name="servers"> Servers
                 </div>
-                <br><br>
-                <div class="validity">
-                    <input type="text"  class="validity-time" id="datetime" name="datetime" value="10/5/2023 13:53:12">
-                    <br>
-                    <div class="validity-btns">
-                        <a href="javascript:addMinutes(10)" id="10m" class="time-btn">+10 Minutes</a>
-                        <a href="javascript:addHours(1)" id="1h" class="time-btn">+1 Hour</a>
-                        <a href="javascript:addDays(1)" id="1d" class="time-btn">+1 Day</a>
-                        <a href="javascript:addWeek()" id="1w" class="time-btn">+1 Week</a>
-                        <a href="javascript:setCurrentDatetime()" id="reset" class="time-btn blue">Reset</a>
-                    </div>
-                    <br>
+                <div class="perm">
+                    <input type="checkbox" name="users"> Users
                 </div>
-                <br><br>    
-                <a class="create-token floating-btn" href="#" onclick="document.getElementById('create_token_form').submit();" title="Create New Token">
-                    <i class="fas fa-edit"></i><span> Create</span>
-                </a>
+                <div class="perm">
+                    <input type="checkbox" name="files"> Files
+                </div>
+                <div class="perm">
+                    <input type="checkbox" name="exploits"> Exploits
+                </div>
+                <div class="perm">
+                    <input type="checkbox" name="logs"> Logs
+                </div>
             </div>
-        </form>
-    </div>
+            <br><br>
+            <div class="validity">
+                <input type="text"  class="validity-time" id="datetime" name="datetime" value="10/5/2023 13:53:12">
+                <br>
+                <div class="validity-btns">
+                    <a href="javascript:addMinutes(10)" id="10m" class="time-btn">+10 Minutes</a>
+                    <a href="javascript:addHours(1)" id="1h" class="time-btn">+1 Hour</a>
+                    <a href="javascript:addDays(1)" id="1d" class="time-btn">+1 Day</a>
+                    <a href="javascript:addWeek()" id="1w" class="time-btn">+1 Week</a>
+                    <a href="javascript:setCurrentDatetime()" id="reset" class="time-btn blue">Reset</a>
+                </div>
+                <br>
+            </div>
+            <br><br>    
+            <a class="create-token floating-btn" href="#" onclick="document.getElementById('create_token_form').submit();" title="Create New Token">
+                <i class="fas fa-edit"></i><span> Create</span>
+            </a>
+        </div>
+    </form>
 </div>
 
 {% include 'wrapper_end.html' %}

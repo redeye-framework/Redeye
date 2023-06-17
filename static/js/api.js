@@ -2,9 +2,11 @@
 function createNewToken() {
     $(".create-token-box").css("display", "inline-block");
     $("#token-name-input").focus();
+    $(".container-api").css("filter", "brightness(40%)");
     this.addEventListener("keyup", function(event) {
         if (event.keyCode === 27) {
             $(".create-token-box").css("display", "none");
+            $(".container-api").css("filter", "brightness(100%)");
         }
     })
 }
