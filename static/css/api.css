@@ -45,7 +45,9 @@
 
 .token .token-options {
     padding: 10px 0;
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .token input {
@@ -60,16 +62,27 @@
 
 .token input:active {
     border: 1px solid white;
+
 }
 
 .token .copy-token {
     padding: 7px 10px;  
 }
+.token .token-options .token-input-flex {
+    flex: 50%;  
+    display: inline-block;
+}
 
 .token .token-options .permissions {
-    display: inline-block;
-    margin: -10px 0 0 60px;
+    margin: 10px 0 0 0;
+    flex: 50%;
 }
+
+@media (max-width: 800px) {
+    .permissions, .token-input-flex {
+      flex: 100%;
+    }
+  }
 
 .token .validity-time {
     float: right;

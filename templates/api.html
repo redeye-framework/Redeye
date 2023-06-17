@@ -12,9 +12,10 @@
                 <span class="validity-time">{{ token[4] }}</span>
             </span>
             <span class="token-options">
-                <input type="text" size="67" class="token-input" id="token-hash-{{ token[0] }}" value="{{ token[2] }}" disabled>
-                <a href="#" class="copy-token" onclick="navigator.clipboard.writeText('{{ token[2] }}'); return false;"><i class="fa fa-copy"></i></a>
-
+                <div class="token-input-flex">
+                    <input type="text" size="67" class="token-input" id="token-hash-{{ token[0] }}" value="{{ token[2] }}" disabled>
+                    <a href="#" class="copy-token" onclick="navigator.clipboard.writeText('{{ token[2] }}'); return false;"><i class="fa fa-copy"></i></a>
+                </div>
                 <div class="permissions inline" style="display: inline-block;">
                     <!--span>READ</span>
                     <label class="switch">
@@ -48,13 +49,13 @@
                         {% endif %}> Exploits
                     </div>
                 </div>
-                <div class="token-validity-btns">
+                <!--div class="token-validity-btns">
                     <a href="#" id="10m" class="time-btn">+10 Minutes</a>
                     <a href="#" id="1h" class="time-btn">+1 Hour</a>
                     <a href="#" id="1d" class="time-btn">+1 Day</a>
                     <a href="#" id="1w" class="time-btn">+1 Week</a>
                     <a href="#" id="reset" class="time-btn blue">Reset</a>
-                </div>
+                </div-->
             </span>
         </div>
     {% endfor %}
