@@ -113,5 +113,9 @@
 </div>
 
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".add-token-btn"), 'n');
+    key_sc($(".add-token-btn"), 'c');
+</script>
 <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 {% include 'footer.html' %}

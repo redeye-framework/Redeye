@@ -793,10 +793,10 @@ input:checked+.slider:before {
 
 #keybinding-map {
     position: fixed;
-    top: 100px;
+    top: 30px;
     left: 40%;
     width: 1000px;
-    max-height: 85vh;
+    max-height: 90vh;
     overflow-y: scroll;
     transform: translateX(-30%);
     background-color: #31353D;

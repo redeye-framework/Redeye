@@ -32,5 +32,9 @@
 </div>
 
 {% include 'wrapper_end.html' %}
+<script>
+    key_sc($(".input-name"), 'n');
+    key_sc($(".input-name"), 'c');
+</script>
 <script src="{{ url_for('static', filename='js/serverusers.js') }}"></script>
 {% include 'footer.html' %}
