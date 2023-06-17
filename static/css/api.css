@@ -135,6 +135,33 @@
     font-size: 20px;
 }
 
+.create-token-box {
+    width: 750px !important;
+    margin-top: 100px;
+}
+
+.perm-box {
+    display: inline-block;
+    border-radius: 5px;
+    border: 3px solid #555;
+    padding: 15px 30px 10px;
+    position: relative;
+    margin: 15px;
+}
+
+.perm-box .perm-head {
+    background-color: #31353D;
+    padding: 5px 10px 5px 5px ;
+    position: absolute;
+    top: -20px;
+    left: 5px;
+}
+
+.perm-box .perm-sub {
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
 .create-token-box .validity-time {
     padding: 3px 5px;
     border: 1px solid white;

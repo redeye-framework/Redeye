@@ -1,4 +1,4 @@
-
+$(".add-token-btn").click();
 function createNewToken() {
     $(".create-token-box").css("display", "inline-block");
     $("#token-name-input").focus();
@@ -93,3 +93,26 @@ function formatDateTime(datetime) {
   
     return day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
+
+$(document).ready(function() {
+    // Add a click event listener to the head-checkbox element
+    $('.perm-head input[type="checkbox"]').on('click', function() {
+      // Find the perm-box element containing the clicked head-checkbox
+      var permBox = $(this).closest('.perm-box');
+  
+      // Find the sub-checkboxes within the same perm-box and check/uncheck them accordingly
+      permBox.find('.perm-sub input[type="checkbox"]').prop('checked', $(this).is(':checked'));
+    });
+  
+    // Add a click event listener to the sub-checkbox elements
+    $('.perm-sub input[type="checkbox"]').on('click', function() {
+      // Find the perm-box element containing the clicked sub-checkbox
+      var permBox = $(this).closest('.perm-box');
+  
+      // Check if any sub-checkbox is unchecked within the same perm-box
+      var isUnchecked = permBox.find('.perm-sub input[type="checkbox"]').not(':checked').length > 0;
+  
+      // Update the head-checkbox based on the sub-checkbox state
+      permBox.find('.perm-head input[type="checkbox"]').prop('checked', !isUnchecked);
+    });
+  });
