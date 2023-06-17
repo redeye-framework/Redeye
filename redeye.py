@@ -423,7 +423,7 @@ def add_new_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.form.to_dict()
-    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"], session["username"])
 
     if USE_NEO4J:
         graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
@@ -1856,11 +1856,11 @@ def api():
 
     for token in db_access_tokens:
         n_token = []
-        for i in range(len(token) - 1):
-            n_token.append(token[i])
+        for index, _ in enumerate(token):
+            n_token.append(token[index])
         
-        j = token[3].replace("'", "\"")
-        n_token[3] = json.loads(j)
+        permissions_str = token[3]
+        n_token[3] = json.loads(permissions_str)
         access_tokens.append(n_token)
 
     return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, access_tokens=access_tokens)
@@ -1876,22 +1876,28 @@ def add_token():
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form['token-name']
-    servers = request.form.get('servers')
-    users = request.form.get('users')
-    files = request.form.get('files')
-    exploits = request.form.get('exploits')
-    permissions = {
-        'servers': str(servers),
-        'files': str(files),
-        'exploits': str(exploits),
-        'users': str(users)
-    }
-    valid_by = request.form.get('datetime')
-    project_id = db.get_projectId_by_projectName(session["project"])
+    servers = 1 if request.form.get('servers') == "on" else 0
+    users = 1 if request.form.get('users') == "on" else 0
+    files = 1 if request.form.get('files') == "on" else 0
+    exploits = 1 if request.form.get('exploits') == "on" else 0
+    logs = 1 if request.form.get('logs') == "on" else 0
+    permissions = json.dumps({
+        'access_level': 1, # Change this when we have Read / Read_Write option
+        'auth': {
+            'servers': servers,
+            'files': files,
+            'exploits': exploits,
+            'users': users,
+            'logs': logs
+        }
+    })
 
-    helper.debug(json.dumps(permissions))
+    valid_by = request.form.get('datetime')
+
+    project_id = db.get_projectId_by_projectName(session["project"])
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
+    #return render_template('api.html', token=generated_token)
     return redirect(url_for('api'))
 
 """

@@ -23,30 +23,35 @@
                         <span class="slider round"></span>
                     </label>
                     <span>WRITE</span-->
-                    <script>console.log('{{token[3]}}')</script>
                     <div class="perm">
                         <input type="checkbox" name="servers" disabled 
-                        {% if token[3]['servers'] == "on" %}
+                        {% if token[3].auth.servers %}
                         checked
                         {% endif %}> Servers
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="users" disabled 
-                        {% if token[3]['users'] == "on" %}
+                        {% if token[3].auth.users %}
                         checked
                         {% endif %}> Users
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="files" disabled 
-                        {% if token[3]['files'] == "on" %}
+                        {% if token[3].auth.files %}
                         checked
                         {% endif %}> Files
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="exploits" disabled 
-                        {% if token[3]['exploits'] == "on" %}
+                        {% if token[3].auth.exploits %}
                         checked
                         {% endif %}> Exploits
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="logs" disabled 
+                        {% if token[3].auth.logs %}
+                        checked
+                        {% endif %}> Logs
                     </div>
                 </div>
                 <!--div class="token-validity-btns">
@@ -80,6 +85,9 @@
                     </div>
                     <div class="perm">
                         <input type="checkbox" name="exploits"> Exploits
+                    </div>
+                    <div class="perm">
+                        <input type="checkbox" name="logs"> Logs
                     </div>
                 </div>
                 <br><br>

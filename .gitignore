@@ -5,6 +5,7 @@ DB/__pycache__
 *.xml
 files/*
 RedeyeVirtualEnv/*
+.venv
 *.csv
 *.docx
 *.jpg
@@ -15,3 +16,4 @@ zip/*
 vpackages
 resetDB.sh
 pushHub.sh
+.DS_Store

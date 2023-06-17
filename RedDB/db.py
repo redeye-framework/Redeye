@@ -509,7 +509,7 @@ def create_new_server(db, exec, ip, name, vendor, is_access, attain, section_id,
     return(result)
 
 @check_input
-def create_new_single_server(db, name, ip, section_id, colorId):
+def create_new_single_server(db, name, ip, section_id, colorId, exec):
     """
     Add new server to data base.
     """
@@ -776,6 +776,11 @@ def get_all_files_names(db):
 @check_input
 def get_files_by_id(db, id):
     query = r'SELECT * FROM files WHERE id="{}"'.format(id)
+    return db_get(db, query)
+
+@check_input
+def get_all_files(db):
+    query = r'SELECT * FROM files WHERE relevant=1'
     return db_get(db, query)
 
 """
@@ -1202,6 +1207,10 @@ def get_project_by_id(projectId):
     query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
 
+def get_project_filename_by_id(projectId):
+    query = r'SELECT filename FROM projects WHERE id="{}"'.format(projectId)
+    return db_get(MANAGE_DB, query)[0][0]
+
 
 """
 =======================================================
@@ -1214,8 +1223,13 @@ def get_tokens_details(projectId):
     return db_get(MANAGE_DB, query)
 
 
+def get_hashed_token_details(hashed_token):
+    query = r'SELECT * FROM access_tokens WHERE token="{}"'.format(hashed_token)
+    return db_get(MANAGE_DB, query)
+
+
 def insert_new_token(name, token, permissions, valid_by, user_id, project_id):
-    query = r'INSERT INTO access_tokens(name, token, permissions, valid_by, user_id, project_id) VALUES("{}", "{}", "{}", "{}", "{}", "{}")'.format(name, token, permissions, valid_by, user_id, project_id)
+    query = f'INSERT INTO access_tokens(name, token, permissions, valid_by, user_id, project_id) VALUES("{name}", "{token}", \'{permissions}\', "{valid_by}", "{user_id}", "{project_id}")'
     result = get_db_with_actions(MANAGE_DB, query)
     return(result)
 
