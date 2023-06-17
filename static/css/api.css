@@ -174,3 +174,7 @@ input[type='checkbox'] {
     border-radius:10px;
     border:2px solid #555;
 }
+
+input[type='checkbox']:focus {
+    outline: 2px solid #176cc0;
+}
