@@ -1,4 +1,3 @@
-$(".add-token-btn").click();
 function createNewToken() {
     $(".create-token-box").css("display", "inline-block");
     $("#token-name-input").focus();

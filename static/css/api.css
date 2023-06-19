@@ -129,6 +129,11 @@
     filter: brightness(110%);
 }
 
+.permissions .perm{
+    display: inline;
+    margin: 5px 10px;
+}
+
 .create-token-box .permissions .perm{
     display: inline;
     margin: 5px 10px;

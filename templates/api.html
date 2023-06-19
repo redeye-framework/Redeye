@@ -17,50 +17,33 @@
                     <a href="#" class="copy-token" onclick="navigator.clipboard.writeText('{{ token[2] }}'); return false;"><i class="fa fa-copy"></i></a>
                 </div>
                 <div class="permissions inline" style="display: inline-block;">
-                    <!--span>READ</span>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                    <span>WRITE</span-->
-                    <div class="perm">
-                        <input type="checkbox" name="servers" disabled 
-                        {% if token[3].auth.servers %}
-                        checked
-                        {% endif %}> Servers
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="users" disabled 
-                        {% if token[3].auth.users %}
-                        checked
-                        {% endif %}> Users
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="files" disabled 
-                        {% if token[3].auth.files %}
-                        checked
-                        {% endif %}> Files
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="exploits" disabled 
-                        {% if token[3].auth.exploits %}
-                        checked
-                        {% endif %}> Exploits
-                    </div>
-                    <div class="perm">
-                        <input type="checkbox" name="logs" disabled 
-                        {% if token[3].auth.logs %}
-                        checked
-                        {% endif %}> Logs
-                    </div>
+                    {% if token[3].auth.servers %}
+                        <div class="perm">
+                            <span>Servers: Full</span>
+                        </div>
+                    {% endif %}
+                    {% if token[3].auth.users %}
+                        <div class="perm">
+                            <span>Users: Full</span>
+                        </div>
+                    {% endif %}
+                    {% if token[3].auth.files %}
+                        <div class="perm">
+                            <span>Files: Full</span>
+                        </div>
+                    {% endif %}
+                    {% if token[3].auth.exploits %}
+                        <div class="perm">
+                            <span>Exploits: Full</span>
+                        </div>
+                    {% endif %}
+                    {% if token[3].auth.logs %}
+                        <div class="perm">
+                            <span>Logs: Full</span>
+                        </div>
+                    {% endif %}
+
                 </div>
-                <!--div class="token-validity-btns">
-                    <a href="#" id="10m" class="time-btn">+10 Minutes</a>
-                    <a href="#" id="1h" class="time-btn">+1 Hour</a>
-                    <a href="#" id="1d" class="time-btn">+1 Day</a>
-                    <a href="#" id="1w" class="time-btn">+1 Week</a>
-                    <a href="#" id="reset" class="time-btn blue">Reset</a>
-                </div-->
             </span>
         </div>
     {% endfor %}
