@@ -110,6 +110,18 @@
     float: right;
 }
 
+#delete-token {
+    margin-left: 15px;
+    color: rgb(212, 71, 71);
+    background-color: transparent;
+    padding: 5px;
+    margin-top: -2px;
+    font-size: 18px;;
+    border: 0;
+    float: right;
+    display: inline-block;
+}
+
 .blue {
     background-color: rgb(38, 128, 255) !important;
     color: white;
