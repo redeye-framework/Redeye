@@ -178,23 +178,6 @@ table {
     margin-left: -9px;
 }
 
-.popup {
-    display: inline-block;
-    opacity: 1;
-    padding: 20px;
-    text-align: center;
-    background: rgb(19 72 132);
-    filter: brightness(150%);
-    color: white;
-    position: absolute;
-    bottom: 50px;
-    right: 150px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    transition-duration: 1s;
-    font-weight: normal;
-}
 
 .select-type {
     border-radius: 3px;
