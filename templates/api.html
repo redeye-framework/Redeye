@@ -20,27 +20,27 @@
                 <div class="permissions inline" style="display: inline-block;">
                     {% if token[3].servers %}
                         <div class="perm">
-                            <span>Servers: Full</span>
+                            <span>Servers -  Read: {% if token[3].servers.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].servers.write %} ✅ {% else %} 🔴 {% endif %}   </span>
                         </div>
                     {% endif %}
                     {% if token[3].users %}
                         <div class="perm">
-                            <span>Users: Full</span>
+                            <span>Users -  Read: {% if token[3].users.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].users.write %} ✅ {% else %} 🔴 {% endif %}   </span>
                         </div>
                     {% endif %}
                     {% if token[3].files %}
                         <div class="perm">
-                            <span>Files: Full</span>
+                            <span>Files -  Read: {% if token[3].files.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].files.write %} ✅ {% else %} 🔴 {% endif %}   </span>
                         </div>
                     {% endif %}
                     {% if token[3].exploits %}
                         <div class="perm">
-                            <span>Exploits: Full</span>
+                            <span>Exploits -  Read: {% if token[3].exploits.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].exploits.write %} ✅ {% else %} 🔴 {% endif %}   </span>
                         </div>
                     {% endif %}
                     {% if token[3].logs %}
                         <div class="perm">
-                            <span>Logs: Full</span>
+                            <span>Logs -  Read: {% if token[3].logs.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].logs.write %} ✅ {% else %} 🔴 {% endif %}   </span>
                         </div>
                     {% endif %}
 
