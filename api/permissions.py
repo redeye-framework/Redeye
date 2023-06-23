@@ -13,7 +13,6 @@ def write():
 def readwrite():
     return "%s%s" % (READ, WRITE)
 
-
 def module():
     return {
         'servers': {
@@ -37,3 +36,12 @@ def module():
             "write": False
         }
     }
+
+def access_level(required, permissions, resource):
+    if permissions.get(resource).get('read') and required == read():
+        return True
+    
+    elif permissions.get(resource).get('write') and required == write():
+        return True
+    
+    return False
