@@ -1,7 +1,7 @@
 from re import M
 import eventlet
 eventlet.monkey_patch()
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory
+from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, jsonify
 from flask_jsglue import JSGlue
 import jwt
 import sys
@@ -29,7 +29,8 @@ from glob import glob
 import zipfile
 import graph
 from functools import wraps
-from api import api_route
+from api.api import api_route
+import api.permissions as api_permissions
 import json
 
 app = Flask(__name__, template_folder="templates")
@@ -1871,34 +1872,28 @@ def api():
 def add_token():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-
-    dict = request.args.to_dict()
+    
+    # print(request.form)
+    
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
-    token_name = request.form['token-name']
-    servers = 1 if request.form.get('servers') == "on" else 0
-    users = 1 if request.form.get('users') == "on" else 0
-    files = 1 if request.form.get('files') == "on" else 0
-    exploits = 1 if request.form.get('exploits') == "on" else 0
-    logs = 1 if request.form.get('logs') == "on" else 0
-    permissions = json.dumps({
-        'access_level': 1, # Change this when we have Read / Read_Write option
-        'auth': {
-            'servers': servers,
-            'files': files,
-            'exploits': exploits,
-            'users': users,
-            'logs': logs
-        }
-    })
+    token_name = request.form.get('token-name')
+    print("token", token_name)
 
-    valid_by = request.form.get('datetime')
+    permissions = api_permissions.module()
+
+    for permission in json.loads(request.form.get('permissions')):
+        for resource, access_level in json.loads(permission).items():
+            permissions[resource] = access_level
+
+    permissions = json.dumps(permissions)
+
+    valid_by = request.form.get('valid_by')
 
     project_id = db.get_projectId_by_projectName(session["project"])
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
-    #return render_template('api.html', token=generated_token)
-    return redirect(url_for('api'))
+    return jsonify({'token': generated_token})
 
 """
 =======================================================

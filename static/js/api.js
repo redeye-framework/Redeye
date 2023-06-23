@@ -114,4 +114,80 @@ $(document).ready(function() {
       // Update the head-checkbox based on the sub-checkbox state
       permBox.find('.perm-head input[type="checkbox"]').prop('checked', !isUnchecked);
     });
-  });
+
+});
+
+
+function addAccessToken() {
+    var form = $('#create_token_form')
+    var actionUrl = 'add_token';
+    var body = form.serializeArray();
+    var permissions = filterAccessToken(body)
+    console.log(body)
+    j_permissions = {
+        'token-name': body[0].value,
+        'permissions': JSON.stringify(permissions),
+        'valid_by': body[body.length - 1].value
+    }
+
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: j_permissions,
+        success: function(data) {
+            alert(data['token'])
+        }
+    });
+}
+
+function filterAccessToken(accessTokensList) {
+    var permissions = [];
+    for (let i = 0; i < accessTokensList.length; i++) {
+        console.log(accessTokensList[i])
+        const obj = accessTokensList[i];
+        const name = obj.name;
+    
+        if (name.endsWith("-rw")) {
+            const baseName = name.slice(0, -3); // Remove the last 3 characters (-rw)
+
+            const rIndex = accessTokensList.findIndex(item => item.name === `${baseName}-r`);
+            if (rIndex !== -1) {
+                accessTokensList.splice(rIndex, 1); // Remove the "-r" entry
+            }
+
+            const wIndex = accessTokensList.findIndex(item => item.name === `${baseName}-w`);
+            if (wIndex !== -1) {
+                accessTokensList.splice(wIndex, 1); // Remove the "-w" entry
+            }
+
+            permissions.push(JSON.stringify({
+                [baseName]: {
+                    'read': true,
+                    'write': true
+                }
+            }))
+        }
+
+        else if (name.endsWith("-r")) {
+            const baseName = name.slice(0, -2); // Remove the last 3 characters (-rw)
+            permissions.push(JSON.stringify({
+                [baseName]: {
+                    'read': true,
+                    'write': false
+                }
+            }))
+        }
+
+        else if (name.endsWith("-w")) {
+            const baseName = name.slice(0, -2); // Remove the last 3 characters (-rw)
+            permissions.push(JSON.stringify({
+                [baseName]: {
+                    'read': false,
+                    'write': true
+                }
+            }))
+        }
+    }
+
+    return permissions
+}

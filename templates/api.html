@@ -18,27 +18,27 @@
                     <a href="#" class="copy-token" onclick="copyToClipboard('{{ token[2] }}');"><i class="fa fa-copy"></i></a>
                 </div>
                 <div class="permissions inline" style="display: inline-block;">
-                    {% if token[3].auth.servers %}
+                    {% if token[3].servers %}
                         <div class="perm">
                             <span>Servers: Full</span>
                         </div>
                     {% endif %}
-                    {% if token[3].auth.users %}
+                    {% if token[3].users %}
                         <div class="perm">
                             <span>Users: Full</span>
                         </div>
                     {% endif %}
-                    {% if token[3].auth.files %}
+                    {% if token[3].files %}
                         <div class="perm">
                             <span>Files: Full</span>
                         </div>
                     {% endif %}
-                    {% if token[3].auth.exploits %}
+                    {% if token[3].exploits %}
                         <div class="perm">
                             <span>Exploits: Full</span>
                         </div>
                     {% endif %}
-                    {% if token[3].auth.logs %}
+                    {% if token[3].logs %}
                         <div class="perm">
                             <span>Logs: Full</span>
                         </div>
@@ -52,7 +52,7 @@
 </div>
 <div class="floating-box create-token-box">
     <h2 class="head">Create New Token</h2>
-    <form action="add_token" method="post" id="create_token_form">
+    <form id="create_token_form">
         <div class="content-center">
             <br>
             <input type="text" name="token-name" id="token-name-input" size="25" class="token-name" placeholder="Token Name">
@@ -60,57 +60,57 @@
             <div class="permissions">
                 <div class="perm-box">
                     <div class="perm-head">
-                        <input type="checkbox" div="head-checkbox" name="servers"> Servers
+                        <input type="checkbox" div="head-checkbox" name="servers-rw"> Servers
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="servers"> Read
+                        <input type="checkbox" div="sub-checkbox" name="servers-r"> Read
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="servers"> Write
+                        <input type="checkbox" div="sub-checkbox" name="servers-w"> Write
                     </div>
                 </div>
                 <div class="perm-box">
                     <div class="perm-head">
-                        <input type="checkbox" div="head-checkbox" name="users"> Users
+                        <input type="checkbox" div="head-checkbox" name="users-rw"> Users
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="users"> Read
+                        <input type="checkbox" div="sub-checkbox" name="users-r"> Read
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="users"> Write
+                        <input type="checkbox" div="sub-checkbox" name="users-w"> Write
                     </div>
                 </div>
                 <div class="perm-box">
                     <div class="perm-head">
-                        <input type="checkbox" div="head-checkbox" name="files"> Files
+                        <input type="checkbox" div="head-checkbox" name="files-rw"> Files
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="files"> Read
+                        <input type="checkbox" div="sub-checkbox" name="files-r"> Read
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="files"> Write
+                        <input type="checkbox" div="sub-checkbox" name="files-w"> Write
                     </div>
                 </div>
                 <div class="perm-box">
                     <div class="perm-head">
-                        <input type="checkbox" div="head-checkbox" name="exploits"> Exploits
+                        <input type="checkbox" div="head-checkbox" name="exploits-rw"> Exploits
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="exploits"> Read
+                        <input type="checkbox" div="sub-checkbox" name="exploits-r"> Read
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="exploits"> Write
+                        <input type="checkbox" div="sub-checkbox" name="exploits-w"> Write
                     </div>
                 </div>
                 <div class="perm-box">
                     <div class="perm-head">
-                        <input type="checkbox" div="head-checkbox" name="logs"> Logs
+                        <input type="checkbox" div="head-checkbox" name="logs-rw"> Logs
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="logs"> Read
+                        <input type="checkbox" div="sub-checkbox" name="logs-r"> Read
                     </div>
                     <div class="perm-sub">
-                        <input type="checkbox" div="sub-checkbox" name="logs"> Write
+                        <input type="checkbox" div="sub-checkbox" name="logs-w"> Write
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 <br>
             </div>
             <br><br>    
-            <a class="create-token floating-btn" href="#" onclick="document.getElementById('create_token_form').submit();" title="Create New Token">
+            <a class="create-token floating-btn" onclick="addAccessToken()" title="Create New Token">
                 <i class="fas fa-edit"></i><span> Create</span>
             </a>
         </div>
