@@ -1233,6 +1233,11 @@ def insert_new_token(name, token, permissions, valid_by, user_id, project_id):
     result = get_db_with_actions(MANAGE_DB, query)
     return(result)
 
+@check_input
+def delete_token_by_id(token_id):
+    query = f'DELETE FROM access_tokens WHERE id="{token_id}"'
+    return get_db_with_actions(MANAGE_DB, query)
+
 """
 =======================================================
                 DB Functions

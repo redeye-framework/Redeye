@@ -1872,8 +1872,7 @@ def api():
 def add_token():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
-    
-    # print(request.form)
+
     
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
@@ -1894,6 +1893,20 @@ def add_token():
     db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
 
     return jsonify({'token': generated_token})
+
+
+@app.route('/delete_token', methods=['POST'])
+@validate_input
+def delete_token():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+
+    token_id = request.form.get('token_id')
+
+    db.delete_token_by_id(token_id)
+
+    return jsonify({'deleted': 'OK'})
 
 """
 =======================================================

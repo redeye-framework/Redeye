@@ -118,6 +118,23 @@ $(document).ready(function() {
 });
 
 
+$('.delete-token').on('click', function() {
+    token_id = $(this).attr('id');
+    var actionUrl = 'delete_token';
+
+    j_data = {
+        'token_id': token_id
+    }
+
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: j_data
+    });
+    
+})
+
+
 function addAccessToken() {
     var form = $('#create_token_form')
     var actionUrl = 'add_token';
