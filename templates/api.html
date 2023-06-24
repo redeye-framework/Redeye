@@ -14,29 +14,29 @@
             </span>
             <span class="token-options">
                 <div class="permissions inline" style="display: inline-block;">
-                    {% if token[3].servers %}
+                    {% if token[3].servers.read or token[3].servers.write  %}
                         <div class="perm">
-                            <span>{% if token[3].servers.read %} Servers:Read {% endif %} {% if token[3].servers.write %} Servers:Write {% endif %}</span>
+                            <span>{% if token[3].servers.read %}Servers:Read {% endif %}{% if token[3].servers.write %}Servers:Write{% endif %}</span>
                         </div>
                     {% endif %}
-                    {% if token[3].users %}
+                    {% if token[3].users.read or token[3].users.write %}
                         <div class="perm">
-                            <span>{% if token[3].users.read %} Users:Read {% endif %} {% if token[3].users.write %} Users:Write {% endif %}</span>
+                            <span>{% if token[3].users.read %}Users:Read {% endif %}{% if token[3].users.write %}Users:Write{% endif %}</span>
                         </div>
                     {% endif %}
-                    {% if token[3].files %}
+                    {% if token[3].files.read or token[3].files.write  %}
                         <div class="perm">
-                            <span>{% if token[3].files.read %} Files:Read {% endif %} {% if token[3].files.write %} Files:Write {% endif %}</span>
+                            <span>{% if token[3].files.read %}Files:Read {% endif %}{% if token[3].files.write %}Files:Write{% endif %}</span>
                         </div>
                     {% endif %}
-                    {% if token[3].exploits %}
+                    {% if token[3].exploits.read or token[3].exploits.write  %}
                         <div class="perm">
-                            <span>{% if token[3].exploits.read %} Exploits:Read {% endif %} {% if token[3].exploits.write %} Exploits:Write {% endif %}</span>
+                            <span>{% if token[3].exploits.read %}Exploits:Read {% endif %}{% if token[3].exploits.write %}Exploits:Write{% endif %}</span>
                         </div>
                     {% endif %}
-                    {% if token[3].logs %}
+                    {% if token[3].logs.read or token[3].logs.write  %}
                         <div class="perm">
-                            <span>{% if token[3].logs.read %} Logs:Read {% endif %} {% if token[3].logs.write %} Logs:Write {% endif %} </span>
+                            <span>{% if token[3].logs.read %}Logs:Read {% endif %}{% if token[3].logs.write %}Logs:Write{% endif %}</span>
                         </div>
                     {% endif %}
                 </div>

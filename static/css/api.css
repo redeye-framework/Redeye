@@ -50,6 +50,12 @@
     text-align: center;
 }
 
+.perm {
+    display: inline-block;
+    width: 150px; /* Adjust the width as needed */
+    
+}
+
 input {
     border-radius: 3px;
     padding: 5px;
@@ -149,7 +155,7 @@ input:active {
 
 .permissions .perm{
     display: inline;
-    margin: 5px 10px;
+    margin: 5px 0px;
 }
 
 .create-token-box .permissions .perm{
