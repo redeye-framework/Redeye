@@ -50,6 +50,15 @@ Graph panel will contain all of the Users and Servers and the relationship betwe
 
 ![Graph](https://raw.githubusercontent.com/redeye-framework/Redeye/dev/Pics/Graph.png)
 
+APIs allow users to effortlessly retrieve data by making simple API requests.
+
+
+``` bash
+curl redeye.local:8443/api/servers --silent -H "Token: redeye_61a8fc25-105e-4e70-9bc3-58ca75e228ca" | jq
+curl redeye.local:8443/api/users --silent -H "Token: redeye_61a8fc25-105e-4e70-9bc3-58ca75e228ca" | jq
+curl redeye.local:8443/api/exploits --silent -H "Token: redeye_61a8fc25-105e-4e70-9bc3-58ca75e228ca" | jq
+```
+
 
 ## Installation
 
