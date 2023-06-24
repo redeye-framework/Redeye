@@ -7,12 +7,15 @@ import json
 from RedDB import db
 from RedDB import jdb
 import os
+import api.permissions as api_permissions
 
 api_route = Blueprint('api', __name__)
 PROJECTS = r"RedDB/Projects/{}"
 
-READ = 1
-READ_WRITE = 2
+READ = api_permissions.read()
+WRITE = api_permissions.write()
+READ_WRITE = api_permissions.readwrite()
+
 
 
 def authentication(access_level, resource):
@@ -26,14 +29,11 @@ def authentication(access_level, resource):
                 return jsonify({ "status" : 401 })
             
             permissions = json.loads(token_details[0][3])
-            token_access_level = int(permissions.get('access_level'))
-            token_auth = permissions.get('auth')
 
-            if access_level <= token_access_level and \
-                token_auth.get(resource):
-                db_name = PROJECTS.format(db.get_project_filename_by_id(token_details[0][6]))
-                response = f(db_name, request.args.to_dict())
-                return response
+            if api_permissions.access_level(access_level, permissions, resource):
+                    db_name = PROJECTS.format(db.get_project_filename_by_id(token_details[0][6]))
+                    response = f(db_name, request.args.to_dict())
+                    return response
 
             else:
                 return jsonify({"status": 403})
