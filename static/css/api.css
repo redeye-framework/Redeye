@@ -50,9 +50,10 @@
     text-align: center;
 }
 
-.token input {
+input {
     border-radius: 3px;
     padding: 5px;
+    font-size: 16px;
     background-color: rgb(67, 72, 82);
     border: 1px transparent;
     color: #ccd;
@@ -60,18 +61,38 @@
     transition-duration: 0.2s;
 }
 
-.token input:active {
+input:active {
     border: 1px solid white;
 
 }
 
-.token .copy-token {
+.copy-token {
     padding: 7px 10px;  
 }
-.token .token-options .token-input-flex {
-    flex: 50%;  
+
+.token-input{
     display: inline-block;
     page-break-inside:avoid !important;
+}
+
+.show-token-box {
+    text-align: center;
+}
+
+.show-token-box .head {
+    margin-bottom: 60px;
+}
+
+.show-token-box .explain {
+    margin-bottom: 20px;
+}
+
+.close-token {
+    background-color: #176cc0;
+}
+
+.close-token:hover {
+    filter: brightness(110%);
 }
 
 .token .token-options .permissions {
@@ -79,21 +100,6 @@
     flex: 50%;
 }
 
-@media (max-width: 1850px) {
-    .token-input-flex input{
-      width: 400px;
-    }
-  }
-@media (max-width: 1500px) {
-    .token-input-flex input{
-      width: 300px;
-    }
-}
-@media (max-width: 920px) {
-    .token-input-flex input{
-      width: 230px;
-    }
-}
 
 .token .validity-time {
     float: right;
@@ -110,15 +116,14 @@
     float: right;
 }
 
-#delete-token {
-    margin-left: 15px;
+.delete-token {
+    margin-right: 15px;
     color: rgb(212, 71, 71);
     background-color: transparent;
     padding: 5px;
-    margin-top: -2px;
+    margin-top: -5px;
     font-size: 18px;;
-    border: 0;
-    float: right;
+    border: 0 !important;
     display: inline-block;
 }
 
@@ -127,18 +132,19 @@
     color: white;
 }
 
-.token a {
+.copy-token {
     text-decoration: none;
     background-color: #474b52;
-    padding: 3px 5px;
+    padding: 7px 8px;
     border: 1px solid white;
     color: white;
     border-radius: 5px;
     margin: 5px;
 }
 
-.token a:hover {
+.copy-token:hover {
     filter: brightness(110%);
+    color: white !important;
 }
 
 .permissions .perm{

@@ -140,21 +140,30 @@ function addAccessToken() {
     var actionUrl = 'add_token';
     var body = form.serializeArray();
     var permissions = filterAccessToken(body)
-    console.log(body)
     j_permissions = {
         'token-name': body[0].value,
         'permissions': JSON.stringify(permissions),
         'valid_by': body[body.length - 1].value
     }
-
     $.ajax({
         type: "POST",
         url: actionUrl,
         data: j_permissions,
         success: function(data) {
-            alert(data['token'])
+            $("#new-token").val(data['token']);
+            showNewToken();
         }
     });
+}
+
+function showNewToken() {
+    $(".show-token-box").css("display", "inline-block");
+    $(".create-token-box").css("filter", "brightness(40%)");
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            location.reload();
+        }
+    })
 }
 
 function filterAccessToken(accessTokensList) {
