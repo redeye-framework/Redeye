@@ -13,34 +13,30 @@
                 <span class="validity-time">{{ token[4] }}</span>
             </span>
             <span class="token-options">
-                <!--div class="token-input-flex">
-                    <input type="text" size="67" class="token-input" id="token-hash-{{ token[0] }}" value="{{ token[2] }}" disabled>
-                    <a href="#" class="copy-token" onclick="copyToClipboard('{{ token[2] }}');"><i class="fa fa-copy"></i></a>
-                </div-->
                 <div class="permissions inline" style="display: inline-block;">
                     {% if token[3].servers %}
                         <div class="perm">
-                            <span>Servers -  Read: {% if token[3].servers.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].servers.write %} ✅ {% else %} 🔴 {% endif %}   </span>
+                            <span>{% if token[3].servers.read %} Servers:Read {% endif %} {% if token[3].servers.write %} Servers:Write {% endif %}</span>
                         </div>
                     {% endif %}
                     {% if token[3].users %}
                         <div class="perm">
-                            <span>Users -  Read: {% if token[3].users.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].users.write %} ✅ {% else %} 🔴 {% endif %}   </span>
+                            <span>{% if token[3].users.read %} Users:Read {% endif %} {% if token[3].users.write %} Users:Write {% endif %}</span>
                         </div>
                     {% endif %}
                     {% if token[3].files %}
                         <div class="perm">
-                            <span>Files -  Read: {% if token[3].files.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].files.write %} ✅ {% else %} 🔴 {% endif %}   </span>
+                            <span>{% if token[3].files.read %} Files:Read {% endif %} {% if token[3].files.write %} Files:Write {% endif %}</span>
                         </div>
                     {% endif %}
                     {% if token[3].exploits %}
                         <div class="perm">
-                            <span>Exploits -  Read: {% if token[3].exploits.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].exploits.write %} ✅ {% else %} 🔴 {% endif %}   </span>
+                            <span>{% if token[3].exploits.read %} Exploits:Read {% endif %} {% if token[3].exploits.write %} Exploits:Write {% endif %}</span>
                         </div>
                     {% endif %}
                     {% if token[3].logs %}
                         <div class="perm">
-                            <span>Logs -  Read: {% if token[3].logs.read %} ✅ {% else %} 🔴 {% endif %} Write: {% if token[3].logs.write %} ✅ {% else %} 🔴 {% endif %}   </span>
+                            <span>{% if token[3].logs.read %} Logs:Read {% endif %} {% if token[3].logs.write %} Logs:Write {% endif %} </span>
                         </div>
                     {% endif %}
                 </div>

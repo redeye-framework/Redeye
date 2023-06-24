@@ -1,4 +1,4 @@
-
+from datetime import datetime
 
 READ = 'r'
 WRITE = 'w'
@@ -37,7 +37,14 @@ def module():
         }
     }
 
-def access_level(required, permissions, resource):
+def access_level(required, permissions, resource, valid_by):
+    current_time = datetime.now()
+    valid_by_time = datetime.strptime(valid_by, '%d/%m/%Y %H:%M:%S')
+
+    if current_time > valid_by_time:
+        # Token has expired
+        return False
+    
     if permissions.get(resource).get('read') and required == read():
         return True
     

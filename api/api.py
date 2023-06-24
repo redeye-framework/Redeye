@@ -28,10 +28,11 @@ def authentication(access_level, resource):
             if not token_details:
                 return jsonify({ "status" : 401 })
             
-            permissions = json.loads(token_details[0][3])
+            token_details = token_details[0]
+            permissions = json.loads(token_details[3])
 
-            if api_permissions.access_level(access_level, permissions, resource):
-                    db_name = PROJECTS.format(db.get_project_filename_by_id(token_details[0][6]))
+            if api_permissions.access_level(access_level, permissions, resource, token_details[4]):
+                    db_name = PROJECTS.format(db.get_project_filename_by_id(token_details[6]))
                     response = f(db_name, request.args.to_dict())
                     return response
 
