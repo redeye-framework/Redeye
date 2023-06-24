@@ -56,7 +56,7 @@
     
 }
 
-input {
+.floating-box input {
     border-radius: 3px;
     padding: 5px;
     font-size: 16px;
@@ -67,7 +67,7 @@ input {
     transition-duration: 0.2s;
 }
 
-input:active {
+.floating-box input:active {
     border: 1px solid white;
 
 }
