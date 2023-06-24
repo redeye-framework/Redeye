@@ -170,6 +170,7 @@ function toggleKeyMap() {
 }
 
 function copyToClipboard(text) {
+    console.log("Copy to clipboard");
     navigator.clipboard.writeText(text);
     tempAlert(text, 1000);
 }

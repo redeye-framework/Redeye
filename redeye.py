@@ -1,7 +1,7 @@
 from re import M
 import eventlet
 eventlet.monkey_patch()
-from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory
+from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, jsonify
 from flask_jsglue import JSGlue
 import jwt
 import sys
@@ -29,8 +29,14 @@ from glob import glob
 import zipfile
 import graph
 from functools import wraps
+from api.api import api_route
+import api.permissions as api_permissions
+import json
 
 app = Flask(__name__, template_folder="templates")
+
+app.register_blueprint(api_route)
+
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
 
@@ -60,7 +66,7 @@ ZIP_FOLDER = r"zip"
 PROJECTS = r"RedDB/Projects/{}"
 SERVER_URL = "http://redeye.local/server?id={}"
 MAX_INPUT = 100
-
+TOKEN_INIT = "redeye_"
 
 #Init
 def init(app):
@@ -418,7 +424,7 @@ def add_new_server():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     dict = request.form.to_dict()
-    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"])
+    server_id = db.create_new_single_server(session["db"],dict["name"],dict["ip"],dict["section-id"],dict["color-id"], session["username"])
 
     if USE_NEO4J:
         graph.addServerNode(server_id,dict["ip"],dict["name"],1,db.get_section_name_by_section_id(session["db"],dict["section-id"]), SERVER_URL.format(server_id))
@@ -1744,6 +1750,7 @@ def add_scan(file):
         return 0
     return 1
 
+
 """
 =======================================================
                 Login & Project Functions
@@ -1832,13 +1839,81 @@ def is_logged(logged=False):
         except:
             return False
 
+"""
+=======================================================
+                Access tokens
+=======================================================
+"""
 
+
+@app.route('/api', methods=['GET'])
+def api():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+    projectId = db.get_projectId_by_projectName(session["project"])
+    db_access_tokens = db.get_tokens_details(projectId)
+    access_tokens = []
+
+    for token in db_access_tokens:
+        n_token = []
+        for index, _ in enumerate(token):
+            n_token.append(token[index])
+        
+        permissions_str = token[3]
+        n_token[3] = json.loads(permissions_str)
+        access_tokens.append(n_token)
+
+    return render_template('api.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, access_tokens=access_tokens)
+
+
+@app.route('/add_token', methods=['POST'])
+@validate_input
+def add_token():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+
+    
+    generated_token = TOKEN_INIT + str(uuid4())
+    hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
+    token_name = request.form.get('token-name')
+    print("token", token_name)
+
+    permissions = api_permissions.module()
+
+    for permission in json.loads(request.form.get('permissions')):
+        for resource, access_level in json.loads(permission).items():
+            permissions[resource] = access_level
+
+    permissions = json.dumps(permissions)
+
+    valid_by = request.form.get('valid_by')
+
+    project_id = db.get_projectId_by_projectName(session["project"])
+    db.insert_new_token(token_name, hashed_token, permissions, valid_by, session['uid'], project_id)
+
+    return jsonify({'token': generated_token})
+
+
+@app.route('/delete_token', methods=['POST'])
+@validate_input
+def delete_token():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+
+    token_id = request.form.get('token_id')
+
+    db.delete_token_by_id(token_id)
+
+    return jsonify({'deleted': 'OK'})
 
 """
 =======================================================
                 Web Functions
 =======================================================
 """
+
 
 def emit_to_all_users(details, function_name):
     projectId = db.get_projectId_by_projectName(session["project"])

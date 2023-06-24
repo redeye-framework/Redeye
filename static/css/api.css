@@ -1,0 +1,230 @@
+.add-token-btn {
+    float: right; 
+    margin-top: 10px;
+}
+
+.add-token-btn:hover {
+    filter: brightness(110%);
+}
+
+.inline {
+    display: inline;
+}
+
+.container-api {
+    width: 90%;
+    margin-left: 5%;
+    display: inline-block;
+}
+
+.inline div {
+    display: inline;
+}
+
+.tokens {
+    padding: 50px;
+}
+
+.token {
+    padding: 10px 20px;
+    margin: 30px 0;
+    background-color: #31353D;
+    border-radius: 10px;
+    box-shadow: 4px 4px 10px black;
+    position: relative;
+}
+
+.token .token-head {
+    padding: 10px 0;
+    display: block;
+}
+
+.token .token-head h3 {
+    display: inline-block;
+}
+
+.token .token-options {
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+input {
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: rgb(67, 72, 82);
+    border: 1px transparent;
+    color: #ccd;
+    margin: 5px;
+    transition-duration: 0.2s;
+}
+
+input:active {
+    border: 1px solid white;
+
+}
+
+.copy-token {
+    padding: 7px 10px;  
+}
+
+.token-input{
+    display: inline-block;
+    page-break-inside:avoid !important;
+}
+
+.show-token-box {
+    text-align: center;
+}
+
+.show-token-box .head {
+    margin-bottom: 60px;
+}
+
+.show-token-box .explain {
+    margin-bottom: 20px;
+}
+
+.close-token {
+    background-color: #176cc0;
+}
+
+.close-token:hover {
+    filter: brightness(110%);
+}
+
+.token .token-options .permissions {
+    margin: 10px 0 0 0;
+    flex: 50%;
+}
+
+
+.token .validity-time {
+    float: right;
+    padding: 3px 5px;
+    border: 1px solid white;
+    font-weight: 400;
+    color: white;
+    border-radius: 5px;
+}
+
+.token .token-validity-btns {
+    margin: 20px 0;
+    display: inline-block;
+    float: right;
+}
+
+.delete-token {
+    margin-right: 15px;
+    color: rgb(212, 71, 71);
+    background-color: transparent;
+    padding: 5px;
+    margin-top: -5px;
+    font-size: 18px;;
+    border: 0 !important;
+    display: inline-block;
+}
+
+.blue {
+    background-color: rgb(38, 128, 255) !important;
+    color: white;
+}
+
+.copy-token {
+    text-decoration: none;
+    background-color: #474b52;
+    padding: 7px 8px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.copy-token:hover {
+    filter: brightness(110%);
+    color: white !important;
+}
+
+.permissions .perm{
+    display: inline;
+    margin: 5px 10px;
+}
+
+.create-token-box .permissions .perm{
+    display: inline;
+    margin: 5px 10px;
+    font-size: 20px;
+}
+
+.create-token-box {
+    width: 750px !important;
+    margin-top: 100px;
+}
+
+.perm-box {
+    display: inline-block;
+    border-radius: 5px;
+    border: 3px solid #555;
+    padding: 15px 30px 10px;
+    position: relative;
+    margin: 15px;
+}
+
+.perm-box .perm-head {
+    background-color: #31353D;
+    padding: 5px 10px 5px 5px ;
+    position: absolute;
+    top: -20px;
+    left: 5px;
+}
+
+.perm-box .perm-sub {
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.create-token-box .validity-time {
+    padding: 3px 5px;
+    border: 1px solid white;
+    font-weight: 400;
+    font-size: 18px;
+    color: white;
+    border-radius: 5px;
+}
+
+.create-token-box .validity-btns {
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.create-token-box .validity-btns a {
+    text-decoration: none;
+    background-color: #474b52;
+    padding: 3px 5px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.create-token-box .create-token {
+    background-color: #4969D1;
+    text-decoration: none;
+}
+
+.create-token-box a:hover {
+    filter: brightness(110%);
+}
+
+input[type='checkbox'] {
+    width:20px;
+    height:20px;
+    border-radius:10px;
+    border:2px solid #555;
+}
+
+input[type='checkbox']:focus {
+    outline: 2px solid #176cc0;
+}
