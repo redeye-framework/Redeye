@@ -279,7 +279,47 @@
     </div>
     <a class="delete-server floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
-    </a> {% include 'user.html' %}
+    </a> 
+    <div class="hidden-floating-box" style="display: inline-block;" id="tag-box">
+        <form action="save_tag">
+            <div class="page-head">Server Tag</div>
+            <input type="text" value="" placeholder="Tag name">
+            <div class="">
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="red">
+                    <span class="checkbox-indicator red"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="blue">
+                    <span class="checkbox-indicator blue"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="green">
+                    <span class="checkbox-indicator green"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="yellow">
+                    <span class="checkbox-indicator yellow"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="white">
+                    <span class="checkbox-indicator white"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="grey">
+                    <span class="checkbox-indicator grey"></span>
+                </label>
+                <label class="checkbox-container ">
+                    <input type="checkbox" value="purple">
+                    <span class="checkbox-indicator purple"></span>
+                </label>
+            </div>
+            <a class="save-tag floating-btn" href="#" onclick="document.getElementById('save_tag').submit();">
+                <i class="fas fa-edit"></i><span> Save </span>
+            </a>
+        </form>
+    </div>
+{% include 'user.html' %}
 </div>
 </div>
 {% include 'wrapper_end.html' %}
