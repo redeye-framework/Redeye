@@ -1,13 +1,10 @@
 from functools import wraps
 from flask import request, request, Blueprint
 from flask import jsonify
-from RedDB.db import get_hashed_token_details
 from hashlib import sha256
 import json
-from RedDB import db
-from RedDB import jdb
-import os
-import api.permissions as api_permissions
+from routes.api import config as api_permissions
+from routes.api import jdb
 
 api_route = Blueprint('api', __name__)
 PROJECTS = r"RedDB/Projects/{}"
@@ -24,7 +21,7 @@ def authentication(access_level, resource):
         @wraps(f)
         def inner(*args, **kwargs):
             token = request.headers.get('Token')
-            token_details = get_hashed_token_details(sha256(token.encode()).hexdigest())
+            token_details = jdb.get_hashed_token_details(sha256(token.encode()).hexdigest())
             if not token_details:
                 return jsonify({ "status" : 401 })
             
@@ -32,7 +29,7 @@ def authentication(access_level, resource):
             permissions = json.loads(token_details[3])
 
             if api_permissions.access_level(access_level, permissions, resource, token_details[4]):
-                    db_name = PROJECTS.format(db.get_project_filename_by_id(token_details[6]))
+                    db_name = PROJECTS.format(jdb.get_project_filename_by_id(token_details[6]))
                     response = f(db_name, request.args.to_dict())
                     return response
 

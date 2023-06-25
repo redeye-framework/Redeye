@@ -1186,27 +1186,33 @@ def get_redeye_users_names(projectId):
     query = r'SELECT username FROM redeye_users WHERE projectId = "{}"'.format(projectId)
     return db_get(MANAGE_DB, query)
 
+@check_input
 def get_projects():
     query = r'SELECT * FROM projects'
     return db_get(MANAGE_DB, query)
 
+@check_input
 def insert_new_project(name, filename):
     query = r'INSERT INTO projects(filename, name) VALUES("{}", "{}")'.format(filename, name)
     result = get_db_with_actions(MANAGE_DB, query)
     return(result)
 
+@check_input
 def get_projectId_by_projectName(projectName):
     query = r'SELECT id FROM projects WHERE name="{}"'.format(projectName)
     return db_get(MANAGE_DB, query)[0][0]
 
+@check_input
 def get_projectId_by_DBName(dbName):
     query = r'SELECT id FROM projects WHERE filename="{}"'.format(dbName)
     return db_get(MANAGE_DB, query)[0][0]
 
+@check_input
 def get_project_by_id(projectId):
     query = r'SELECT name FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
 
+@check_input
 def get_project_filename_by_id(projectId):
     query = r'SELECT filename FROM projects WHERE id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)[0][0]
@@ -1218,16 +1224,17 @@ def get_project_filename_by_id(projectId):
 =======================================================
 """
 
+@check_input
 def get_tokens_details(projectId):
     query = r'SELECT * FROM access_tokens WHERE project_id="{}"'.format(projectId)
     return db_get(MANAGE_DB, query)
 
-
+@check_input
 def get_hashed_token_details(hashed_token):
     query = r'SELECT * FROM access_tokens WHERE token="{}"'.format(hashed_token)
     return db_get(MANAGE_DB, query)
 
-
+@check_input
 def insert_new_token(name, token, permissions, valid_by, user_id, project_id):
     query = f'INSERT INTO access_tokens(name, token, permissions, valid_by, user_id, project_id) VALUES("{name}", "{token}", \'{permissions}\', "{valid_by}", "{user_id}", "{project_id}")'
     result = get_db_with_actions(MANAGE_DB, query)
