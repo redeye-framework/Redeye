@@ -156,3 +156,11 @@ def filter(args, data: dict):
                 return True
     
     return False
+
+
+def get_hashed_token_details(hashed_token):
+    return db.get_hashed_token_details(hashed_token)
+
+
+def get_project_filename_by_id(project_id):
+    return db.get_project_filename_by_id(project_id)

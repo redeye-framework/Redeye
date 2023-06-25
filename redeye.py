@@ -29,13 +29,9 @@ from glob import glob
 import zipfile
 import graph
 from functools import wraps
-from api.api import api_route
-import api.permissions as api_permissions
 import json
 
 app = Flask(__name__, template_folder="templates")
-
-app.register_blueprint(api_route)
 
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
@@ -76,6 +72,9 @@ def init(app):
 
     if USE_NEO4J:
         graph.init()
+
+    from routes.api.v1 import api_route
+    app.register_blueprint(api_route)
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
@@ -1873,7 +1872,8 @@ def add_token():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    
+
+    from routes.api import config as api_permissions
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form.get('token-name')
