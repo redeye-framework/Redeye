@@ -19,3 +19,4 @@ jobs:
 
     - name: Check APIs
       run: curl localhost:8443/api/servers
+      
