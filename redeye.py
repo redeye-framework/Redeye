@@ -393,16 +393,26 @@ def change_server_color():
     return redirect(request.referrer)
 
 
-@app.route('/add_tag', methods=['POST'])
-def add_tag():
+@app.route('/save_tag', methods=['POST'])
+def save_tag():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     if request.method == 'POST':
         tag_name = request.form.get('tag-name')
+        tag_id = request.form.get('tag-id')
         server_id = request.form.get('server-id')
         color = request.form.get('color')
-        db.add_tag(session["db"], server_id, tag_name, color)
+        dict = request.args.to_dict()
+        if "tagId" in dict:
+            print("delete")
+            db.edit_tag(session["db"], dict["tagId"], dict["tagName"], dict["color"])
+        elif tag_id!="0":
+            print("edit")
+            db.edit_tag(session["db"], tag_id, tag_name, color)
+        else:
+            print("add")
+            db.add_tag(session["db"], server_id, tag_name, color)
 
     return redirect(request.referrer)
 

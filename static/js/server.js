@@ -269,24 +269,20 @@ $(".normal-tag").on('click', function(e) {
     var tagId = $(this).attr('id');
     var tagName = $(this).text();
     var tagColor = $(this).find('.tag-color').val();
+    alert(tagId);
     showTagBox(tagName, tagColor, serverId, tagId);
-    /*$.post(Flask.url_for('edit_tag', {
-        tagId: tagId,
-        serverId: serverId,
-        name: tagName,
-        color: tagColor
-    }));*/
 });
 
 $(".delete-tag").on('click', function(e) {
     var tagId = $(this).parent().find('.tag-id-input').val();
-    $.post(Flask.url_for('edit_tag', {
-        tagId: tagId,
-        serverId: 0,
-        name: "",
-        color: ""
+    $.post(Flask.url_for('save_tag', {
+        "tagId": tagId,
+        "serverId": 0,
+        "tagName": "",
+        "color": ""
     }));
     hideHiddenFloatingBox("#tag-box");
+    location.reload();
 });
 
 function showTagBox(name, color, serverId, tagId) {
