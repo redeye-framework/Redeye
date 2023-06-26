@@ -17,6 +17,24 @@
     filter: brightness(110%);
 }
 
+.tags-dots {
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    padding-left: 7px;
+    z-index: 900;
+    display: inline;
+}
+
+.tag-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+    float: left;
+    margin-left: 7px;
+}
+
 .grey {
     background-color: rgba(129, 120, 120, 0.699);
 }

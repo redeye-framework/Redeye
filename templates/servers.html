@@ -16,6 +16,13 @@
             {% for server in data[section]['info'] %}
             <a href="{{ url_for('server') }}?id={{ data[section]['info'][server]['srvDetails'][0] }}" tabindex="1">
                 <div class="server-box server" style="border-top: 4px solid {{ data[section]['info'][server]['color'] }}">
+                    <div class="tags-dots">
+                        <div class="tag-dot green"></div>
+                        <div class="tag-dot red"></div>
+                        <div class="tag-dot yellow"></div>
+                        <div class="tag-dot grey"></div>
+                        <div class="tag-dot white"></div>
+                    </div>
                     <div class="name">{{ data[section]['info'][server]['srvDetails'][2] }}</div>
                     <div class="content">
                         <div class="ports" title="{{ data[section]['info'][server]['ports'][0] }}"><i class="fas fa-ethernet"></i>
