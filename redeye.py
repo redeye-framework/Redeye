@@ -398,8 +398,13 @@ def add_tag():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    dict = request.args.to_dict()
-    db.add_tag(session["db"], dict["serverId"], dict["name"], dict["color"])
+    if request.method == 'POST':
+        tag_name = request.form.get('tag-name')
+        server_id = request.form.get('server-id')
+        color = request.form.get('color')
+        db.add_tag(session["db"], server_id, tag_name, color)
+
+    return redirect(request.referrer)
 
 
 @app.route('/edit_tag', methods=['POST'])
@@ -409,6 +414,8 @@ def edit_tag():
 
     dict = request.args.to_dict()
     db.edit_tag(session["db"], dict["tagId"], dict["name"], dict["color"])
+    
+    return redirect(request.referrer)
 
 
 @app.route('/add_new_server', methods=['POST'])

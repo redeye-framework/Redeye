@@ -256,26 +256,54 @@ $('.color-picker').on('change', function(e) {
 
 $(".add-tag").on('click', function(e) {
     var serverId = $(".editable-id").val();
-    var tagName = prompt("Enter new tag name: ");
-    var tagColor = prompt("Enter new tag color (like- red): ");
-    $.post(Flask.url_for('add_tag', {
+    showTagBox("", "grey", serverId, 0);
+    /*$.post(Flask.url_for('add_tag', {
         serverId: serverId,
         name: tagName,
         color: tagColor
-    }));
-    location.reload();
+    }));*/
 });
 
 $(".normal-tag").on('click', function(e) {
     var serverId = $(".editable-id").val();
-    var tagName = prompt("Enter new tag name (leave empty for delete): ");
-    var tagColor = prompt("Enter new tag color (like- red): ");
     var tagId = $(this).attr('id');
-    $.post(Flask.url_for('edit_tag', {
+    var tagName = $(this).text();
+    var tagColor = $(this).find('.tag-color').val();
+    showTagBox(tagName, tagColor, serverId, tagId);
+    /*$.post(Flask.url_for('edit_tag', {
         tagId: tagId,
         serverId: serverId,
         name: tagName,
         color: tagColor
+    }));*/
+});
+
+$(".delete-tag").on('click', function(e) {
+    var tagId = $(this).parent().find('.tag-id-input').val();
+    $.post(Flask.url_for('edit_tag', {
+        tagId: tagId,
+        serverId: 0,
+        name: "",
+        color: ""
     }));
-    location.reload();
+    hideHiddenFloatingBox("#tag-box");
+});
+
+function showTagBox(name, color, serverId, tagId) {
+    showHiddenFloatingBox("#tag-box");
+    $(".tag-name-input").val(name);
+    $(("#tag-" + color)).click();
+    $(".tag-name-input").focus();
+    $(".server-id-input").val(serverId);
+    $(".tag-id-input").val(tagId);
+}
+
+const checkboxes = document.querySelectorAll('input[type="checkbox"][name="color"]');
+        
+checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+        checkboxes.forEach(cb => {
+            cb.checked = (cb === checkbox);
+        });
+    });
 });

@@ -249,3 +249,16 @@ $(".export").click(function() {
 })
 
 $(".import").click(function() {})
+
+function showHiddenFloatingBox(box) {
+    $(box).show();
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(box).blur();
+        }
+    })
+}
+
+function hideHiddenFloatingBox(box) {
+    $(box).hide();
+}

@@ -31,7 +31,7 @@
     <div class="head-right">
         <div class="tags">
             {% for tag in tags %}
-                <div class="tag normal-tag {{ tag['color'] }}" id="{{ tag['id'] }}">{{ tag['name'] }}</div>
+                <div class="tag normal-tag {{ tag['color'] }}" id="{{ tag['id'] }}">{{ tag['name'] }}<input type="hidden" class="tag-color" value="{{ tag['color'] }}"></div>
             {% endfor %}
             <a href="#" class="tag grey add-tag">+</a>
         </div>
@@ -280,42 +280,47 @@
     <a class="delete-server floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
     </a> 
-    <div class="hidden-floating-box" style="display: inline-block;" id="tag-box">
-        <form action="save_tag">
+    <div class="hidden-floating-box" id="tag-box">
+        <form action="{{ url_for('add_tag') }}" method="POST" id="tag-form">
             <div class="page-head">Server Tag</div>
-            <input type="text" value="" placeholder="Tag name">
+            <input type="hidden" value="" class="server-id-input" name="server-id">
+            <input type="hidden" value="" class="tag-id-input" name="tag-id">
+            <input type="text" value="" name="tag-name" placeholder="Tag name" class="tag-name-input">
             <div class="">
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="red">
-                    <span class="checkbox-indicator red"></span>
+                    <input type="checkbox" value="red" name="color">
+                    <span class="checkbox-indicator red" id="tag-red"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="blue">
-                    <span class="checkbox-indicator blue"></span>
+                    <input type="checkbox" value="blue" name="color">
+                    <span class="checkbox-indicator blue" id="tag-blue"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="green">
-                    <span class="checkbox-indicator green"></span>
+                    <input type="checkbox" value="green" name="color">
+                    <span class="checkbox-indicator green" id="tag-green"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="yellow">
-                    <span class="checkbox-indicator yellow"></span>
+                    <input type="checkbox" value="yellow" name="color">
+                    <span class="checkbox-indicator yellow" id="tag-yellow"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="white">
-                    <span class="checkbox-indicator white"></span>
+                    <input type="checkbox" value="white" name="color">
+                    <span class="checkbox-indicator white" id="tag-white"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="grey">
-                    <span class="checkbox-indicator grey"></span>
+                    <input type="checkbox" value="grey" name="color">
+                    <span class="checkbox-indicator grey" id="tag-grey"></span>
                 </label>
                 <label class="checkbox-container ">
-                    <input type="checkbox" value="purple">
-                    <span class="checkbox-indicator purple"></span>
+                    <input type="checkbox" value="purple" name="color">
+                    <span class="checkbox-indicator purple" id="tag-purple"></span>
                 </label>
             </div>
-            <a class="save-tag floating-btn" href="#" onclick="document.getElementById('save_tag').submit();">
+            <a class="save-tag floating-btn" href="#" onclick="document.getElementById('tag-form').submit();">
                 <i class="fas fa-edit"></i><span> Save </span>
+            </a>
+            <a class="delete-tag floating-btn" href="#">
+                <i class="fas fa-trash"></i><span> Delete </span>
             </a>
         </form>
     </div>
