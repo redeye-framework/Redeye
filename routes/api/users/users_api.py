@@ -1,5 +1,8 @@
 from RedDB import db
 from routes.api.config import filter
+from routes.api import constants
+
+USER_TYPE = "API"
 
 def users_info(db_name, args):
     users = []
@@ -19,3 +22,26 @@ def users_info(db_name, args):
             users.append(data)
 
     return users
+
+
+def add_new_user(db_name: str, args: dict, exec) -> dict:
+
+    userTypeId = db.get_user_type(db_name, USER_TYPE)
+            
+    if not userTypeId:
+        userTypeId = db.insert_new_user_type(db_name, USER_TYPE)
+    else:
+        userTypeId = userTypeId[0][0]
+
+
+    details = dict(
+        username = args.get("username"),
+        password = args.get("password"),
+        permissions = args.get("permissions"),
+        type = userTypeId,
+        server_id = args.get("server_id"),
+        found = args.get("found")
+    )
+
+    db.insert_new_user(db_name, exec=exec, **details)
+    return constants.success_msg("User added successfully")

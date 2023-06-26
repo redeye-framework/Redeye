@@ -51,7 +51,7 @@ def authentication(access_level, resource):
 
 @api_route.route('/api/servers',methods=['GET'])
 @authentication(READ, 'servers')
-def api_get_servers(db_name, args, executer):
+def api_get_servers(db_name, args, _):
     servers = servers_api.servers_info(db_name, args)
 
     return jsonify(servers)
@@ -60,22 +60,30 @@ def api_get_servers(db_name, args, executer):
 @api_route.route('/api/servers',methods=['POST'])
 @authentication(WRITE, 'servers')
 def api_new_server(db_name, args, executer):
-    servers = servers_api.add_new_server(db_name, args, executer)
+    status = servers_api.add_new_server(db_name, args, executer)
 
-    return jsonify(servers)
+    return jsonify(status)
 
 
 @api_route.route('/api/exploits',methods=['GET'])
 @authentication(READ, 'exploits')
-def api_get_exploits(db_name, args, executer):
+def api_get_exploits(db_name, args, _):
     exploits = exploits_api.exploits_info(db_name, args)
 
     return jsonify(exploits)
 
 
+@api_route.route('/api/exploits',methods=['POST'])
+@authentication(WRITE, 'exploits')
+def api_new_exploit(db_name, args, _):
+    status = exploits_api.add_new_exploit(db_name, args)
+
+    return jsonify(status)
+
+
 @api_route.route('/api/files',methods=['GET'])
 @authentication(READ, 'files')
-def api_get_files(db_name, args, executer):
+def api_get_files(db_name, args, _):
     files = files_api.files_info(db_name, args)
 
     return jsonify(files)
@@ -83,10 +91,18 @@ def api_get_files(db_name, args, executer):
 
 @api_route.route('/api/users',methods=['GET'])
 @authentication(READ, 'users')
-def api_get_users(db_name, args, executer):
+def api_get_users(db_name, args, _):
     users = users_api.users_info(db_name, args)
 
     return jsonify(users)
+
+
+@api_route.route('/api/users',methods=['POST'])
+@authentication(WRITE, 'users')
+def api_new_user(db_name, args, executer):
+    status = users_api.add_new_user(db_name, args, executer)
+
+    return jsonify(status)
 
 
 @api_route.route('/api/logs',methods=['GET'])

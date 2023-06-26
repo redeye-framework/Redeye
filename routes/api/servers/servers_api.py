@@ -33,7 +33,6 @@ def servers_info(db_name: str, args: dict) -> list:
 
 
 def add_new_server(db_name: str, args: dict, executer: str) -> dict:
-    print(args)
     details = dict(
         ip = args.get("ip"),
         name = args.get("name"),
@@ -49,5 +48,5 @@ def add_new_server(db_name: str, args: dict, executer: str) -> dict:
         return constants.error_msg("Server name or IP is missing")
 
     db.create_new_server(db_name, executer, **details)
-    return constants.success_msg("Server created successfully.")
+    return constants.success_msg("Server created successfully")
     
