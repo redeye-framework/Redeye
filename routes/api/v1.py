@@ -5,6 +5,7 @@ from hashlib import sha256
 import json
 from routes.api import config as api_permissions
 from routes.api import jdb
+from routes.api import constants
 from routes.api.servers import servers_api
 from routes.api.users import users_api
 from routes.api.exploits import exploits_api
@@ -26,9 +27,12 @@ def authentication(access_level, resource):
         @wraps(f)
         def inner(*args, **kwargs):
             token = request.headers.get('Token')
+            if not token:
+                return jsonify(constants.return_401())
+             
             token_details = jdb.get_hashed_token_details(sha256(token.encode()).hexdigest())
             if not token_details:
-                return jsonify({ "status" : 401 })
+                return jsonify(constants.return_401())
             
             token_details = token_details[0]
             permissions = json.loads(token_details[3])
@@ -43,7 +47,7 @@ def authentication(access_level, resource):
                     return response
 
             else:
-                return jsonify({"status": 403})
+                return jsonify(constants.return_403())
         
         return inner
     return outer

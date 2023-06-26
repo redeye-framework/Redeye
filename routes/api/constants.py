@@ -11,3 +11,9 @@ def success_msg(msg: str) -> dict:
 
 def help_msg(msg: dict) -> dict:
     return { "Help" : msg }
+
+def return_401() -> dict:
+    return status({ "Authentication Required": 401 })
+
+def return_403() -> dict:
+    return status({ "Forbidden": 403 })
