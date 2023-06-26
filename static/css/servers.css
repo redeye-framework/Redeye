@@ -33,6 +33,7 @@
     border-radius: 5px;
     float: left;
     margin-left: 7px;
+    filter: brightness(130%);
 }
 
 .grey {
