@@ -5,13 +5,18 @@ from hashlib import sha256
 import json
 from routes.api import config as api_permissions
 from routes.api import jdb
+from routes.api.servers import servers_api
+from routes.api.users import users_api
+from routes.api.exploits import exploits_api
+from routes.api.files import files_api
+from routes.api.logs import logs_api
 
 api_route = Blueprint('api', __name__)
 PROJECTS = r"RedDB/Projects/{}"
 
 READ = api_permissions.read()
 WRITE = api_permissions.write()
-READ_WRITE = api_permissions.readwrite()
+# READ_WRITE = api_permissions.readwrite()
 
 
 
@@ -30,7 +35,11 @@ def authentication(access_level, resource):
 
             if api_permissions.access_level(access_level, permissions, resource, token_details[4]):
                     db_name = PROJECTS.format(jdb.get_project_filename_by_id(token_details[6]))
-                    response = f(db_name, request.args.to_dict())
+                    executer = jdb.get_username_by_id(token_details[5])[1]
+                    if access_level == READ:
+                        response = f(db_name, request.args.to_dict(), executer)
+                    elif access_level == WRITE:
+                        response = f(db_name, request.form.to_dict(), executer)
                     return response
 
             else:
@@ -42,39 +51,47 @@ def authentication(access_level, resource):
 
 @api_route.route('/api/servers',methods=['GET'])
 @authentication(READ, 'servers')
-def api_get_servers(db_name, args):
-    servers = jdb.servers_info(db_name, args)
+def api_get_servers(db_name, args, executer):
+    servers = servers_api.servers_info(db_name, args)
+
+    return jsonify(servers)
+
+
+@api_route.route('/api/servers',methods=['POST'])
+@authentication(WRITE, 'servers')
+def api_new_server(db_name, args, executer):
+    servers = servers_api.add_new_server(db_name, args, executer)
 
     return jsonify(servers)
 
 
 @api_route.route('/api/exploits',methods=['GET'])
 @authentication(READ, 'exploits')
-def api_get_exploits(db_name, args):
-    exploits = jdb.exploits_info(db_name, args)
+def api_get_exploits(db_name, args, executer):
+    exploits = exploits_api.exploits_info(db_name, args)
 
     return jsonify(exploits)
 
 
 @api_route.route('/api/files',methods=['GET'])
 @authentication(READ, 'files')
-def api_get_files(db_name, args):
-    files = jdb.files_info(db_name, args)
+def api_get_files(db_name, args, executer):
+    files = files_api.files_info(db_name, args)
 
     return jsonify(files)
 
 
 @api_route.route('/api/users',methods=['GET'])
 @authentication(READ, 'users')
-def api_get_users(db_name, args):
-    users = jdb.users_info(db_name, args)
+def api_get_users(db_name, args, executer):
+    users = users_api.users_info(db_name, args)
 
     return jsonify(users)
 
 
 @api_route.route('/api/logs',methods=['GET'])
 @authentication(READ, 'logs')
-def api_get_logs(db_name, args):
-    users = jdb.logs_info(db_name, args)
+def api_get_logs(db_name, args, executer):
+    users = logs_api.logs_info(db_name, args)
 
     return jsonify(users)
