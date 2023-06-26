@@ -33,6 +33,9 @@ import json
 
 app = Flask(__name__, template_folder="templates")
 
+from routes.api.v1 import api_route
+app.register_blueprint(api_route)
+
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
 
@@ -72,9 +75,6 @@ def init(app):
 
     if USE_NEO4J:
         graph.init()
-
-    from routes.api.v1 import api_route
-    app.register_blueprint(api_route)
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
