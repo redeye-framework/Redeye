@@ -1,6 +1,6 @@
 from RedDB import db
 from routes.api.config import filter
-from routes.api import constants 
+from routes.api import constants
 
 def servers_info(db_name: str, args: dict) -> list:
     servers = []
@@ -49,4 +49,19 @@ def add_new_server(db_name: str, args: dict, executer: str) -> dict:
 
     db.create_new_server(db_name, executer, **details)
     return constants.success_msg("Server created successfully")
-    
+
+
+
+def help() -> dict:
+    return constants.help_msg({
+        "arguments for POST /api/servers": {
+            "ip": "IP of the server (REQUIRED)",
+            "name": "Name of the server (REQUIRED)",
+            "vendor": "Vendor of the server",
+            "is_access": "Do we have access to the server (Default: False)",
+            "attain": "Additional info about the server (Default: Attain)"
+        }, 
+        "arguments for GET /api/servers": {
+            "filters": "Filter by any of the returned parameters (wildcards are supported)"
+        },
+    })

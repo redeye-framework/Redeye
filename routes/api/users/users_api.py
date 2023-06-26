@@ -39,9 +39,23 @@ def add_new_user(db_name: str, args: dict, exec) -> dict:
         password = args.get("password"),
         permissions = args.get("permissions"),
         type = userTypeId,
-        server_id = args.get("server_id"),
+        server_id = None,
         found = args.get("found")
     )
 
     db.insert_new_user(db_name, exec=exec, **details)
     return constants.success_msg("User added successfully")
+
+
+def help() -> dict:
+    return constants.help_msg({
+        "arguments for POST /api/users": {
+            "username": "Found Username (REQUIRED)",
+            "password": "Found password of the user (REQUIRED)",
+            "permissions": "Level of permissions",
+            "found": "Where does this user found on"
+        }, 
+        "arguments for GET /api/users": {
+            "filters": "Filter by any of the returned parameters (wildcards are supported)"
+        },
+    })

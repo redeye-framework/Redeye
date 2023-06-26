@@ -57,6 +57,14 @@ def api_get_servers(db_name, args, _):
     return jsonify(servers)
 
 
+@api_route.route('/api/servers/help',methods=['GET'])
+@authentication(READ, 'servers')
+def api_get_servers_help(db_name, args, _):
+    help_menu = servers_api.help()
+
+    return jsonify(help_menu)
+
+
 @api_route.route('/api/servers',methods=['POST'])
 @authentication(WRITE, 'servers')
 def api_new_server(db_name, args, executer):
@@ -71,6 +79,14 @@ def api_get_exploits(db_name, args, _):
     exploits = exploits_api.exploits_info(db_name, args)
 
     return jsonify(exploits)
+
+
+@api_route.route('/api/exploits/help',methods=['GET'])
+@authentication(READ, 'exploits')
+def api_get_exploits_help(db_name, args, _):
+    help_menu = exploits_api.help()
+
+    return jsonify(help_menu)
 
 
 @api_route.route('/api/exploits',methods=['POST'])
@@ -95,6 +111,14 @@ def api_get_users(db_name, args, _):
     users = users_api.users_info(db_name, args)
 
     return jsonify(users)
+
+
+@api_route.route('/api/users/help',methods=['GET'])
+@authentication(READ, 'users')
+def api_get_users_help(db_name, args, _):
+    help_menu = users_api.help()
+
+    return jsonify(help_menu)
 
 
 @api_route.route('/api/users',methods=['POST'])
