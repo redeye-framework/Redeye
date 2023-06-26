@@ -1,7 +1,8 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/servers.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}"> {% include 'wrapper.html' %}
-<div class="server-page">
+<div class="server-page main-page">
+    <div class="hidden-box-darken">
     <h1 class="head" style="border-bottom-color: {{ color }};">
         <span class="editable">{{ server[2] }}</span>
         <input class="editable-inp" style="display:none;" type="text" size="10" value="{{ server[2] }}" name="name" placeholder="Name">
@@ -36,7 +37,7 @@
             <a href="#" class="tag grey add-tag">+</a>
         </div>
     </div>
-    <div class="container-fluid server-content">
+    <div class="container-fluid hidden-box-darken server-content">
         <div class="row">
             <div class="col col-sm-4 users">
                 <form action="{{ url_for('create_user') }}" method="POST" id="user-form">
@@ -280,6 +281,7 @@
     <a class="delete-server floating-btn delete-server-btn " href="#" onclick="deleteServer('{{ server[0] }}')" title="Delete Server">
         <i class="fas fa-trash"></i>
     </a> 
+    </div>
     <div class="hidden-floating-box" id="tag-box">
         <form action="{{ url_for('save_tag') }}" method="POST" id="tag-form">
             <div class="page-head">Server Tag</div>

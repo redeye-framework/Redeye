@@ -269,7 +269,6 @@ $(".normal-tag").on('click', function(e) {
     var tagId = $(this).attr('id');
     var tagName = $(this).text();
     var tagColor = $(this).find('.tag-color').val();
-    alert(tagId);
     showTagBox(tagName, tagColor, serverId, tagId);
 });
 
