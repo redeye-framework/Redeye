@@ -1,5 +1,6 @@
 from RedDB import db
 from routes.api.config import filter
+from routes.api import constants
 
 def logs_info(db_name, args):
     logs = []
@@ -50,3 +51,11 @@ def logs_info(db_name, args):
             logs.append(data)
 
     return logs
+
+
+def help() -> dict:
+    return constants.help_msg({
+        "arguments for GET /api/logs": {
+            "filters": "Filter by any of the returned parameters (wildcards are supported)"
+        },
+    })

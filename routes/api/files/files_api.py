@@ -1,5 +1,6 @@
 from RedDB import db
 from routes.api.config import filter
+from routes.api import constants
 
 def files_info(db_name, args):
     files = []
@@ -18,3 +19,11 @@ def files_info(db_name, args):
             files.append(data)
 
     return files
+
+
+def help() -> dict:
+    return constants.help_msg({
+        "arguments for GET /api/files": {
+            "filters": "Filter by any of the returned parameters (wildcards are supported)"
+        },
+    })

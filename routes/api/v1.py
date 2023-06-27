@@ -109,6 +109,14 @@ def api_get_files(db_name, args, _):
     return jsonify(files)
 
 
+@api_route.route('/api/files/help',methods=['GET'])
+@authentication(READ, 'files')
+def api_get_files_help(db_name, args, _):
+    help_menu = files_api.help()
+
+    return jsonify(help_menu)
+
+
 @api_route.route('/api/users',methods=['GET'])
 @authentication(READ, 'users')
 def api_get_users(db_name, args, _):
@@ -139,3 +147,11 @@ def api_get_logs(db_name, args, executer):
     users = logs_api.logs_info(db_name, args)
 
     return jsonify(users)
+
+
+@api_route.route('/api/logs/help',methods=['GET'])
+@authentication(READ, 'logs')
+def api_get_logs_help(db_name, args, executer):
+    help_menu = logs_api.help()
+
+    return jsonify(help_menu)
