@@ -1,4 +1,3 @@
-from fire import Fire
 from json import dumps
 from auth import test_login
 from api import test_api
@@ -13,4 +12,4 @@ def run_tests():
 
 
 if __name__ == '__main__':
-    Fire(run_tests)
+    run_tests()

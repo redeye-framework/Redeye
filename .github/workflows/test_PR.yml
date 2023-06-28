@@ -3,7 +3,7 @@ name: Test before merging
 on: [pull_request]
 
 jobs:  
-  build:
+  buid_and_test:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
@@ -14,7 +14,7 @@ jobs:
         prevent: false
 
     - uses: actions/checkout@v3
-    
+
     - name: Build redeye
       run: make build
 
