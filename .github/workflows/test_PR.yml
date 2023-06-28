@@ -12,6 +12,7 @@ jobs:
         client-id: ${{ secrets.CIMON_CLIENT_ID }}
         secret: ${{ secrets.CIMON_SECRET }}
         prevent: false
+        fail-on-error: true
 
     - uses: actions/checkout@v3
 
