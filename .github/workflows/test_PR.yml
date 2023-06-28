@@ -6,13 +6,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Run Cimon
+      uses: cycodelabs/cimon-action@v0
+      with:
+        client-id: ${{ secrets.CIMON_CLIENT_ID }}
+        secret: ${{ secrets.CIMON_SECRET }}
+        prevent: false
+
     - uses: actions/checkout@v3
 
     - name: Build redeye
-      run: docker build -t ghcr.io/redeye-framework/redeye:latest .
+      run: make build
 
     - name: Run redeye
-      run: docker-compose up -d
+      run: make run
 
     - name: Wait for initialization
       run: sleep 5
@@ -20,5 +27,5 @@ jobs:
     - name: Check main page
       run: curl http://localhost:8443
 
-    - name: Check APIs
-      run: curl localhost:8443/api/servers
+    - name: Run Redeye tests
+      run: make test

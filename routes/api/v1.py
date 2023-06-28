@@ -11,6 +11,7 @@ from routes.api.users import users_api
 from routes.api.exploits import exploits_api
 from routes.api.files import files_api
 from routes.api.logs import logs_api
+from http import HTTPStatus
 
 api_route = Blueprint('api', __name__)
 PROJECTS = r"RedDB/Projects/{}"
@@ -32,7 +33,7 @@ def authentication(access_level, resource):
              
             token_details = jdb.get_hashed_token_details(sha256(token.encode()).hexdigest())
             if not token_details:
-                return jsonify(constants.return_401())
+                return jsonify(constants.return_401()), HTTPStatus.UNAUTHORIZED
             
             token_details = token_details[0]
             permissions = json.loads(token_details[3])
@@ -47,7 +48,7 @@ def authentication(access_level, resource):
                     return response
 
             else:
-                return jsonify(constants.return_403())
+                return jsonify(constants.return_403()), HTTPStatus.FORBIDDEN
         
         return inner
     return outer

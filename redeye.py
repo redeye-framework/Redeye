@@ -1877,12 +1877,11 @@ def add_token():
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form.get('token-name')
-    print("token", token_name)
 
     permissions = api_permissions.module()
 
     for permission in json.loads(request.form.get('permissions')):
-        for resource, access_level in json.loads(permission).items():
+        for resource, access_level in permission.items():
             permissions[resource] = access_level
 
     permissions = json.dumps(permissions)
