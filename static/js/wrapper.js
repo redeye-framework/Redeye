@@ -250,3 +250,19 @@ $(".export").click(function() {
 })
 
 $(".import").click(function() {})
+
+function showHiddenFloatingBox(box) {
+    $(box).show();
+    $(".hidden-box-darken").css("filter", "brightness(40%)");
+    this.addEventListener("keyup", function(event) {
+        if (event.keyCode === 27) {
+            $(box).hide();
+            $(".hidden-box-darken").css("filter", "brightness(100%)");
+        }
+    })
+}
+
+function hideHiddenFloatingBox(box) {
+    $(box).hide();
+    $(".hidden-box-darken").css("filter", "brightness(100%)");
+}

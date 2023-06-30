@@ -17,6 +17,25 @@
     filter: brightness(110%);
 }
 
+.tags-dots {
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    padding-left: 7px;
+    z-index: 900;
+    display: inline;
+}
+
+.tag-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+    float: left;
+    margin-left: 7px;
+    filter: brightness(130%);
+}
+
 .grey {
     background-color: rgba(129, 120, 120, 0.699);
 }
@@ -502,4 +521,78 @@ input[type="file"] {
     overflow-wrap: break-word;
     min-height: 200px;
     max-height: 500px;
+}
+
+#tag-box {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    width: 450px;
+    max-height: 85vh;
+    min-height: 300px;
+    transform: translateX(-50%);
+    background-color: #31353D;
+    border-radius: 10px;
+    box-shadow: 0 0 15px black;
+    color: #bbc;
+    padding: 20px;
+    z-index: 1000;
+    text-align: center;
+}
+
+#tag-box .page-head {
+    font-size: 2rem;
+    margin: 5px;
+    padding-top: 10px;
+    width: 100%;
+    border-bottom: 1px solid #bbc;
+}
+
+#tag-box input {
+    margin: 30px 20px 20px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.checkbox-container input {
+    display: none;
+}
+  
+.checkbox-container .checkbox-indicator {
+    display: block;
+    height: 23px;
+    width: 23px;
+    border: 1px solid #CCC;
+    filter: brightness(130%);
+    border-radius: 5px;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+.checkbox-container .checkbox-indicator:hover {
+    border: 1px solid #777;
+}
+
+.checkbox-container input:checked ~ .checkbox-indicator {
+    box-shadow: 0 0 0 3px #b0b0b0 inset;
+}
+
+#tag-box .buttons {
+    margin: 20px 10px;
+}
+
+#tag-box .save-tag {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 30px !important;
+    background-color: #3f6ad8;
+}
+
+#tag-box .delete-tag {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 20px !important;
+    margin-left: 20px !important;
+    background-color: #d8493f;
 }

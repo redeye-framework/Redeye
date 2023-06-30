@@ -212,8 +212,9 @@ def servers():
             users = db.get_users_by_server_id(session["db"], server[0])
             colorId = db.get_color_by_server_id(session["db"], server[0])[0][0]
             colorHex = db.get_color_by_id(session["db"], colorId)[0][0]
+            tags = db.get_tags_by_server_id(session["db"], server[0])
 
-            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users, 'color': colorHex }
+            serverData[server[0]] = { 'srvDetails':server,'ports':ports, 'users':users, 'color': colorHex, 'tags':tags}
         allData[sectionId] = {'name': name,'info': serverData} 
 
     # {'SectionId': {
@@ -398,13 +399,28 @@ def change_server_color():
     return redirect(request.referrer)
 
 
-@app.route('/add_tag', methods=['POST'])
-def add_tag():
+@app.route('/save_tag', methods=['POST'])
+def save_tag():
     if not is_logged():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
-    dict = request.args.to_dict()
-    db.add_tag(session["db"], dict["serverId"], dict["name"], dict["color"])
+    if request.method == 'POST':
+        tag_name = request.form.get('tag-name')
+        tag_id = request.form.get('tag-id')
+        server_id = request.form.get('server-id')
+        color = request.form.get('color')
+        dict = request.args.to_dict()
+        if "tagId" in dict:
+            print("delete")
+            db.edit_tag(session["db"], dict["tagId"], dict["tagName"], dict["color"])
+        elif tag_id!="0":
+            print("edit")
+            db.edit_tag(session["db"], tag_id, tag_name, color)
+        else:
+            print("add")
+            db.add_tag(session["db"], server_id, tag_name, color)
+
+    return redirect(request.referrer)
 
 
 @app.route('/edit_tag', methods=['POST'])
@@ -414,6 +430,8 @@ def edit_tag():
 
     dict = request.args.to_dict()
     db.edit_tag(session["db"], dict["tagId"], dict["name"], dict["color"])
+    
+    return redirect(request.referrer)
 
 
 @app.route('/add_new_server', methods=['POST'])
