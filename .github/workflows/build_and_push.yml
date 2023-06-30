@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - v*
-
+    branches:
+      - main
 
 jobs:
   build_and_push:
@@ -45,40 +46,5 @@ jobs:
         
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
-        docker tag redeye $IMAGE_ID:$VERSION
-        docker push $IMAGE_ID:$VERSION
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build_and_push
-    steps:
-    - name: Run Cimon
-      uses: cycodelabs/cimon-action@v0
-      with:
-        client-id: ${{ secrets.CIMON_CLIENT_ID }}
-        secret: ${{ secrets.CIMON_SECRET }}
-        prevent: false
-        report-process-tree: true
-        fail-on-error: true
-
-    - uses: actions/checkout@v3
-    - name: Build image
-      run: docker build . --file Dockerfile --tag redeye --label "runnumber=${GITHUB_RUN_ID}"
-
-    - name: Log in to registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-    - name: Push image
-      run: |
-        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/redeye
-
-        # Change all uppercase to lowercase
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        # Strip git ref prefix from version
-        VERSION=latest
-        # Use Docker `latest` tag convention
-        [ "$VERSION" == "main" ] && VERSION=latest
-        echo IMAGE_ID=$IMAGE_ID
-        echo VERSION=latest
         docker tag redeye $IMAGE_ID:$VERSION
         docker push $IMAGE_ID:$VERSION
