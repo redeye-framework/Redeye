@@ -27,36 +27,6 @@ function submitUsersForm() {
     $('#user-form').submit();
 }
 
-$("table").mouseover(function() {
-    $(this).find(".item-add").show()
-        //$(this).find(".item-add").animate({padding: '0px'}, {duration: 200});
-        //$(this).find(".item-add").find('td')
-        //.wrapInner('<div style="display: block;" />')
-        //.parent()
-        //.find('td > div')
-        //.slideUp(700, function(){
-        //    $(this).parent().parent().remove();
-        //});
-}).mouseleave(function() {
-    if (!$(this).find(':focus').length > 0) {
-        $(this).find(".item-add").hide()
-    } else {
-        $(this).focusout(function() {
-            if (!$(this).is(':hover')) {
-                $(this).find(".item-add").hide()
-            }
-        })
-    }
-    //$(this).find(".item-add").find('td')
-    //.wrapInner('<div style="display: none;" />')
-    //.parent()
-    //.find('td > div')
-    //.slideDown(700, function(){
-    //    var $set = $(this);
-    //    $set.replaceWith($set.contents());
-    //});
-})
-
 $(".editable").click(function() {
     var inp = $(this).parent().find(".editable-inp");
     $(this).hide();

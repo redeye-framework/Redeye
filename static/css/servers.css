@@ -348,7 +348,6 @@ td .editable-inp-2 {
 }
 
 .server-content .item-add {
-    display: none;
     transition-duration: 0.3s;
 }
 
