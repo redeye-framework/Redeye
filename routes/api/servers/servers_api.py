@@ -2,6 +2,8 @@ from RedDB import db
 from routes.api.config import filter
 from routes.api import constants
 
+SECTION_NAME = "Added using API"
+
 def servers_info(db_name: str, args: dict) -> list:
     servers = []
     raw_servers = db.get_servers(db_name)
@@ -33,13 +35,21 @@ def servers_info(db_name: str, args: dict) -> list:
 
 
 def add_new_server(db_name: str, args: dict, executer: str) -> dict:
+
+    section_id = db.get_section_id_by_section_name(db_name, SECTION_NAME)
+
+    if section_id:
+        section_id = section_id[0][0]
+    else:
+        section_id = db.create_new_server_section(db_name, SECTION_NAME)
+
     details = dict(
         ip = args.get("ip"),
         name = args.get("name"),
         vendor = args.get("vendor"),
         is_access = args.get("is_accessible", False),
         attain = args.get("attain", "Attain"),
-        section_id = 1,
+        section_id = section_id,
         color_id = 1
     )
 
