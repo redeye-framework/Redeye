@@ -27,8 +27,16 @@ function submitUsersForm() {
     $('#user-form').submit();
 }
 
+$(document).ready(function(){
+    $('table').click(function (e) {
+    e.stopPropagation();
+    $(this).find('.item-add').toggle(5000);
+    //$(this).next('.item-add').stop().show('slide', {direction: 'left'}, 1400);
+   });
+});
+/*
 $("table").mouseover(function() {
-    $(this).find(".item-add").show()
+    $(this).find(".item-add").css("height", "49px");
         //$(this).find(".item-add").animate({padding: '0px'}, {duration: 200});
         //$(this).find(".item-add").find('td')
         //.wrapInner('<div style="display: block;" />')
@@ -39,11 +47,11 @@ $("table").mouseover(function() {
         //});
 }).mouseleave(function() {
     if (!$(this).find(':focus').length > 0) {
-        $(this).find(".item-add").hide()
+        $(this).find(".item-add").css("height", "0px");
     } else {
         $(this).focusout(function() {
             if (!$(this).is(':hover')) {
-                $(this).find(".item-add").hide()
+                $(this).find(".item-add").css("height", "0px");
             }
         })
     }
@@ -56,6 +64,7 @@ $("table").mouseover(function() {
     //    $set.replaceWith($set.contents());
     //});
 })
+*/
 
 $(".editable").click(function() {
     var inp = $(this).parent().find(".editable-inp");
