@@ -33,6 +33,9 @@ import json
 
 app = Flask(__name__, template_folder="templates")
 
+from routes.api.v1 import api_route
+app.register_blueprint(api_route)
+
 jsglue = JSGlue(app)
 socketio = SocketIO(app, cors_allowed_origins="http://localhost")
 
@@ -72,9 +75,6 @@ def init(app):
 
     if USE_NEO4J:
         graph.init()
-
-    from routes.api.v1 import api_route
-    app.register_blueprint(api_route)
 
     for project in projects:
         d1,d2,d3,d4,d5,d6,d7,d8 = helper.setFilesFolder(project[2])
@@ -1404,7 +1404,7 @@ def add_exploit():
             db.insert_new_standalone_file(session["db"], full_path, file_name, "Exploit File Added", session["username"])
         else:
             full_path = None
-        db.insert_new_exploit(session["db"], dic['exploit-name'],dic['exploit-con'],full_path)
+        db.insert_new_exploit(session["db"], dic['exploit-name'],dic['exploit-con'],full_path, session["username"])
 
     return redirect(request.referrer)
 
@@ -1877,12 +1877,11 @@ def add_token():
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form.get('token-name')
-    print("token", token_name)
 
     permissions = api_permissions.module()
 
     for permission in json.loads(request.form.get('permissions')):
-        for resource, access_level in json.loads(permission).items():
+        for resource, access_level in permission.items():
             permissions[resource] = access_level
 
     permissions = json.dumps(permissions)

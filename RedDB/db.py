@@ -629,9 +629,15 @@ def get_section_id_by_server_id(db, server_id):
     query = r'SELECT section_id FROM servers WHERE id="{}"'.format(server_id)
     return db_get(db, query)[0][0]
 
+@check_input
 def get_section_name_by_section_id(db, section_id):
     query = r'SELECT name FROM sections WHERE id="{}"'.format(section_id)
     return db_get(db, query)[0][0]
+
+@check_input
+def get_section_id_by_section_name(db, section_name):
+    query = r'SELECT id FROM sections WHERE name="{}"'.format(section_name)
+    return db_get(db, query)
 
 @check_input
 def get_servers(db):

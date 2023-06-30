@@ -1,0 +1,33 @@
+name: Test before merging
+
+on: [pull_request]
+
+jobs:  
+  buid_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Cimon
+      uses: cycodelabs/cimon-action@v0
+      with:
+        client-id: ${{ secrets.CIMON_CLIENT_ID }}
+        secret: ${{ secrets.CIMON_SECRET }}
+        prevent: false
+        report-process-tree: true
+        fail-on-error: true
+
+    - uses: actions/checkout@v3
+
+    - name: Build redeye
+      run: make build
+
+    - name: Run redeye
+      run: make run
+
+    - name: Wait for initialization
+      run: sleep 5
+
+    - name: Check main page
+      run: curl http://localhost:8443
+
+    - name: Run Redeye tests
+      run: make test

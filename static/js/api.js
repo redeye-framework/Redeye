@@ -186,32 +186,32 @@ function filterAccessToken(accessTokensList) {
                 accessTokensList.splice(wIndex, 1); // Remove the "-w" entry
             }
 
-            permissions.push(JSON.stringify({
+            permissions.push({
                 [baseName]: {
                     'read': true,
                     'write': true
                 }
-            }))
+            })
         }
 
         else if (name.endsWith("-r")) {
             const baseName = name.slice(0, -2); // Remove the last 3 characters (-rw)
-            permissions.push(JSON.stringify({
+            permissions.push({
                 [baseName]: {
                     'read': true,
                     'write': false
                 }
-            }))
+            })
         }
 
         else if (name.endsWith("-w")) {
             const baseName = name.slice(0, -2); // Remove the last 3 characters (-rw)
-            permissions.push(JSON.stringify({
+            permissions.push({
                 [baseName]: {
                     'read': false,
                     'write': true
                 }
-            }))
+            })
         }
     }
 

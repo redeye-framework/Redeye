@@ -2,6 +2,9 @@ version: "3.3"
 services:
   redeye:
     container_name: "Redeye"
+    depends_on:
+      neo4j:
+        condition: service_healthy
     image: "ghcr.io/redeye-framework/redeye:latest"
     ports:
       - "8443:8443"
@@ -10,6 +13,12 @@ services:
       - DB:/redeye/RedDB
   neo4j:
     image: "neo4j:4.4.9"
+    healthcheck:
+      test: wget http://localhost:7474 || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 20
+      start_period: 3s
     ports:
       - "0.0.0.0:7474:7474"
       - "0.0.0.0:7687:7687"
