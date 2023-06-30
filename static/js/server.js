@@ -243,7 +243,7 @@ $(".normal-tag").on('click', function(e) {
 });
 
 $(".delete-tag").on('click', function(e) {
-    var tagId = $(this).parent().find('.tag-id-input').val();
+    var tagId = $(this).parent().parent().find('.tag-id-input').val();
     $.post(Flask.url_for('save_tag', {
         "tagId": tagId,
         "serverId": 0,
