@@ -1422,7 +1422,7 @@ def add_exploit():
             db.insert_new_standalone_file(session["db"], full_path, file_name, "Exploit File Added", session["username"])
         else:
             full_path = None
-        db.insert_new_exploit(session["db"], dic['exploit-name'],dic['exploit-con'],full_path, session["username"])
+        db.insert_new_exploit(session["db"], dic['exploit-name'],dic['exploit-con'],full_path)
 
     return redirect(request.referrer)
 
