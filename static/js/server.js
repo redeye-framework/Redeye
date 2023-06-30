@@ -302,3 +302,5 @@ checkboxes.forEach(checkbox => {
         });
     });
 });
+
+//$(".add-tag").click();

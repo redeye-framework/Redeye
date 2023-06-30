@@ -318,12 +318,15 @@
                     <span class="checkbox-indicator purple" id="tag-purple"></span>
                 </label>
             </div>
-            <a class="save-tag floating-btn" href="#" onclick="document.getElementById('tag-form').submit();">
-                <i class="fas fa-edit"></i><span> Save </span>
-            </a>
-            <a class="delete-tag floating-btn" href="#">
-                <i class="fas fa-trash"></i><span> Delete </span>
-            </a>
+            <div class="buttons">
+                <a class="save-tag floating-btn" href="#" onclick="document.getElementById('tag-form').submit();">
+                    <i class="fas fa-edit"></i><span> Save </span>
+                </a>
+                <a class="delete-tag floating-btn" href="#">
+                    <i class="fas fa-trash"></i><span> Delete </span>
+                </a>
+            </div>
+
         </form>
     </div>
 {% include 'user.html' %}
