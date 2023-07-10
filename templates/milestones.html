@@ -1,0 +1,136 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chats.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/milestones.css') }}">
+{% include 'wrapper.html' %}
+<div class="milestones">
+    <div id="create_milestone" class="create-milestone">
+        <form enctype="multipart/form-data" id="add-milestone-form" class="modal-example" method="POST">
+            <div class="milestone-attrs">
+                <div class="milestone-attr">
+                    <span>Start milestone date</span><br>
+                    <input type="date" id="input-today" name="start_milestone_date" required><br>
+                </div>
+                <div class="milestone-attr">
+                    <span>End milestone date</span><br>
+                    <input type="date" id="input-end" name="end_milestone_date" required><br>
+                </div>
+                <div class="milestone-attr">
+                <span>Asignee</span><br>
+                    <select id="modal-example" name="people" class="exec-milestone-input" multiple required style="direction: ltr;">
+                        <optgroup label="Users">
+                            {% for i in range(len_users) %}
+                                <option dir="auto" value="{{ users[i][0] }}">{{ users[i][0] }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <input dir="rtl" name="milestone_name" type="text" class="main-milestone-input" placeholder="Name" required>
+            <textarea dir="rtl" name="milestone_description" type="text" class="data-milestone-input" cols="65" rows="5" placeholder="Description" required></textarea>
+            <div class="buttom">
+                <div class="inline files">
+                    <label for="files" class="new-file">
+                        <input onchange="add_files(this)" type="file" id="files" class="new-file" name="attachments" multiple/><i class="fa fa-paperclip"></i>
+                    </label>
+                </div>
+                <input type="hidden" id="exec" name="executers">
+                <button style="float: left;" class="btn btn-primary inline" onclick="get_executers()">Create Milestone</button>
+            </div>
+        </form>
+    </div>
+    {% for i in range(len_milestones) %}
+        <div class="milestone" id="milestone-{{ milestones[i][0] }}">
+            <div class="stats">
+                <div class="timeline" id="timeline-{{ milestones[i][0] }}">
+                    <input type="hidden" class="state" value="{{ milestones[i][3][6] }}">
+                    <input type="hidden" id="milestone_id" value="{{ milestones[i][0] }}">
+                    <input type="hidden" class="gwidth" value="{{ milestones[i][3][2] }}%">
+                    <input type="hidden" class="lwidth" value="{{ milestones[i][3][3] }}%">
+                    <input type="hidden" class="gtext" value="{{ milestones[i][3][1] }} days">
+                    <input type="hidden" class="ltext" value="{{ milestones[i][3][0] }} days">
+                    <div class="startpoint" title="{{ milestones[i][3][4] }}"></div>
+                    <div class="line">
+                        <div style="width: {{ milestones[i][3][2] }}%;" class="gone"><div class="text">{{ milestones[i][3][1] }} days</div></div>
+                        <div style="width: {{ milestones[i][3][3] }}%;" class="left"><div class="text">{{ milestones[i][3][0] }} days</div></div>
+                    </div>
+                    <div class="custom-control custom-checkbox mr-sm-2 inline" id="checkbox" title="{{ milestones[i][3][5] }}">
+                        <input type="checkbox" name="access" class="custom-control-input endpoint input-{{ milestones[i][0] }}" id="check{{ milestones[i][0] }}" onclick="fillTimeLine(this)" title="{{ milestones[i][3][5] }}" {% if milestones[i][3][6] == 1 %}checked{% endif %}>
+                        <label class="custom-control-label" for="check{{ milestones[i][0] }}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="data">
+                <input type="hidden" class="milestone-id" value="{{ milestones[i][0] }}">
+                <h3 class="name">{{ milestones[i][1] }}</h3>
+                <input class="input edit-name">
+                <div class="desc">{{ milestones[i][2] }}</div>
+                <textarea dir="rtl" name="milestone_description" type="text" class="data-milestone-input edit-desc" cols="65" rows="5"></textarea><br>
+                <div class="inline files">
+                    {% for file in milestones[i][4] %}
+                        <form method="POST" action="{{ url_for('download_milestone_file') }}" id="download-{{file[0]}}">
+                            <label for="files">
+                                <input type="hidden" id="file" value="{{ file[2] }}" name="attachments"/>
+                                <a href="#" class="file" onclick="javascript:document.getElementById('download-{{ file[0] }}').submit()">
+                                <i class="fa fa-download"></i>
+                                <span>{{ file[1] }}</span></a>
+                            </label>
+                        </form>
+                    {% endfor %}
+                </div>
+                {% if access %}
+                <a onclick="deletemilestone(this)" class="delete-milestone"><i class="fa fa-trash"></i></a> <!-- Show only if user is Administrator -->
+                {% endif %}
+                <a href="javascript:togglemilestoneUrgent({{ milestones[i][0] }})" id="flag-{{ milestones[i][0] }}" class="flag {% if milestones[i][6] %}urgent{% endif %}"><i class="fa fa-flag"></i></a>
+                <a class="open-chat"><i class="fa fa-chevron-down"></i></a>
+                <a class="close-chat" style="display: none;"><i class="fa fa-chevron-up"></i></a>
+            </div>
+            <div class="chat">
+                <input type="hidden" id="current-user" value="{{ username }}">
+                <div style="background-image: url(/static/pics/chats.jpg);" class="messages" id="messages">
+                    {% for message in milestones[i][5] %}
+                        <div class="message" style="float: right;">
+                            <input class="message-id" type="hidden" value="{{ message[0] }}">
+                            <div id="sender" class="sender">{{ message[2] }}</div>
+                            <div id="date" class="date">{{ message[4] }}</div>
+                            <div id="content" class="content">{{ message[3] }}
+                                {% if message[8] %}
+                                <form action="{{ url_for('download_chat_file') }}" id='download-file-form-{{ message[8][0][2] }}' method="GET">
+                                    <input type='hidden' name='file_name' value='{{ message[8][0][2] }}'>
+                                    <a href='#' onclick="javascript:document.getElementById('download-file-form-{{ message[8][0][2] }}').submit()" class='file-attach'>
+                                        <i class='fa fa-download'></i><span class='filename'>{{ message[8][0][1] }}</span>
+                                    </a>
+                                </form>
+                                {% endif %}
+                            </div>
+                            {% if message[2] == username %}
+                                <a onclick="deleteMsg(this)" class="hide-message"><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="send">
+                    <label class="chat-file" style="display: none;">
+                        <input type="file" class="chat-file-input" name="attachment" disabled>
+                        <i class="fa fa-times remove-file" onclick="removeChatFile(this)"></i><span class="chat-file-name"></span>
+                    </label>
+                    <input type="hidden" class="milestone-id" name="milestone-id" value="{{ milestones[i][0] }}">
+                    <input class="msg-input" type="text" name="message">
+                    <label for="add-attachment-{{milestones[i][0]}}" class="add-attachment">
+                        <input name="attachment" type="file" class="attachment-input" id="add-attachment-{{milestones[i][0]}}" /><i class="fas fa-paperclip"></i>
+                    </label>
+                    <button class="send-btn" type="submit"><i class="fa fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="spacer" style="display: inline-block; width: 100%; height: 300px"></div>
+</div>
+
+ {% include 'wrapper_end.html' %}
+
+<script>
+    key_sc($(".main-mytodo-input"), 'n');
+</script>
+<script src="{{ url_for('static', filename='js/milestones.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chats.js') }}"></script>
+{% include 'footer.html' %}

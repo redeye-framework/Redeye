@@ -1,0 +1,434 @@
+
+.green {
+    background-color: #28a745 !important;
+}
+
+.red {
+    background-color: #c44939 !important;
+}
+
+.input {
+    border-radius: 3px;
+    padding: 5px;
+    margin-right: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+}
+
+.milestones {
+    text-align: center;
+}
+
+.milestones > .create-milestone {
+    display: inline-block;
+    width: 80%;
+    background-color: #31353D;
+    direction: rtl;
+    text-align: right;
+    box-shadow: 1px 1px 3px black;
+    border-radius: 10px;
+    transition-duration: 0.3s;
+    padding: 15px;
+    margin: 40px;
+    box-shadow: 2px 2px 7px black;
+}
+
+.milestones > .create-milestone > form  textarea,
+.milestones > .create-milestone > form  input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    transition-duration: 0.3s;
+}
+
+.milestones > .create-milestone > form  textarea:focus,
+.milestones > .create-milestone > form  input:focus {
+    border: 1px solid #999;
+}
+
+.milestones > .create-milestone > form > .buttom {
+    margin-top: 10px;
+}
+
+.milestones > .create-milestone .milestone-attrs {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.milestones > .create-milestone .milestone-attrs > .milestone-attr {
+    margin-left: 15px;
+    float: right;
+}
+
+.create-milestone .files {
+    padding: 0px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.create-milestone .files label {
+    height: 100%;
+    border-radius: 10px;
+    margin: 0px;
+    padding: 8px 15px;
+    margin: 0 5px;
+    direction: ltr;
+    border-color: transparent;
+    border-left: 1px solid rgba(67, 72, 82, 0.753);
+    color: #ccd;
+    background-color: rgb(67, 72, 82);
+    transition-duration: 0.2s;
+    outline: none;
+    cursor: pointer;
+}
+
+.create-milestone .files label:hover {
+    filter: brightness(110%);
+}
+
+.create-milestone .files label > span {
+    margin-left: 5px;
+}
+
+.remove-file {
+    font-size: 16px;
+    padding: 2px 4px 2px 0;
+    filter: brightness(90%);
+    cursor: pointer;
+}
+
+.remove-file:hover {
+    filter: brightness(110%);
+}
+
+.milestones > .milestone {
+    display: inline-block;
+    width: 80%;
+    padding: 0px;
+    background-color: #31353D;
+    direction: rtl;
+    text-align: right;
+    box-shadow: 1px 1px 3px black;
+    border-radius: 10px;
+    transition-duration: 0.3s;
+    margin: 40px;
+    overflow: hidden;
+}
+
+.milestones > .milestone > .stats {
+    display: inline-block;
+    height: 70px;
+    width: 100%;
+    padding: 15px 40px;
+    background-color: #282b30;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.336) inset;
+}
+
+.milestones > .milestone > .stats > .timeline {
+    height: 40px;
+    position: relative;
+}
+
+.milestones > .milestone > .stats > .timeline > .startpoint{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    background-color: royalblue;
+    border-radius: 50%;
+    z-index: 100;
+}
+
+.milestones > .milestone > .stats > .timeline > .line {
+    display: inline-block;
+    margin-top: 18px;
+    width: 100%;
+    height: 5px;
+    padding: 0 10px;
+    float: left;
+    background-color: rgb(67, 72, 82);
+    text-align: center;
+    direction: ltr;
+}
+
+.milestones > .milestone > .stats > .timeline > .line > .gone {
+    height: 5px;
+    float: left;
+    background-color: royalblue;
+    display: inline-block;
+    position: relative;
+    transition-duration: 0.4s;
+}
+
+.milestones > .milestone > .stats > .timeline > .line > .left {
+    height: 5px;
+    float: left;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    transition-duration: 0.4s;
+}
+
+.milestones > .milestone > .stats > .timeline > .line > div > .text{
+    color: #ccd;
+    display: inline-block;
+    position: absolute;
+    top: -28px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+#checkbox {
+    margin-right: 0px !important;
+}
+
+.custom-checkbox .custom-control-label::before {
+    border-radius: .70rem;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    background-color: #777;
+    top: 10px;
+    right: 0px;
+}
+
+.custom-control-label::after {
+    position: absolute;
+    top: .59rem;
+    left: -1.45em;
+    display: block;
+    width: 1.35rem;
+    height: 1.35rem;
+    content: "";
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+    cursor: pointer;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #28a745 !important;
+    background-color: #28a745 !important;
+}
+
+.milestones > .milestone > .data {
+    padding: 15px;
+    text-align: right;
+    position: relative;
+}
+
+.milestones > .milestone > .data > .name {
+    font-size: 24px;
+    margin: 10px 10px;
+}
+
+.milestones > .milestone > .data > .edit-name {
+    display: none;
+    font-size: 22px;
+}
+
+.milestones > .milestone > .data > .edit-desc {
+    display: none;
+    margin-right: 5px;
+}
+
+.milestones > .milestone > .data > .desc {
+    font-size: 18px;
+    margin: 15px 10px 0 !important;
+}
+
+.milestones > .milestone > .data > .desc,
+.milestones > .milestone > .data > .files {
+    direction: rtl;
+    display: inline;
+}
+
+.milestones > .milestone > .data > .files {
+    direction: ltr;
+    float: right;
+    display: inline-block;
+    padding-top: 15px;
+}
+
+.milestones > .milestone > .data > .files > form {
+    display: inline;
+}
+
+.milestones > .milestone > .data > .files .file {
+    text-decoration: none;
+    direction: ltr;
+    display: inline;
+    margin: 4px 5px;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 4px 9px 5px 9px;
+    color: #ccd;
+    background-color: rgba(236, 237, 240, 0.089);
+    border: 1px solid #666;
+    border-radius: 7px;
+    transition-duration: 0.2s;
+}
+
+.milestones > .milestone > .data > .files .file:hover {
+    filter: brightness(110%);
+    background-color: rgba(236, 237, 240, 0.05);
+}
+
+.milestones > .milestone > .data > .files .file span{
+    margin-left: 7px;
+}
+
+.milestones > .milestone > .data > .delete-milestone {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.milestones > .milestone > .data > .delete-milestone:hover {
+    filter: brightness(120%);
+}
+
+.milestones > .milestone > .data > .open-chat, .close-chat {
+    color: #ccd;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 13px 10px;
+    float: left;
+    cursor: pointer;
+}
+
+.milestones > .milestone > .data > .flag {
+    float: right;
+    padding: 13px 10px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #ccd;
+    filter: brightness(70%);
+    transition-duration: 0.2s;
+}
+
+.milestones > .milestone > .data > .flag:hover {
+    filter: brightness(90%);
+}
+
+.milestones > .milestone > .data > .urgent {
+    filter: brightness(80%);
+    color: #c44939;
+}
+
+.milestones > .milestone > .chat {
+    position: relative;
+    display: none;
+    width: 100%;
+    height: 0px;
+    background-color: #282b30;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.336) inset;
+    overflow: hidden;
+    transition-duration: 0.4s;
+}
+
+.milestones > .milestone > .chat > .messages {
+	border-top: 2px solid #282b30;
+	background-color: #3b4049;
+	padding-bottom: 80px;
+}
+
+.milestones > .milestone > .chat > .send {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+    flex: 0 1 80px;
+    width: 100%;
+    display: flex;
+    direction: ltr;
+}
+
+.milestones > .milestone > .data > .open-chat:hover {
+    color: white;
+}
+
+.main-milestone-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    border-color: transparent;
+    color: #ccd;
+    width: 100%;
+}
+
+.data-milestone-input {
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(67, 72, 82);
+    color: #ccd;
+    width: 100%;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+    transition-duration: 0.3s;
+}
+
+.multi-select-button {
+    border-radius: 3px;
+    padding: 7px !important;
+    background-color: rgb(67, 72, 82) !important;
+    border-color: transparent !important;
+    color: #ccd;
+    width: 200px;
+}
+
+.multi-select-button:after {
+    margin-right: 5px;
+}
+
+.modal-example .multi-select-menu {
+    top: 20% !important;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: None;
+    direction: ltr;
+    overflow: auto;
+    border: none;
+    border-radius: 0.3em;
+    box-shadow: 0 1em 3em rgba(0,0,0,0.4);
+    background-color: rgb(67, 72, 82) !important;
+    color: #ccd;
+    text-shadow: none;
+    font-size: 18px;
+    text-align: left;
+    min-width: 200px !important;
+    padding: 10px;
+}
+
+.multi-select-menuitem {
+    display: block;
+    font-size: 0.875em;
+    padding: 0.6em 1em 0.6em 30px;
+    white-space: nowrap;
+}
+
+.multi-select-menuitems label{
+    margin-bottom: .2rem;
+}
+
+.exploit-content .buttons label:hover,
+.exploit-content .buttons button:hover {
+    filter: brightness(1.05);
+}
+
+
+input[type="file"] {
+    display: none;
+}

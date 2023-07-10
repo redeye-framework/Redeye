@@ -1925,6 +1925,49 @@ def delete_token():
 
     return jsonify({'deleted': 'OK'})
 
+
+"""
+=======================================================
+                 Milestones
+=======================================================
+"""
+
+
+@app.route('/milestones', methods=['GET'])
+def milestones():
+    if not is_logged():
+        return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
+    
+    milestones = [[[],[],[],[],[],[]], [[],[],[],[],[],[]], [[],[],[],[],[],[]], [[],[],[],[],[],[]], [[],[],[],[],[],[]], [[],[],[],[],[],[]]]
+    users = [[]]
+    len_milestones = len(milestones)
+    len_users = len(users)
+
+    return render_template('milestones.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, milestones=milestones, users=users, len_milestones=len_milestones, len_users=len_users)
+
+
+@app.route('/download_milestone_file', methods=['GET'])
+def download_milestone_file():
+    
+    milestones = [[[]]]
+    users = [[]]
+    len_milestones = len(milestones)
+    len_users = len(users)
+
+    return render_template('milestones.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, milestones=milestones, users=users, len_milestones=len_milestones, len_users=len_users)
+
+
+@app.route('/download_chat_file', methods=['GET'])
+def download_chat_file():
+    
+    milestones = [[[]]]
+    users = [[]]
+    len_milestones = len(milestones)
+    len_users = len(users)
+
+    return render_template('milestones.html', project=session["project"], username=session["username"], profile=session["profile"], is_docker=USE_NEO4J, milestones=milestones, users=users, len_milestones=len_milestones, len_users=len_users)
+
+
 """
 =======================================================
                 Web Functions
