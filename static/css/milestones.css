@@ -77,7 +77,6 @@
     margin: 0px;
     padding: 8px 15px;
     margin: 0 5px;
-    direction: ltr;
     border-color: transparent;
     border-left: 1px solid rgba(67, 72, 82, 0.753);
     color: #ccd;
@@ -378,49 +377,6 @@
     min-height: 100px;
     max-height: 300px;
     transition-duration: 0.3s;
-}
-
-.multi-select-button {
-    border-radius: 3px;
-    padding: 7px !important;
-    background-color: rgb(67, 72, 82) !important;
-    border-color: transparent !important;
-    color: #ccd;
-    width: 200px;
-}
-
-.multi-select-button:after {
-    margin-right: 5px;
-}
-
-.modal-example .multi-select-menu {
-    top: 20% !important;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: None;
-    direction: ltr;
-    overflow: auto;
-    border: none;
-    border-radius: 0.3em;
-    box-shadow: 0 1em 3em rgba(0,0,0,0.4);
-    background-color: rgb(67, 72, 82) !important;
-    color: #ccd;
-    text-shadow: none;
-    font-size: 18px;
-    text-align: left;
-    min-width: 200px !important;
-    padding: 10px;
-}
-
-.multi-select-menuitem {
-    display: block;
-    font-size: 0.875em;
-    padding: 0.6em 1em 0.6em 30px;
-    white-space: nowrap;
-}
-
-.multi-select-menuitems label{
-    margin-bottom: .2rem;
 }
 
 .exploit-content .buttons label:hover,
