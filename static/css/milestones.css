@@ -25,7 +25,7 @@
     width: 80%;
     background-color: #31353D;
     direction: rtl;
-    text-align: right;
+    text-align: left;
     box-shadow: 1px 1px 3px black;
     border-radius: 10px;
     transition-duration: 0.3s;
@@ -62,7 +62,7 @@
 
 .milestones > .create-milestone .milestone-attrs > .milestone-attr {
     margin-left: 15px;
-    float: right;
+    float: left;
 }
 
 .create-milestone .files {
@@ -111,7 +111,7 @@
     padding: 0px;
     background-color: #31353D;
     direction: rtl;
-    text-align: right;
+    text-align: left;
     box-shadow: 1px 1px 3px black;
     border-radius: 10px;
     transition-duration: 0.3s;
