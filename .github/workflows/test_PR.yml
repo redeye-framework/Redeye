@@ -3,7 +3,7 @@ name: Test before merging
 on: [pull_request]
 
 jobs:  
-  buid_and_test:
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
@@ -32,7 +32,7 @@ jobs:
     - name: Run Redeye tests
       run: make test
 
-  buid_and_test_source:
+  build_and_test_source:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
