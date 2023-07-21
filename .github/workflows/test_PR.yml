@@ -3,7 +3,7 @@ name: Test before merging
 on: [pull_request]
 
 jobs:  
-  build_and_test:
+  build_and_test_image:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
