@@ -31,3 +31,35 @@ jobs:
 
     - name: Run Redeye tests
       run: make test
+
+  buid_and_test_source:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Cimon
+      uses: cycodelabs/cimon-action@v0
+      with:
+        client-id: ${{ secrets.CIMON_CLIENT_ID }}
+        secret: ${{ secrets.CIMON_SECRET }}
+        prevent: false
+        report-process-tree: true
+        fail-on-error: true
+
+    - uses: actions/checkout@v3
+
+    - name: Run Redeye
+      run: |
+        sudo apt install python3.8-venv
+        python3 -m venv RedeyeVirtualEnv
+        source RedeyeVirtualEnv/bin/activate
+        pip3 install -r requirements.txt
+        python3 RedDB/db.py
+        python3 redeye.py --safe --port 8443 &
+    
+    - name: Wait for initialization
+      run: sleep 5
+
+    - name: Check main page
+      run: curl http://localhost:8443
+
+    - name: Run Redeye tests
+      run: make test
