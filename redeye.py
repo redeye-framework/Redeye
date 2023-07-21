@@ -33,7 +33,7 @@ import json
 
 app = Flask(__name__, template_folder="templates")
 
-from routes.api.v1 import api_route
+from Routes.api.v1 import api_route
 app.register_blueprint(api_route)
 
 jsglue = JSGlue(app)
@@ -1891,7 +1891,7 @@ def add_token():
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
 
-    from routes.api import config as api_permissions
+    from Routes.api import config as api_permissions
     generated_token = TOKEN_INIT + str(uuid4())
     hashed_token = hashlib.sha256(generated_token.encode()).hexdigest()
     token_name = request.form.get('token-name')
