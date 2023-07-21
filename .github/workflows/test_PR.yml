@@ -48,10 +48,6 @@ jobs:
 
     - name: Run Redeye
       run: |
-        sudo apt update
-        sudo apt install python3.8-venv
-        python3 -m venv RedeyeVirtualEnv
-        source RedeyeVirtualEnv/bin/activate
         pip3 install -r requirements.txt
         python3 RedDB/db.py
         python3 redeye.py --safe --port 8443 &
