@@ -70,7 +70,7 @@ jobs:
       run: |
         pip3 install -r requirements.txt
         python3 RedDB/db.py
-        python3 redeye.py --safe --port 8443 &
+        START /B python3 redeye.py --safe --port 8443
     
     - name: Wait for initialization
       run: sleep 5
@@ -88,9 +88,11 @@ jobs:
 
     - name: Run Redeye
       run: |
-        pip3 install -r requirements.txt
-        python3 RedDB/db.py
-        python3 redeye.py --safe --port 8443 &
+        python -m venv .venv
+        source .venv/source/activate 
+        pip install -r requirements.txt
+        python RedDB/db.py
+        python redeye.py --safe --port 8443 &
     
     - name: Wait for initialization
       run: sleep 5
