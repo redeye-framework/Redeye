@@ -3,14 +3,14 @@ from flask import request, request, Blueprint
 from flask import jsonify
 from hashlib import sha256
 import json
-from routes.api import config as api_permissions
-from routes.api import jdb
-from routes.api import constants
-from routes.api.servers import servers_api
-from routes.api.users import users_api
-from routes.api.exploits import exploits_api
-from routes.api.files import files_api
-from routes.api.logs import logs_api
+from Routes.api import config as api_permissions
+from Routes.api import jdb
+from Routes.api import constants
+from Routes.api.servers import servers_api
+from Routes.api.users import users_api
+from Routes.api.exploits import exploits_api
+from Routes.api.files import files_api
+from Routes.api.logs import logs_api
 from http import HTTPStatus
 
 api_route = Blueprint('api', __name__)

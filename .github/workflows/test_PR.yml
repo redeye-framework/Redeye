@@ -3,7 +3,7 @@ name: Test before merging
 on: [pull_request]
 
 jobs:  
-  buid_and_test:
+  build_and_test_image:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
@@ -23,6 +23,35 @@ jobs:
     - name: Run redeye
       run: make run
 
+    - name: Wait for initialization
+      run: sleep 5
+
+    - name: Check main page
+      run: curl http://localhost:8443
+
+    - name: Run Redeye tests
+      run: make test
+
+  build_and_test_source_ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Cimon
+      uses: cycodelabs/cimon-action@v0
+      with:
+        client-id: ${{ secrets.CIMON_CLIENT_ID }}
+        secret: ${{ secrets.CIMON_SECRET }}
+        prevent: false
+        report-process-tree: true
+        fail-on-error: true
+
+    - uses: actions/checkout@v3
+
+    - name: Run Redeye
+      run: |
+        pip3 install -r requirements.txt
+        python3 RedDB/db.py
+        python3 redeye.py --safe --port 8443 &
+    
     - name: Wait for initialization
       run: sleep 5
 

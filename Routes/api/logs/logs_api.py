@@ -1,6 +1,6 @@
 from RedDB import db
-from routes.api.config import filter
-from routes.api import constants
+from Routes.api.config import filter
+from Routes.api import constants
 
 def logs_info(db_name, args):
     logs = []
