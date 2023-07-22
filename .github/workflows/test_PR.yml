@@ -32,7 +32,7 @@ jobs:
     - name: Run Redeye tests
       run: make test
 
-  build_and_test_source:
+  build_and_test_source_ubuntu:
     runs-on: ubuntu-latest
     steps:
     - name: Run Cimon
@@ -44,6 +44,46 @@ jobs:
         report-process-tree: true
         fail-on-error: true
 
+    - uses: actions/checkout@v3
+
+    - name: Run Redeye
+      run: |
+        pip3 install -r requirements.txt
+        python3 RedDB/db.py
+        python3 redeye.py --safe --port 8443 &
+    
+    - name: Wait for initialization
+      run: sleep 5
+
+    - name: Check main page
+      run: curl http://localhost:8443
+
+    - name: Run Redeye tests
+      run: make test
+
+  build_and_test_source_windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Redeye
+      run: |
+        pip3 install -r requirements.txt
+        python3 RedDB/db.py
+        python3 redeye.py --safe --port 8443 &
+    
+    - name: Wait for initialization
+      run: sleep 5
+
+    - name: Check main page
+      run: curl http://localhost:8443
+
+    - name: Run Redeye tests
+      run: make test
+
+  build_and_test_source_macos:
+    runs-on: macos-latest
+    steps:
     - uses: actions/checkout@v3
 
     - name: Run Redeye
