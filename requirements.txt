@@ -4,12 +4,10 @@ cffi==1.17.0
 click==8.1.7
 cryptography==43.0.0
 dnspython==2.6.1
-eventlet==0.36.1
 fire==0.6.0
 Flask==3.0.3
 Flask-JSGlue==0.3.1
 Flask-SocketIO==5.3.6
-greenlet==3.0.3
 h11==0.14.0
 itsdangerous==2.2.0
 Jinja2==3.0.3

@@ -1,6 +1,4 @@
 from re import M
-import eventlet
-eventlet.monkey_patch()
 from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, jsonify
 from flask_jsglue import JSGlue
 import jwt
@@ -38,13 +36,13 @@ jsglue.init_app(app)
 from Routes.api.v1 import api_route
 app.register_blueprint(api_route)
 
-socketio = SocketIO(app, cors_allowed_origins="http://localhost")
+socketio = SocketIO(app, async_mode='threading', cors_allowed_origins="http://localhost")
 
 # Connect to redeye
 sio = client_socket.Client()
 
 app.config['SESSION_COOKIE_NAME'] = "RedSession"
-app.secret_key = str(uuid4())  # Nice
+app.secret_key = 'try'#str(uuid4())  # Nice
 
 clients = {} #key: username; value: list of sockets
 #/SocketIO
@@ -1803,7 +1801,7 @@ def login():
                 print(token)
                 print(jwt.decode(token, app.secret_key, algorithms=["HS256"]))
                 print("----------------")
-                resp = make_response(index(jwt.decode(token, app.secret_key, algorithms=["HS256"])))
+                resp = make_response(index(token))
                 resp.set_cookie('reduser', token)
                 return resp
         
@@ -1851,9 +1849,12 @@ def refresh_projects():
 def is_logged(logged=False):
     try:
         token = request.cookies['reduser']
+        print("Token - ", token)
         data = jwt.decode(token, app.secret_key, algorithms=["HS256"])
+        print("Data - ", data)
         return True
     except Exception:
+        print("EXCEPTION")
         try:
             data = jwt.decode(logged, app.secret_key, algorithms=["HS256"])
             return True
