@@ -1,6 +1,4 @@
 from re import M
-import eventlet
-eventlet.monkey_patch()
 from flask import Flask, request, render_template, session, request, redirect, abort, make_response, url_for, send_from_directory, jsonify
 from flask_jsglue import JSGlue
 import jwt
@@ -9,11 +7,11 @@ from os import  path, listdir, makedirs
 import os
 from RedDB import db
 from Parse import Parse as parse
-from Report import report_gen as report
 import Redhelper as helper
 import collections
 import csv
-from datetime import datetime, timedelta
+from datetime import timedelta
+import datetime
 from uuid import uuid4
 from collections import defaultdict
 import urllib.parse
@@ -32,18 +30,19 @@ from functools import wraps
 import json
 
 app = Flask(__name__, template_folder="templates")
+jsglue = JSGlue()
+jsglue.init_app(app)
 
 from Routes.api.v1 import api_route
 app.register_blueprint(api_route)
 
-jsglue = JSGlue(app)
-socketio = SocketIO(app, cors_allowed_origins="http://localhost")
+socketio = SocketIO(app, async_mode='threading', cors_allowed_origins="http://localhost")
 
 # Connect to redeye
 sio = client_socket.Client()
 
 app.config['SESSION_COOKIE_NAME'] = "RedSession"
-app.secret_key = str(uuid4())  # Nice
+app.secret_key = 'try'#str(uuid4())  # Nice
 
 clients = {} #key: username; value: list of sockets
 #/SocketIO
@@ -1797,10 +1796,13 @@ def login():
                 session["profile"] = db.get_profilePicture_by_id(check_id)[0][0]
                 session["project"] = helper.get_project_name(projects, session["project"])           
                 clients[session["uid"]] = socketio
-                token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.utcnow(
-                ) + timedelta(hours=2)}, app.secret_key)
-                resp = make_response(index(token.decode('UTF-8')))
-                resp.set_cookie('reduser', token.decode('UTF-8'))
+                token = jwt.encode({'user': "{}-{}".format(creds['username'],check_id), 'exp': datetime.datetime.now(datetime.UTC) + timedelta(hours=2)}, app.secret_key, algorithm="HS256")
+                print("TOKEN ------------")
+                print(token)
+                print(jwt.decode(token, app.secret_key, algorithms=["HS256"]))
+                print("----------------")
+                resp = make_response(index(token))
+                resp.set_cookie('reduser', token)
                 return resp
         
         # If the user is not authenticated
@@ -1847,11 +1849,14 @@ def refresh_projects():
 def is_logged(logged=False):
     try:
         token = request.cookies['reduser']
-        data = jwt.decode(token, app.secret_key)
+        print("Token - ", token)
+        data = jwt.decode(token, app.secret_key, algorithms=["HS256"])
+        print("Data - ", data)
         return True
     except Exception:
+        print("EXCEPTION")
         try:
-            data = jwt.decode(logged, app.secret_key)
+            data = jwt.decode(logged, app.secret_key, algorithms=["HS256"])
             return True
         except:
             return False
@@ -1956,6 +1961,7 @@ def add_header(response):
 @app.route('/')
 def index(logged=False):
     if not is_logged(logged):
+        print("NOT LOGGED !!!!!!!")
         return render_template('login.html', projects=projects, show_create_project=IS_ENV_SAFE)
 
     comments = db.get_all_comments(session["db"])

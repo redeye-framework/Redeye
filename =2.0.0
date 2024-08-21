@@ -1,0 +1,6 @@
+Requirement already satisfied: Flask==2.0.2 in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (2.0.2)
+Requirement already satisfied: Jinja2==3.0.3 in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (3.0.3)
+Requirement already satisfied: Werkzeug in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (3.0.3)
+Requirement already satisfied: itsdangerous>=2.0 in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (from Flask==2.0.2) (2.2.0)
+Requirement already satisfied: click>=7.1.2 in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (from Flask==2.0.2) (8.1.7)
+Requirement already satisfied: MarkupSafe>=2.0 in /Users/danielarad/Documents/venv/redeyevenv/lib/python3.12/site-packages (from Jinja2==3.0.3) (2.1.5)
