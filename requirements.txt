@@ -6,11 +6,11 @@ cryptography==43.0.0
 dnspython==2.6.1
 fire==0.6.0
 Flask==3.0.3
-Flask-JSGlue==0.3.1
+Flask-JSGlue @ git+https://github.com/sisitrs2/flask-jsglue.git
 Flask-SocketIO==5.3.6
 h11==0.14.0
 itsdangerous==2.2.0
-Jinja2==3.0.3
+Jinja2==3.1.4
 markup==0.2.2
 MarkupSafe==2.1.5
 neo4j==5.23.1
